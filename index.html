@@ -819,7 +819,7 @@ function renderGrants() {
 
   // Federal grants section
   if (hasFed) {
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${(hasManual||hasNYS)?'margin-top:8px;':''}margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(Grants.gov)</span></div>`;
+    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${(hasManual||hasNYS)?'margin-top:8px;':''}margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${state.totalHits.toLocaleString()} results · Grants.gov)</span></div>`;
     html += state.grants.map(g => renderCard(g)).join('');
   }
 
