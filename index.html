@@ -525,10 +525,9 @@ async function fetchGrants() {
     const r = await fetch(GRANTS_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
-    if (d.errorcode !== 0) throw new Error(d.msg||'API error');
-    let g = d.data.oppHits || [];
+    let g = d.oppHits || d.data?.oppHits || [];
     if (state.eligibility==='01|02|04|08') g = filterLocal(g);
-    state.grants=g; state.totalHits=d.data.hitCount||0; state.loading=false;
+    state.grants=g; state.totalHits=d.hitCount||d.data?.hitCount||0; state.loading=false;
     renderGrants(); renderPagination(); renderSummary(); renderActiveTags();
   } catch(e) { state.loading=false; showError(e.message); }
 }
@@ -563,11 +562,10 @@ async function fetchSplit(append) {
     const r = await fetch(GRANTS_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
-    if (d.errorcode !== 0) throw new Error(d.msg||'API error');
-    let g = d.data.oppHits || [];
+    let g = d.oppHits || d.data?.oppHits || [];
     if (sp.eligibility==='01|02|04|08') g = filterLocal(g);
     sp.grants = append ? [...sp.grants,...g] : g;
-    sp.totalHits = d.data.hitCount||0; sp.loading=false;
+    sp.totalHits = d.hitCount||d.data?.hitCount||0; sp.loading=false;
     renderSplitList();
   } catch(e) {
     sp.loading=false;
