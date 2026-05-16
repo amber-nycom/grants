@@ -284,15 +284,8 @@
       </div>
       <div class="filter-group">
         <h4>Eligibility</h4>
-        <select class="select-filter" id="filter-eligibility">
-          <option value="01|02|04|08" selected>Local government (all)</option>
-          <option value="">Any / unrestricted</option>
-          <option value="00">State governments</option><option value="01">County governments</option>
-          <option value="02">City or township governments</option><option value="04">Special district governments</option>
-          <option value="05">Independent school districts</option><option value="06">Public &amp; state universities</option>
-          <option value="07">Native American tribal govts</option><option value="08">Public housing authorities</option>
-          <option value="22">Nonprofits (501c3)</option><option value="99">Unrestricted</option>
-        </select>
+        <input type="hidden" id="filter-eligibility" value="02">
+        <p style="font-size:12px;color:var(--text-mid);">City &amp; township governments</p>
       </div>
       <div class="filter-group">
         <h4>Sort</h4>
@@ -348,15 +341,8 @@
       </div>
       <div class="filter-group">
         <h4>Eligibility</h4>
-        <select class="select-filter" id="sp-filter-eligibility">
-          <option value="01|02|04|08" selected>Local government (all)</option>
-          <option value="">Any / unrestricted</option>
-          <option value="00">State governments</option><option value="01">County governments</option>
-          <option value="02">City or township governments</option><option value="04">Special district governments</option>
-          <option value="05">Independent school districts</option><option value="06">Public &amp; state universities</option>
-          <option value="07">Native American tribal govts</option><option value="08">Public housing authorities</option>
-          <option value="22">Nonprofits (501c3)</option><option value="99">Unrestricted</option>
-        </select>
+        <input type="hidden" id="sp-filter-eligibility" value="02">
+        <p style="font-size:12px;color:var(--text-mid);">City &amp; township governments</p>
       </div>
       <div class="filter-group">
         <h4>Sort</h4>
@@ -481,7 +467,7 @@ const PAGE_SIZE = 12;
 const SPLIT_SIZE = 30;
 
 let state = {
-  keyword:'', category:'', eligibility:'01|02|04|08',
+  keyword:'', category:'', eligibility:'02',
   statuses:['posted'], sort:'openDate|desc',
   page:0, totalHits:0, grants:[], nysGrants:[], saved:new Set(), loading:false,
   manualGrants: JSON.parse(localStorage.getItem('manualGrants')||'[]'),
@@ -489,7 +475,7 @@ let state = {
   agencyGrants: [],
 };
 let sp = {
-  category:'', eligibility:'01|02|04|08', statuses:['posted'], sort:'openDate|desc',
+  category:'', eligibility:'02', statuses:['posted'], sort:'openDate|desc',
   page:0, totalHits:0, grants:[], loading:false, selectedId:null, loaded:false,
 };
 
@@ -782,12 +768,28 @@ function deleteManualGrant(id) {
   renderGrants();
 }
 
+// ── CLIENT-SIDE FILTER FOR LOCAL GRANTS ──────────────────────
+function matchesLocalFilters(g) {
+  const kw = (state.keyword||'').toLowerCase();
+  if (kw) {
+    const haystack = [(g.title||''), (g.agency||''), (g.agencyName||''), (g.notes||''), (g.eligibility||''), (g.source||'')].join(' ').toLowerCase();
+    if (!haystack.includes(kw)) return false;
+  }
+  if (state.category) {
+    const cats = (g.categories||g.fundingCategories||[]);
+    if (Array.isArray(cats) && cats.length && !cats.includes(state.category)) return false;
+  }
+  return true;
+}
+
 // ── BROWSE RENDER ─────────────────────────────────────────────
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
   const hasFed = state.grants.length>0;
-  const hasNYS = state.nysGrants.length>0;
-  const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants];
+
+  const filteredNYS = (state.nysGrants||[]).filter(matchesLocalFilters);
+  const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants].filter(matchesLocalFilters);
+  const hasNYS = filteredNYS.length>0;
   const hasManual = allManual.length>0;
   const hasAgency = (state.agencyGrants||[]).length>0;
   if (!hasFed && !hasNYS && !hasManual && !hasAgency && !state.loading) {
@@ -809,12 +811,11 @@ function renderGrants() {
     const ag = (state.agencyGrants||[]).filter(g => {
       const s = (g.status||'').toLowerCase();
       if (s.includes('closed')) return false;
-      // Filter out grants with past due dates
       if (g.dueDate) {
         const d = new Date(g.dueDate);
         if (!isNaN(d.getTime()) && d < now) return false;
       }
-      return true;
+      return matchesLocalFilters(g);
     });
     if (ag.length > 0) {
       const sources = [...new Set(ag.map(g=>g.source))].join(', ');
@@ -825,8 +826,8 @@ function renderGrants() {
 
   // NYS grants section
   if (hasNYS) {
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${state.nysGrants.length} opportunities)</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
-    html += state.nysGrants.map(g => renderNYSCard(g)).join('');
+    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${filteredNYS.length} opportunities)</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
+    html += filteredNYS.map(g => renderNYSCard(g)).join('');
   }
 
   // Federal grants section
