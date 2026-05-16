@@ -257,6 +257,9 @@
 <div id="tab-browse">
   <div class="layout">
     <aside class="sidebar">
+      <div style="background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--radius);padding:7px 10px;margin-bottom:14px;font-size:11px;color:var(--blue-dark);line-height:1.4;">
+        🇺🇸 <strong>Federal grants only.</strong> Filters below apply to Grants.gov results. NYS, agency, and manually added grants are shown as-is.
+      </div>
       <div class="filter-group">
         <h4>Category</h4>
         <select class="select-filter" id="filter-category">
@@ -768,28 +771,12 @@ function deleteManualGrant(id) {
   renderGrants();
 }
 
-// ── CLIENT-SIDE FILTER FOR LOCAL GRANTS ──────────────────────
-function matchesLocalFilters(g) {
-  const kw = (state.keyword||'').toLowerCase();
-  if (kw) {
-    const haystack = [(g.title||''), (g.agency||''), (g.agencyName||''), (g.notes||''), (g.eligibility||''), (g.source||'')].join(' ').toLowerCase();
-    if (!haystack.includes(kw)) return false;
-  }
-  if (state.category) {
-    const cats = (g.categories||g.fundingCategories||[]);
-    if (Array.isArray(cats) && cats.length && !cats.includes(state.category)) return false;
-  }
-  return true;
-}
-
 // ── BROWSE RENDER ─────────────────────────────────────────────
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
   const hasFed = state.grants.length>0;
-
-  const filteredNYS = (state.nysGrants||[]).filter(matchesLocalFilters);
-  const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants].filter(matchesLocalFilters);
-  const hasNYS = filteredNYS.length>0;
+  const hasNYS = state.nysGrants.length>0;
+  const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants];
   const hasManual = allManual.length>0;
   const hasAgency = (state.agencyGrants||[]).length>0;
   if (!hasFed && !hasNYS && !hasManual && !hasAgency && !state.loading) {
@@ -815,7 +802,7 @@ function renderGrants() {
         const d = new Date(g.dueDate);
         if (!isNaN(d.getTime()) && d < now) return false;
       }
-      return matchesLocalFilters(g);
+      return true;
     });
     if (ag.length > 0) {
       const sources = [...new Set(ag.map(g=>g.source))].join(', ');
@@ -826,8 +813,8 @@ function renderGrants() {
 
   // NYS grants section
   if (hasNYS) {
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${filteredNYS.length} opportunities)</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
-    html += filteredNYS.map(g => renderNYSCard(g)).join('');
+    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${state.nysGrants.length} opportunities)</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
+    html += state.nysGrants.map(g => renderNYSCard(g)).join('');
   }
 
   // Federal grants section
