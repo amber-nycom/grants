@@ -368,6 +368,80 @@ async function scrapeDASNY(page) {
   }
 }
 
+// ── DEC ──────────────────────────────────────────────────────
+async function scrapeDEC() {
+  console.log('Scraping DEC...');
+  try {
+    const html = await fetchHtml('https://dec.ny.gov/get-involved/grant-applications');
+    const grants = [];
+    const seen = new Set();
+
+    // Parse all table rows
+    const rowRe = /<tr[\s\S]*?<\/tr>/gi;
+    let rowMatch;
+    while ((rowMatch = rowRe.exec(html)) !== null) {
+      const row = rowMatch[0];
+      // Skip header rows
+      if (/<th/i.test(row)) continue;
+
+      const cells = [];
+      const cellRe = /<td[^>]*>([\s\S]*?)<\/td>/gi;
+      let cm;
+      while ((cm = cellRe.exec(row)) !== null) cells.push(cm[1]);
+      if (cells.length < 3) continue;
+
+      // cells[0] = Program Name (with link), cells[1] = Eligible Parties, cells[2] = Deadline, cells[3] = Awarded By
+      const eligText = stripHtml(cells[1]).toUpperCase();
+      // Only include grants that municipalities (MUNI) are eligible for
+      if (!eligText.includes('MUNI')) continue;
+
+      const linkRe = /<a[^>]+href="([^"]+)"[^>]*>([\s\S]*?)<\/a>/i;
+      const lm = linkRe.exec(cells[0]);
+      if (!lm) continue;
+
+      const title = stripHtml(lm[2]);
+      if (!title || title.length < 5 || seen.has(title)) continue;
+      seen.add(title);
+
+      const rawUrl = lm[1];
+      const url = resolveUrl(rawUrl, 'https://dec.ny.gov');
+      const deadlineRaw = stripHtml(cells[2]).trim();
+      const deadlineLower = deadlineRaw.toLowerCase();
+
+      // Determine status from deadline column
+      let status = 'Available';
+      if (deadlineLower === 'closed' || deadlineLower.includes('closed')) {
+        status = 'Closed';
+      } else if (deadlineLower === 'continuous' || deadlineLower === 'rolling') {
+        status = 'Available';
+      } else if (isPast(deadlineRaw)) {
+        status = 'Closed';
+      }
+
+      const hasDate = /\d{1,2}[\/.\-]\d{1,2}|(january|february|march|april|may|june|july|august|september|october|november|december)/i.test(deadlineRaw);
+      const dueDate = (hasDate && deadlineLower !== 'continuous') ? deadlineRaw : '';
+
+      grants.push({
+        id: 'dec-' + title.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 40),
+        title,
+        agency: 'NYS Department of Environmental Conservation',
+        status,
+        dueDate,
+        eligibility: stripHtml(cells[1]),
+        link: url || 'https://dec.ny.gov/get-involved/grant-applications',
+        source: 'DEC',
+      });
+      console.log('  DEC [' + status + '] ' + title + (dueDate ? ' · ' + dueDate : ''));
+    }
+
+    console.log('  DEC: ' + grants.length + ' MUNI-eligible grants');
+    return grants;
+  } catch(e) {
+    console.log('  DEC error: ' + e.message);
+    return [];
+  }
+}
+
 // ── MAIN ──────────────────────────────────────────────────────
 (async () => {
   const browser = await puppeteer.launch({
@@ -378,8 +452,8 @@ async function scrapeDASNY(page) {
   await page.setViewport({ width: 1280, height: 900 });
   await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
 
-  // Run static scrapers (EFC, Parks, HCR use https.get; DASNY uses browser)
-  const [efc, parks, hcr] = await Promise.all([scrapeEFC(), scrapeParks(), scrapeHCR()]);
+  // Run static scrapers (EFC, Parks, HCR, DEC use https.get; DASNY uses browser)
+  const [efc, parks, hcr, dec] = await Promise.all([scrapeEFC(), scrapeParks(), scrapeHCR(), scrapeDEC()]);
   const dasny = await scrapeDASNY(page);
 
   // Deduplicate across all sources by title
@@ -392,6 +466,7 @@ async function scrapeDASNY(page) {
   });
   const parksDeduped = dedupe(parks);
   const hcrDeduped = dedupe(hcr);
+  const decDeduped = dedupe(dec);
   // Add dasny titles to seen so NY PLAYS from parks doesn't duplicate DASNY's
   dasny.forEach(g => seenTitles.add(g.title.toLowerCase().trim()));
 
@@ -420,7 +495,7 @@ async function scrapeDASNY(page) {
 
   await browser.close();
 
-  const scraped = [...efc, ...parksChecked, ...hcrChecked, ...dasny];
+  const scraped = [...efc, ...parksChecked, ...hcrChecked, ...dasny, ...decDeduped];
   console.log('\nTotal agency grants: ' + scraped.length);
   scraped.forEach(g => console.log(' [' + g.source + '] ' + g.title + (g.dueDate ? ' · ' + g.dueDate : '')));
 
@@ -437,7 +512,7 @@ async function scrapeDASNY(page) {
   const allGrants = [...scraped, ...manualGrants];
   const output = {
     grants: allGrants, fetched: new Date().toISOString(), count: allGrants.length,
-    sources: { efc: efc.length, parks: parks.length, hcr: hcr.length, dasny: dasny.length },
+    sources: { efc: efc.length, parks: parks.length, hcr: hcr.length, dasny: dasny.length, dec: dec.length },
   };
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
   console.log('Saved to agency-grants.json');
