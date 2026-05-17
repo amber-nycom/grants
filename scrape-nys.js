@@ -94,45 +94,71 @@ async function loadSearchResults(page) {
 
         await new Promise(r => setTimeout(r, 4000));
 
-        // Extract the Announcement Link from the detail page
+        // Extract the Announcement Link and Service Area from the detail page
         const found = await page.evaluate(() => {
-          // Strategy 1: find element with text "Announcement Link" and grab the http link near it
+          const result = { link: null, serviceArea: null };
           const allEls = Array.from(document.querySelectorAll('td, th, label, span, div'));
+
+          // Grab Service Area(s)
+          for (const el of allEls) {
+            const text = (el.innerText || '').trim().toLowerCase();
+            if (text.includes('service area')) {
+              const parent = el.closest('tr') || el.parentElement;
+              if (parent) {
+                const next = parent.nextElementSibling;
+                const candidates = [parent, next].filter(Boolean);
+                for (const c of candidates) {
+                  const cells = Array.from(c.querySelectorAll('td, span, div'));
+                  for (const cell of cells) {
+                    const val = (cell.innerText || '').trim();
+                    if (val && val.length > 3 && !val.toLowerCase().includes('service area')) {
+                      result.serviceArea = val;
+                      break;
+                    }
+                  }
+                  if (result.serviceArea) break;
+                }
+              }
+            }
+          }
+
+          // Strategy 1: find Announcement Link
           for (const el of allEls) {
             const text = (el.innerText || '').trim().toLowerCase();
             if (text === 'announcement link' || text.includes('announcement link')) {
               const parent = el.closest('tr') || el.parentElement;
               if (parent) {
-                // Check this row and the next for an http link (not mailto)
                 const candidates = [parent, parent.nextElementSibling].filter(Boolean);
                 for (const c of candidates) {
                   const links = Array.from(c.querySelectorAll('a[href]'));
                   const httpLink = links.find(a => a.href && a.href.startsWith('http') && !a.href.includes('javascript'));
-                  if (httpLink) return httpLink.href.replace(/^https?:\/\/https?:\/+/, 'https://');
+                  if (httpLink) { result.link = httpLink.href.replace(/^https?:\/\/https?:\/+/, 'https://'); break; }
                 }
               }
             }
           }
-          // Strategy 2: any http link that isn't SFS and isn't mailto
-          const allLinks = Array.from(document.querySelectorAll('a[href]'));
-          const ext = allLinks.find(a =>
-            a.href &&
-            a.href.startsWith('http') &&
-            !a.href.startsWith('mailto') &&
-            !a.href.includes('esupplier.sfs.ny.gov') &&
-            !a.href.includes('javascript')
-          );
-          if (!ext) return null;
-          // Fix malformed URLs like https://https//... or http://https//...
-          const cleaned = ext.href.replace(/^https?:\/\/https?:\/+/, 'https://');
-          return cleaned;
+          // Strategy 2: any http link that is not SFS
+          if (!result.link) {
+            const allLinks = Array.from(document.querySelectorAll('a[href]'));
+            const ext = allLinks.find(a =>
+              a.href && a.href.startsWith('http') && !a.href.startsWith('mailto') &&
+              !a.href.includes('esupplier.sfs.ny.gov') && !a.href.includes('javascript')
+            );
+            if (ext) result.link = ext.href.replace(/^https?:\/\/https?:\/+/, 'https://');
+          }
+
+          return result;
         });
 
-        if (found) {
-          announcementLink = found;
+        if (found.link) {
+          announcementLink = found.link;
           console.log('  -> ' + announcementLink);
         } else {
           console.log('  -> No external link found, keeping SFS fallback');
+        }
+        if (found.serviceArea) {
+          g.serviceArea = found.serviceArea;
+          console.log('  -> Service Area: ' + found.serviceArea);
         }
 
         // Go back to search results for next iteration
@@ -156,6 +182,7 @@ async function loadSearchResults(page) {
       eligibility: g.eligibility,
       dueDate: g.dueDate,
       link: announcementLink,
+      serviceArea: g.serviceArea || null,
       source: 'NYS',
     });
   }
