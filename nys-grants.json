@@ -8,6 +8,7 @@
       "eligibility": "Governmental Entity, Not-For-Profit",
       "dueDate": "06/01/2026 4:00PM EDT",
       "link": "https://agriculture.ny.gov/rfa-0393-farmland-protection-implementation-grants-round-20-agricultural-conservation-easement",
+      "serviceArea": "Agricultural Supports",
       "source": "NYS"
     },
     {
@@ -18,6 +19,7 @@
       "eligibility": "Governmental Entity, Not-For-Profit",
       "dueDate": "06/26/2026 4:00PM EDT",
       "link": "https://agriculture.ny.gov/rfp-0397-farmland-protection-staff-capacity-grants-pilot-program",
+      "serviceArea": "Agricultural Supports",
       "source": "NYS"
     },
     {
@@ -28,6 +30,7 @@
       "eligibility": "For Profit, Governmental Entity, Individual, Not-For-Profit, Tribal Organization",
       "dueDate": "08/05/2026 2:00PM EDT",
       "link": "https://dec.ny.gov/",
+      "serviceArea": "Environmental Supports",
       "source": "NYS"
     },
     {
@@ -38,6 +41,7 @@
       "eligibility": "Governmental Entity, Not-For-Profit, Tribal Organization",
       "dueDate": "09/15/2026 3:00PM EDT",
       "link": "https://dec.ny.gov/environmental-protection/water/water-quality/harmful-algal-blooms",
+      "serviceArea": "Environmental Supports",
       "source": "NYS"
     },
     {
@@ -48,6 +52,7 @@
       "eligibility": "Governmental Entity, Not-For-Profit, Tribal Organization",
       "dueDate": "11/01/2027 3:00PM EDT",
       "link": "https://dec.ny.gov/environmental-protection/waste-management/grants",
+      "serviceArea": "Environmental Supports, Government Supports",
       "source": "NYS"
     },
     {
@@ -58,6 +63,7 @@
       "eligibility": "For Profit, Governmental Entity, Individual, Not-For-Profit, Tribal Organization",
       "dueDate": "08/05/2026 2:00PM EDT",
       "link": "https://dec.ny.gov/",
+      "serviceArea": "Environmental Supports",
       "source": "NYS"
     },
     {
@@ -68,6 +74,18 @@
       "eligibility": "For Profit, Governmental Entity, Individual, Not-For-Profit, Tribal Organization",
       "dueDate": "08/05/2026 2:00PM EDT",
       "link": "https://dec.ny.gov/",
+      "serviceArea": "Environmental Supports",
+      "source": "NYS"
+    },
+    {
+      "id": "UCF 2026",
+      "agency": "DEC01",
+      "title": "Urban and Community Forestry Program 2026",
+      "status": "Available",
+      "eligibility": "For Profit, Governmental Entity, Individual, Not-For-Profit, Tribal Organization",
+      "dueDate": "08/12/2026 2:00PM EDT",
+      "link": "https://dec.ny.gov/nature/forests-trees/urban-and-community-forestry",
+      "serviceArea": "Environmental Supports",
       "source": "NYS"
     },
     {
@@ -78,6 +96,7 @@
       "eligibility": "Governmental Entity, Not-For-Profit",
       "dueDate": "06/11/2026 4:00PM EDT",
       "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
+      "serviceArea": "Health Services",
       "source": "NYS"
     },
     {
@@ -88,66 +107,7 @@
       "eligibility": "For Profit, Governmental Entity, Not-For-Profit",
       "dueDate": "09/28/2028 4:00PM EDT",
       "link": "https://www.health.ny.gov/funding/rfa/20171/",
-      "source": "NYS"
-    },
-    {
-      "id": "EEETT-A26",
-      "agency": "DOH01",
-      "title": "RFA#20760 Ending Epidemics Ed & Training Comp A",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit",
-      "dueDate": "05/12/2026 4:00PM EDT",
-      "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
-      "source": "NYS"
-    },
-    {
-      "id": "EEETT-B26",
-      "agency": "DOH01",
-      "title": "RFA#20760 Ending Epidemics Ed & Training Comp B",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit",
-      "dueDate": "05/12/2026 4:00PM EDT",
-      "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
-      "source": "NYS"
-    },
-    {
-      "id": "EEETT-C26",
-      "agency": "DOH01",
-      "title": "RFA#20760 Ending Epidemics Ed & Training Comp C",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit",
-      "dueDate": "05/12/2026 4:00PM EDT",
-      "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
-      "source": "NYS"
-    },
-    {
-      "id": "EEETT-D26",
-      "agency": "DOH01",
-      "title": "RFA#20760 Ending Epidemics Ed & Training Comp D",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit",
-      "dueDate": "05/12/2026 4:00PM EDT",
-      "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
-      "source": "NYS"
-    },
-    {
-      "id": "EEETT-E26",
-      "agency": "DOH01",
-      "title": "RFA#20760 Ending Epidemics Ed & Training Comp E",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit, Tribal Organization",
-      "dueDate": "05/12/2026 4:00PM EDT",
-      "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
-      "source": "NYS"
-    },
-    {
-      "id": "NAV2026",
-      "agency": "DOH01",
-      "title": "RFA#20706: Consumer Assistance Navigator Program",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit, Tribal Organization",
-      "dueDate": "05/14/2026 4:00PM EDT",
-      "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
+      "serviceArea": "Government Supports, Health Services",
       "source": "NYS"
     },
     {
@@ -158,6 +118,7 @@
       "eligibility": "Governmental Entity, Not-For-Profit",
       "dueDate": "06/10/2026 4:00PM EDT",
       "link": "https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL",
+      "serviceArea": "Health Services",
       "source": "NYS"
     },
     {
@@ -168,6 +129,18 @@
       "eligibility": "For Profit, Governmental Entity, Not-For-Profit",
       "dueDate": "06/05/2026 4:00PM EDT",
       "link": "https://dol.ny.gov/funding-opportunities",
+      "serviceArea": "Workforce Development",
+      "source": "NYS"
+    },
+    {
+      "id": "EVT0000011",
+      "agency": "OAS01",
+      "title": "ATL - 26001 Prevention & Mitigation of HAG",
+      "status": "Advertised Only - Not in SFS",
+      "eligibility": "Governmental Entity, Not-For-Profit, Tribal Organization",
+      "dueDate": "07/08/2026 4:00PM EDT",
+      "link": "https://www.nyscr.ny.gov/Ads/Details/2134502?crumbs=%5B%7B%22Url%22%3A%22%2FAds%2FMyAds%3FGovernmentId%3D999%5Cu0026AssigneeId%3D3ca703cd-dc80-4f61-a912-39a95b93448b%5Cu0026Status%3DOpen%22,%22Title%22%3A%22My%20Open%20Ads%22%7D%5D",
+      "serviceArea": "Government Supports, Health Services",
       "source": "NYS"
     },
     {
@@ -178,6 +151,7 @@
       "eligibility": "For Profit, Governmental Entity, Individual, Not-For-Profit, Tribal Organization",
       "dueDate": "07/02/2026 1:00PM EDT",
       "link": "https://omh.ny.gov/omhweb/rfp/",
+      "serviceArea": "Health Services",
       "source": "NYS"
     },
     {
@@ -188,9 +162,10 @@
       "eligibility": "Governmental Entity, Not-For-Profit",
       "dueDate": "07/17/2026 4:00PM EDT",
       "link": "https://parks.ny.gov/grants/zoos-botanical-gardens-aquaria-operational-support-grant-program",
+      "serviceArea": "Education Supports, Environmental Supports",
       "source": "NYS"
     }
   ],
-  "fetched": "2026-05-11T11:38:45.072Z",
-  "count": 19
+  "fetched": "2026-05-17T22:51:38.811Z",
+  "count": 15
 }
