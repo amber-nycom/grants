@@ -902,7 +902,7 @@ function renderAgencyCard(g) {
     </div>
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'')}</div>
-    <div class="card-mid">${g.description?`<span class="card-category" style="font-size:10px;white-space:normal;line-height:1.3;">${esc(g.description.slice(0,80))}…</span>`:'<span></span>'}</div>
+    <div class="card-mid"><span></span></div>
     ${dl}
     <div class="card-bottom">
       <div class="card-id">${esc(g.source||'')}</div>
