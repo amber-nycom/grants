@@ -49,7 +49,7 @@
   .nav-tab { padding: 0 14px; height: 46px; display: flex; align-items: center; font-size: 13px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; white-space: nowrap; user-select: none; }
   .nav-tab:hover { color: rgba(255,255,255,0.85); }
   .nav-tab.active { color: #fff; border-bottom-color: var(--blue-mid); font-weight: 500; }
-  .topbar-search { flex: 1; max-width: 550px; height: 32px; border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius); background: rgba(255,255,255,0.1); padding: 0 12px; font-size: 13px; font-family: 'Inter', sans-serif; color: #fff; outline: none; transition: border-color 0.15s, background 0.15s; }
+  .topbar-search { flex: 1; max-width: 340px; height: 32px; border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius); background: rgba(255,255,255,0.1); padding: 0 12px; font-size: 13px; font-family: 'Inter', sans-serif; color: #fff; outline: none; transition: border-color 0.15s, background 0.15s; }
   .topbar-search:focus { border-color: var(--blue-mid); background: rgba(255,255,255,0.15); }
   .topbar-search::placeholder { color: rgba(255,255,255,0.45); }
   .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
@@ -757,11 +757,38 @@ function deleteManualGrant(id) {
   renderGrants();
 }
 
-// ── BROWSE RENDER ─────────────────────────────────────────────
+// ── NYS SERVICE AREA MAPPING ──────────────────────────────────
+const NYS_CATEGORY_MAP = {
+  AG: ['Agricultural Supports'],
+  ED: ['Education Supports'],
+  ENV: ['Environmental Supports'],
+  EN: ['Environmental Supports'],
+  FN: ['Family Supports'],
+  IS: ['Family Supports'],
+  HL: ['Health Services'],
+  HO: ['Housing and Shelter Services'],
+  LJL: ['Justice Services', 'Public Safety Supports'],
+  CD: ['Government Supports'],
+  T: ['Public Transportation Services'],
+  ELT: ['Workforce Development'],
+  NR: ['Environmental Supports'],
+  HU: ['Education Supports'],
+};
+
+function filterNYSByCategory(grants, category) {
+  if (!category) return grants;
+  const areas = NYS_CATEGORY_MAP[category];
+  if (!areas) return grants;
+  return grants.filter(g => {
+    if (!g.serviceArea) return false;
+    return areas.some(a => g.serviceArea.toLowerCase().includes(a.toLowerCase()));
+  });
+}
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
   const hasFed = state.grants.length>0;
-  const hasNYS = state.nysGrants.length>0;
+  const filteredNYS = filterNYSByCategory(state.nysGrants, state.category);
+  const hasNYS = filteredNYS.length>0;
   const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants];
   const hasManual = allManual.length>0;
   const hasAgency = (state.agencyGrants||[]).length>0;
@@ -799,8 +826,9 @@ function renderGrants() {
 
   // NYS grants section
   if (hasNYS) {
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${state.nysGrants.length} opportunities)</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
-    html += state.nysGrants.map(g => renderNYSCard(g)).join('');
+    const label = state.category ? `${filteredNYS.length} matching` : `${filteredNYS.length} opportunities`;
+    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
+    html += filteredNYS.map(g => renderNYSCard(g)).join('');
   }
 
   // Federal grants section
@@ -902,7 +930,7 @@ function renderAgencyCard(g) {
     </div>
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'')}</div>
-    <div class="card-mid"><span></span></div>
+    <div class="card-mid">${g.description?`<span class="card-category" style="font-size:10px;white-space:normal;line-height:1.3;">${esc(g.description.slice(0,80))}…</span>`:'<span></span>'}</div>
     ${dl}
     <div class="card-bottom">
       <div class="card-id">${esc(g.source||'')}</div>
