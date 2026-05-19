@@ -44,7 +44,7 @@
       "id": "parks-municipal-parks-and-recreation-grant",
       "title": "Municipal Parks and Recreation Grant",
       "agency": "NYS Office of Parks, Recreation & Historic Preservation",
-      "status": "Available",
+      "status": "Closed",
       "dueDate": "",
       "link": "https://parks.ny.gov/grants/municipal-parks-recreation-grant",
       "source": "NYS Parks",
@@ -375,7 +375,7 @@
       "source": "DEC"
     }
   ],
-  "fetched": "2026-05-19T15:05:41.382Z",
+  "fetched": "2026-05-19T15:31:56.508Z",
   "count": 38,
   "sources": {
     "efc": 3,
