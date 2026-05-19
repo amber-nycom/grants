@@ -1,0 +1,139 @@
+{
+  "_readme": "Edit this file to pin deadlines, statuses, or any other field on agency grants. Changes here survive every scraper run. Fields: dueDate, status, title, agency, link, description, notes. Set pin:true to preserve dueDate even when the scraper would otherwise blank it.",
+
+  "overrides": {
+
+    "efc-green-resiliency-grants-and-gr": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "efc-wastewater-infrastructure-engi": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "efc-clean-vessel-assistance-progra": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+
+    "parks-environmental-protection-fund": {
+      "dueDate": "",
+      "notes": "Typically opens in spring. Check parks.ny.gov for current round."
+    },
+    "parks-municipal-parks-and-recreation-grant": {
+      "dueDate": "",
+      "notes": "Check parks.ny.gov for current round."
+    },
+    "parks-recreational-trails-program": {
+      "dueDate": "",
+      "notes": "Federal pass-through program. Check parks.ny.gov for current round."
+    },
+    "parks-african-american-heritage-grant": {
+      "dueDate": ""
+    },
+    "parks-lwcf-outdoor-recreation-legacy-partnersh": {
+      "dueDate": ""
+    },
+    "parks-boating-infrastructure-grant-program": {
+      "dueDate": ""
+    },
+    "parks-maritime-heritage-subgrant-program": {
+      "dueDate": ""
+    },
+    "parks-zbga-capital-grant-program": {
+      "dueDate": ""
+    },
+    "parks-zbga-operational-support-grant-program": {
+      "dueDate": ""
+    },
+    "parks-snowmobile-trail-grant-program": {
+      "dueDate": "",
+      "notes": "Annual program. Applications typically due in fall."
+    },
+
+    "hcr-community-development-block-gr": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "hcr-nys-home-program": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "hcr-pro-housing-community-program": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "hcr-vacant-rental-program--vrp-": {
+      "dueDate": ""
+    },
+
+    "dec-municipal-waste-reduction--recycling": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "dec-household-hazardous-waste-disposal": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "dec-solid-waste-municipal-landfill-closure": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "dec-municipal-landfill-gas-management": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "dec-brownfield-opportunity-areas---dos": {
+      "dueDate": "Rolling",
+      "pin": true
+    },
+    "dec-water-quality-improvement-project--wqip-": {
+      "dueDate": ""
+    },
+    "dec-nys-dec-efc-wastewater-infrastructure-en": {
+      "dueDate": ""
+    },
+    "dec-non-agricultural-nonpoint-source-plannin": {
+      "dueDate": ""
+    },
+    "dec-the-hudson-river-estuary": {
+      "dueDate": ""
+    },
+    "dec-invasive-species-grant-program": {
+      "dueDate": ""
+    },
+    "dec-community-reforestation--core--grant": {
+      "dueDate": ""
+    },
+    "dec-community-forest-conservation-grants": {
+      "dueDate": ""
+    },
+    "dec-adirondack-and-catskill-parks-community-": {
+      "dueDate": ""
+    },
+    "dec-urban-and-community-forestry": {
+      "dueDate": ""
+    },
+    "dec-volunteer-fire-assistance": {
+      "dueDate": ""
+    },
+    "dec-open-space-conservation-grant-program": {
+      "dueDate": ""
+    },
+    "dec-establishing-large-forests-reimbursement": {
+      "dueDate": ""
+    },
+    "dec-municipal-zero-emission-vehicle--zev--cl": {
+      "dueDate": ""
+    },
+    "dec-municipal-zero-emission-vehicle--zev--in": {
+      "dueDate": ""
+    },
+    "dec-climate-smart-communities-grants": {
+      "dueDate": ""
+    },
+    "dec-municipal-funding-for-food-scraps-recycl": {
+      "dueDate": ""
+    }
+  }
+}
