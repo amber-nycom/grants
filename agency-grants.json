@@ -5,7 +5,7 @@
       "title": "Green Resiliency Grants and Green Innovation Grant Program",
       "agency": "NYS Environmental Facilities Corporation",
       "status": "Available",
-      "dueDate": "6/4/2026",
+      "dueDate": "06/04/2026",
       "description": "Grants for implementing green infrastructure projects including stormwater management, water efficiency, and energy efficiency.",
       "link": "https://efc.ny.gov/grg",
       "source": "EFC"
@@ -375,7 +375,7 @@
       "source": "DEC"
     }
   ],
-  "fetched": "2026-05-19T14:50:43.824Z",
+  "fetched": "2026-05-19T15:05:41.382Z",
   "count": 38,
   "sources": {
     "efc": 3,
