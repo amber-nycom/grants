@@ -132,6 +132,57 @@ function isJunk(title) {
   return NAV_JUNK.some(j => t === j || t.startsWith(j));
 }
 
+// ── LOAD OVERRIDES ────────────────────────────────────────────
+// Reads agency-overrides.json and returns a map of { id: { field: value, ... } }.
+// The scraper applies these AFTER scraping, so manual edits are never overwritten.
+// Fields you can override: dueDate, status, title, agency, link, description, notes.
+// The special field "pin: true" prevents the scraper from ever marking a grant Closed.
+function loadOverrides() {
+  const overridesPath = path.join(process.cwd(), 'agency-overrides.json');
+  if (!fs.existsSync(overridesPath)) {
+    console.log('No agency-overrides.json found — skipping overrides.');
+    return {};
+  }
+  try {
+    const data = JSON.parse(fs.readFileSync(overridesPath, 'utf8'));
+    const overrides = data.overrides || {};
+    console.log('Loaded ' + Object.keys(overrides).length + ' overrides from agency-overrides.json');
+    return overrides;
+  } catch(e) {
+    console.log('Could not read agency-overrides.json: ' + e.message);
+    return {};
+  }
+}
+
+// Apply overrides to a grant object.
+// - All fields in the override are merged in.
+// - "pin: true" means the scraper's status is ignored and the override status is always used.
+// - If no status override exists and pin is not set, scraped status wins (live detection still works).
+function applyOverride(grant, overrides) {
+  const override = overrides[grant.id];
+  if (!override) return grant;
+
+  const merged = { ...grant };
+
+  // Apply every override field except 'pin' (internal flag)
+  for (const [key, val] of Object.entries(override)) {
+    if (key === 'pin') continue;
+    merged[key] = val;
+  }
+
+  // If pinned and no status override, keep the scraped status
+  // (pin just means dueDate etc won't be blanked by re-scrape)
+  if (override.pin && !override.status) {
+    merged.status = grant.status;
+  }
+
+  console.log('  OVERRIDE applied: [' + grant.id + ']' +
+    (override.dueDate ? ' dueDate=' + override.dueDate : '') +
+    (override.status  ? ' status=' + override.status   : ''));
+
+  return merged;
+}
+
 // ── EFC ──────────────────────────────────────────────────────
 async function scrapeEFC() {
   console.log('Scraping EFC...');
@@ -180,7 +231,7 @@ async function scrapeEFC() {
       const dueLower = dueDate.toLowerCase();
       const efcStatus = (dueLower.includes('closed') || dueLower.includes('not available') || dueLower.includes('not accepting')) ? 'Closed' : 'Available';
       // Only keep dueDate if it contains an actual date value
-      const hasDate = /\d{1,2}[\/.\-]\d{1,2}|(january|february|march|april|may|june|july|august|september|october|november|december)/i.test(dueDate);
+      const hasDate = /\d{1,2}[\/.\-]\d{1,2}|(january|february|march|april|may|june|july|august|september|october|november|december)/i.test(dueDate);
       grants.push({
         id: 'efc-' + title.toLowerCase().replace(/[^a-z0-9]/g, '-').slice(0, 30),
         title, agency: 'NYS Environmental Facilities Corporation',
@@ -495,7 +546,15 @@ async function scrapeDEC() {
 
   await browser.close();
 
-  const scraped = [...efc, ...parksChecked, ...hcrChecked, ...dasny, ...decDeduped];
+  // ── APPLY OVERRIDES ──────────────────────────────────────────
+  // Load agency-overrides.json and merge into scraped data by grant ID.
+  // Overrides are applied last so they always win over scraped values.
+  // The only exception: if a grant has "pin: true" in its override AND no
+  // explicit status override, the live-detected status is preserved.
+  const overrides = loadOverrides();
+  const scraped = [...efc, ...parksChecked, ...hcrChecked, ...dasny, ...decDeduped]
+    .map(g => applyOverride(g, overrides));
+
   console.log('\nTotal agency grants: ' + scraped.length);
   scraped.forEach(g => console.log(' [' + g.source + '] ' + g.title + (g.dueDate ? ' · ' + g.dueDate : '')));
 
