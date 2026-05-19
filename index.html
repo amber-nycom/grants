@@ -965,7 +965,23 @@ function renderNYSCard(g) {
   const statusLower = (g.status||'').toLowerCase();
   const sc = statusLower.includes('available')||statusLower.includes('open') ? 'tag-posted' : 'tag-closed';
   let dl = '';
-  if (g.dueDate) dl = `<span class="deadline-row urgent">⏱ Due: ${esc(g.dueDate)}</span>`;
+  if (g.dueDate) {
+  const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
+  const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
+  const parsed = new Date(normalized);
+  const today = new Date(); today.setHours(0,0,0,0);
+  if (!isNaN(parsed.getTime())) {
+    const days = Math.round((parsed - today) / 86400000);
+    const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
+    const label = days < 0 ? 'Closed · ' + cleaned
+                : days === 0 ? 'Closes today'
+                : days === 1 ? 'Closes tomorrow'
+                : 'Closes in ' + days + ' days · ' + cleaned;
+    dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+  } else {
+    dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+  }
+}
   else if (g.award) dl = `<span class="deadline-row rolling">◈ ${esc(g.award)}</span>`;
   const hasId = g.id && !String(g.id).startsWith('nys-');
   const viewHref = g.link || g.url || 'https://grantsmanagement.ny.gov/search-funding-sfs';
