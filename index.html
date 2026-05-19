@@ -952,6 +952,7 @@ if (g.dueDate) {
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'')}</div>
     <div class="card-mid"><span></span></div>
+    ${dl}
     <div class="card-bottom">
       <div class="card-id">${esc(g.source||'')}</div>
       <a class="view-btn" href="${esc(g.link||'#')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View ↗</a>
