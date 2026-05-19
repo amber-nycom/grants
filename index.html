@@ -918,11 +918,29 @@ function renderAgencyCard(g) {
   };
   const sourceStyle = sourceColors[g.source] || 'background:var(--text-mid);color:#fff;';
   let dl = '';
-  const hasRealDate = g.dueDate && /\d{4}|jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec/i.test(g.dueDate);
-  if (hasRealDate) {
-    const dlCls = g.dueDate.toLowerCase().includes('closed') ? 'style="color:var(--red);"' : '';
-    dl = `<span class="deadline-row" ${dlCls}>⏱ ${esc(g.dueDate.slice(0,80))}</span>`;
+if (g.dueDate) {
+  const dueLower = g.dueDate.toLowerCase();
+  if (dueLower.includes('rolling')) {
+    dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
+  } else {
+    const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
+    // Normalize MM/DD/YYYY to YYYY-MM-DD for reliable parsing
+    const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
+    const parsed = new Date(normalized);
+    const today = new Date(); today.setHours(0,0,0,0);
+    if (!isNaN(parsed.getTime())) {
+      const days = Math.round((parsed - today) / 86400000);
+      const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
+      const label = days < 0 ? 'Closed · ' + cleaned
+                  : days === 0 ? 'Closes today'
+                  : days === 1 ? 'Closes tomorrow'
+                  : 'Closes in ' + days + ' days · ' + cleaned;
+      dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+    } else {
+      dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+    }
   }
+}
   return `<div class="grant-card" style="${isClosed?'opacity:0.55;':''}">
     <div class="card-top">
       <div style="display:flex;gap:5px;flex-wrap:wrap;">
