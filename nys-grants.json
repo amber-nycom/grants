@@ -133,6 +133,17 @@
       "source": "NYS"
     },
     {
+      "id": "OSH TE",
+      "agency": "DOL01",
+      "title": "2026-2027 OSH TE",
+      "status": "Available",
+      "eligibility": "For Profit, Governmental Entity, Not-For-Profit",
+      "dueDate": "06/15/2026 4:00PM EDT",
+      "link": "https://dol.ny.gov/hazard-abatement-board",
+      "serviceArea": "Workforce Development",
+      "source": "NYS"
+    },
+    {
       "id": "EVT0000011",
       "agency": "OAS01",
       "title": "ATL - 26001 Prevention & Mitigation of HAG",
@@ -166,6 +177,6 @@
       "source": "NYS"
     }
   ],
-  "fetched": "2026-05-18T11:56:08.461Z",
-  "count": 15
+  "fetched": "2026-05-25T16:39:47.902Z",
+  "count": 16
 }
