@@ -218,7 +218,7 @@
       "id": "dec-water-quality-improvement-project--wqip-",
       "title": "Water Quality Improvement Project (WQIP) Program",
       "agency": "NYS Department of Environmental Conservation",
-      "status": "Closed",
+      "status": "Available",
       "dueDate": "",
       "eligibility": "MUNI, NFP, OT",
       "link": "https://dec.ny.gov/get-involved/grant-applications/wqip-program",
@@ -238,7 +238,7 @@
       "id": "dec-non-agricultural-nonpoint-source-plannin",
       "title": "Non-Agricultural Nonpoint Source Planning and MS4 Mapping Grant",
       "agency": "NYS Department of Environmental Conservation",
-      "status": "Closed",
+      "status": "Available",
       "dueDate": "",
       "eligibility": "MUNI, OT",
       "link": "https://dec.ny.gov/get-involved/grant-applications/non-agricultural-nonpoint-source-planning-ms4-mapping-grant",
@@ -375,7 +375,7 @@
       "source": "DEC"
     }
   ],
-  "fetched": "2026-05-25T16:54:58.663Z",
+  "fetched": "2026-06-01T21:51:50.599Z",
   "count": 38,
   "sources": {
     "efc": 3,
