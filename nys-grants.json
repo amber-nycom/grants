@@ -1,6 +1,17 @@
 {
   "grants": [
     {
+      "id": "FPIG20",
+      "agency": "AGM01",
+      "title": "Round 20 Farmland Protection Implementation Grants",
+      "status": "Available",
+      "eligibility": "Governmental Entity, Not-For-Profit",
+      "dueDate": "06/01/2027 4:00PM EDT",
+      "link": "https://agriculture.ny.gov/rfa-0393-farmland-protection-implementation-grants-round-20-agricultural-conservation-easement",
+      "serviceArea": "Agricultural Supports",
+      "source": "NYS"
+    },
+    {
       "id": "FPSC01",
       "agency": "AGM01",
       "title": "Farmland Protection Staff Capacity, Round 1",
@@ -9,6 +20,17 @@
       "dueDate": "06/26/2026 4:00PM EDT",
       "link": "https://agriculture.ny.gov/rfp-0397-farmland-protection-staff-capacity-grants-pilot-program",
       "serviceArea": "Agricultural Supports",
+      "source": "NYS"
+    },
+    {
+      "id": "SV26",
+      "agency": "DCJ01",
+      "title": "2026 STOP VAWA Formula Grant Program",
+      "status": "Available",
+      "eligibility": "Governmental Entity, Not-For-Profit, Tribal Organization",
+      "dueDate": "07/29/2026 12:00PM EDT",
+      "link": "https://criminaljustice.ny.gov/ofpa/index.htm",
+      "serviceArea": "Family Supports, Government Supports, Justice Services, Public Safety Supports",
       "source": "NYS"
     },
     {
@@ -78,6 +100,17 @@
       "source": "NYS"
     },
     {
+      "id": "CFA2026",
+      "agency": "DED01",
+      "title": "2026 Consolidated Funding Application (CFA)",
+      "status": "Advertised Only - Not in SFS",
+      "eligibility": "Governmental Entity",
+      "dueDate": "07/31/2026 4:00PM EDT",
+      "link": "https://www.governor.ny.gov/news/governor-hochul-announces-launch-2026-regional-economic-development-council-initiative",
+      "serviceArea": "https://www.governor.ny.gov/news/governor-hochul-announces-launch-2026-regional-economic-development-council-initiative",
+      "source": "NYS"
+    },
+    {
       "id": "CLSPLH2026",
       "agency": "DOH01",
       "title": "RFA #20781 Legal Services for People with HIV/AIDS",
@@ -127,7 +160,7 @@
       "title": "NYSDOL OJET GCEW-EV",
       "status": "Available",
       "eligibility": "For Profit, Governmental Entity, Not-For-Profit",
-      "dueDate": "06/05/2026 4:00PM EDT",
+      "dueDate": "12/03/2026 4:00PM EST",
       "link": "https://dol.ny.gov/funding-opportunities",
       "serviceArea": "Workforce Development",
       "source": "NYS"
@@ -166,6 +199,17 @@
       "source": "NYS"
     },
     {
+      "id": "MH253027",
+      "agency": "OMH01",
+      "title": "Collaborative Care Tech, Training, and Support",
+      "status": "Available",
+      "eligibility": "For Profit, Governmental Entity, Not-For-Profit",
+      "dueDate": "07/21/2026 2:00PM EDT",
+      "link": "https://omh.ny.gov/omhweb/rfp/",
+      "serviceArea": "Health Services",
+      "source": "NYS"
+    },
+    {
       "id": "ZBGAOS26",
       "agency": "PRK01",
       "title": "ZBGA OPERATIONAL SUPPORT FY2026-2029",
@@ -199,6 +243,6 @@
       "source": "NYS"
     }
   ],
-  "fetched": "2026-06-01T21:22:33.970Z",
-  "count": 18
+  "fetched": "2026-06-08T18:19:11.034Z",
+  "count": 22
 }
