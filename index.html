@@ -85,7 +85,7 @@
   .section-link:hover { text-decoration: underline; }
 
   /* ── CARDS ── */
-  .grant-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; }
+  .grant-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; height: 100%; }
   .grant-card:hover { border-color: var(--blue-mid); box-shadow: 0 2px 8px rgba(29,78,216,0.08); }
   .grant-card.manual-card { border-left: 3px solid var(--manual); }
   .grant-card.manual-card:hover { border-color: var(--manual); box-shadow: 0 2px 8px rgba(91,33,182,0.1); }
@@ -107,7 +107,7 @@
   .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
   .deadline-row.urgent { color: var(--red); font-weight: 500; }
   .deadline-row.rolling { color: var(--green); }
-  .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 2px; padding-top: 8px; border-top: 1px solid var(--border); }
+  .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border); }
   .card-id { font-size: 10px; color: var(--text-faint); font-family:'Inter',sans-serif; }
   .card-id-row { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-faint); font-family:'Inter',sans-serif; }
   .copy-id-btn { font-size: 10px; padding: 2px 6px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-faint); cursor: pointer; font-family:'Inter',sans-serif; transition: all 0.12s; }
@@ -281,7 +281,7 @@
       <div class="grants-grid" id="grants-grid">
         <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>
       </div>
-      <div id="pagination"></div>
+      <div class="pagination" id="pagination"></div>
     </main>
   </div>
 </div>
@@ -341,6 +341,7 @@
     </main>
   </div>
 </div>
+
 
 <!-- ══ PIPELINE TAB ══ -->
 <div id="tab-pipeline" style="display:none;">
@@ -464,7 +465,7 @@ function switchTab(tab, el) {
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
   document.getElementById('keyword-input').style.display = tab==='federal' ? '' : 'none';
-  document.getElementById('keyword-input').placeholder = tab==='federal' ? 'Search federal grants…' : 'Search grants… (e.g. housing, parks, transit)';
+  document.getElementById('keyword-input').placeholder = 'Search federal grants…';
   if (tab==='federal' && !fed.loaded) { fed.loaded=true; fetchFedGrants(); }
 }
 
@@ -557,7 +558,7 @@ function renderFedCard(g) {
   if (!g.closeDate) dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
   else { const d=daysUntil(g.closeDate); const cls=d<=14&&d>=0?'urgent':''; dl=`<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.closeDate:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.closeDate}</span>`; }
   return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')">
-    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div>
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div></div>
     <div class="card-title">${esc(cleanTitle(g.title||'Untitled'))}</div>
     <div class="card-agency">${esc((g.agencyName||g.agencyCode||'').slice(0,60))}</div>
     <div class="card-mid">${g.fundingCategories?`<span class="card-category">${esc(CAT[g.fundingCategories]||g.fundingCategories)}</span>`:'<span></span>'}</div>
@@ -566,6 +567,7 @@ function renderFedCard(g) {
     <a class="view-btn" href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank" onclick="event.stopPropagation()">View →</a></div>
   </div>`;
 }
+
 
 
 // ── BROWSE FETCH ──────────────────────────────────────────────
@@ -789,7 +791,7 @@ function renderCard(g) {
   if (!g.closeDate) dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
   else { const d=daysUntil(g.closeDate); const cls=d<0?'':d<=14?'urgent':''; dl=`<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.closeDate:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.closeDate}</span>`; }
   return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')">
-    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div>
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div></div>
     <div class="card-title">${esc(cleanTitle(g.title||'Untitled'))}</div>
     <div class="card-agency">${esc((g.agencyName||g.agencyCode||'').slice(0,60))}</div>
     <div class="card-mid">${g.fundingCategories?`<span class="card-category">${esc(CAT[g.fundingCategories]||g.fundingCategories)}</span>`:'<span></span>'}</div>
@@ -880,7 +882,7 @@ function renderNYSCard(g) {
   const viewHref = g.link || g.url || 'https://grantsmanagement.ny.gov/search-funding-sfs';
   return `<div class="grant-card">
     <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-nys">NYS</span><span class="tag ${sc}">${esc(g.status||'Available')}</span></div>
-    <button class="card-heart ${saved?'saved':''}" onclick="event.stopPropagation();toggleSave('nys-${esc(String(g.id))}',this)">${saved?'♥':'♡'}</button></div>
+</div>
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'New York State')}</div>
     <div class="card-mid"><span></span></div>
