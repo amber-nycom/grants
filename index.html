@@ -105,10 +105,11 @@
   .card-agency { font-size: 11px; color: var(--text-faint); }
   .card-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .card-category { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-muted); }
-  .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
+  .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); margin-top: auto; }
   .deadline-row.urgent { color: var(--red); font-weight: 500; }
   .deadline-row.rolling { color: var(--green); }
   .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border); }
+  .deadline-row ~ .card-bottom { margin-top: 0; }
   .card-id { font-size: 10px; color: var(--text-faint); font-family:'Inter',sans-serif; }
   .card-id-row { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-faint); font-family:'Inter',sans-serif; }
   .copy-id-btn { font-size: 10px; padding: 2px 6px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-faint); cursor: pointer; font-family:'Inter',sans-serif; transition: all 0.12s; }
@@ -461,23 +462,29 @@ const CAT = {
 // Short labels for badges — matched to agency-grants.json source values where applicable
 const NYS_AGENCY_LABELS = {
   'AGM01': 'Ag & Markets',
+  'DCJ01':  'DCJS',
   'DEC01':  'DEC',
+  'DED01':  'ESD',
   'DOH01':  'DOH',
   'DOL01':  'DOL',
   'OAS01':  'OAS',
   'OMH01':  'OMH',
   'PRK01':  'NYS Parks',
+  'TDA01':  'OTDA',
 };
 
 // Full agency names for display under card titles
 const NYS_AGENCY_NAMES = {
   'AGM01': 'NYS Department of Agriculture & Markets',
+  'DCJ01':  'NYS Division of Criminal Justice Services',
   'DEC01':  'NYS Department of Environmental Conservation',
+  'DED01':  'Empire State Development',
   'DOH01':  'NYS Department of Health',
   'DOL01':  'NYS Department of Labor',
   'OAS01':  'NYS Office of Addiction Services & Supports',
   'OMH01':  'NYS Office of Mental Health',
   'PRK01':  'NYS Office of Parks, Recreation & Historic Preservation',
+  'TDA01':  'NYS Office of Temporary & Disability Assistance',
 };
 
 // ── TABS ─────────────────────────────────────────────────────
@@ -1039,7 +1046,7 @@ async function fetchAgencyGrants(){
 document.getElementById('keyword-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') {
     const activeTab = document.querySelector('.nav-tab.active');
-    if (activeTab && activeTab.textContent.trim()==='Federal grants') applyFedFilters();
+    if (activeTab && activeTab.textContent.trim()==='Federal Grants') applyFedFilters();
     else applyFilters();
   }
 });
