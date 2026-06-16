@@ -603,7 +603,7 @@ function renderSplitList() {
     return `<div class="split-item${active}" onclick="selectGrant('${esc(String(g.id))}',${i})">
       <div class="split-dot ${dot}"></div>
       <div class="split-item-body">
-        <div class="split-item-title">${esc((g.title||'').slice(0,55))}${(g.title||'').length>55?'…':''}</div>
+        <div class="split-item-title">${esc(cleanTitle(g.title||'').slice(0,55))}${cleanTitle(g.title||'').length>55?'…':''}</div>
         <div class="split-item-meta">${esc(meta)}</div>
       </div>
       ${award?`<div class="split-item-award">${award}</div>`:''}
@@ -905,7 +905,7 @@ function renderCard(g) {
   return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')">
     <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div>
     <button class="card-heart ${saved?'saved':''}" onclick="event.stopPropagation();toggleSave('${esc(String(g.id))}',this)">${saved?'♥':'♡'}</button></div>
-    <div class="card-title">${esc(g.title||'Untitled')}</div>
+    <div class="card-title">${esc(cleanTitle(g.title||'Untitled'))}</div>
     <div class="card-agency">${esc((g.agencyName||g.agencyCode||'').slice(0,60))}</div>
     <div class="card-mid">${g.fundingCategories?`<span class="card-category">${esc(CAT[g.fundingCategories]||g.fundingCategories)}</span>`:'<span></span>'}</div>
     ${dl}
@@ -1064,6 +1064,7 @@ function toggleSaveModal(id) {
 // ── HELPERS ───────────────────────────────────────────────────
 function daysUntil(s) { if(!s)return null; const[m,d,y]=s.split('/'); if(!y)return null; const c=new Date(y,m-1,d),n=new Date(); n.setHours(0,0,0,0); return Math.round((c-n)/86400000); }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function cleanTitle(s) { return (s||'').replace(/(&nbsp;|\u00a0)+/g,' ').trim(); }
 function toggleSave(id,btn) { const sid=String(id); if(state.saved.has(sid)){state.saved.delete(sid);btn.classList.remove('saved');btn.innerHTML='♡';}else{state.saved.add(sid);btn.classList.add('saved');btn.innerHTML='♥';} }
 function copyId(id,btn) { navigator.clipboard.writeText(id).then(()=>{const o=btn.textContent;btn.textContent='✓';btn.style.background='var(--green)';btn.style.color='white';setTimeout(()=>{btn.textContent=o;btn.style.background='';btn.style.color='';},2000);}).catch(()=>prompt('Copy:',id)); }
 function fmtAward(g) { if(!g.awardCeiling)return''; const n=parseInt(g.awardCeiling); if(n>=1000000)return'$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M'; if(n>=1000)return'$'+Math.round(n/1000)+'k'; return'$'+n; }
