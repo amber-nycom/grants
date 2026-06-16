@@ -515,6 +515,7 @@
 const GRANTS_API = 'https://young-base-f33b.amberdlucky.workers.dev';
 const PAGE_SIZE = 12;
 const SPLIT_SIZE = 30;
+const FED_PAGE_SIZE = 75;
 
 let state = {
   keyword:'', category:'', eligibility:'02',
@@ -580,7 +581,7 @@ async function fetchFedGrants() {
   document.getElementById('fed-grants-grid').innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>`;
   document.getElementById('fed-pagination').innerHTML = '';
   const [sb,sd] = fed.sort.split('|');
-  const body = { rows:PAGE_SIZE, startRecordNum:fed.page*PAGE_SIZE, oppStatuses:fed.statuses.join('|')||'posted', sortBy:`${sb}|${sd}` };
+  const body = { rows:FED_PAGE_SIZE, startRecordNum:fed.page*FED_PAGE_SIZE, oppStatuses:fed.statuses.join('|')||'posted', sortBy:`${sb}|${sd}` };
   if (fed.keyword) body.keyword = fed.keyword;
   if (fed.category) body.fundingCategories = fed.category;
   if (fed.eligibility) body.eligibilities = fed.eligibility;
@@ -645,7 +646,7 @@ function renderFedCard(g) {
 }
 
 function renderFedPagination() {
-  const tot=Math.ceil(fed.totalHits/PAGE_SIZE), cur=fed.page;
+  const tot=Math.ceil(fed.totalHits/FED_PAGE_SIZE), cur=fed.page;
   const el=document.getElementById('fed-pagination');
   if(tot<=1){el.innerHTML='';return;}
   let b=`<button class="page-btn" onclick="goFedPage(${cur-1})" ${cur===0?'disabled':''}>‹</button>`;
