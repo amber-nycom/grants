@@ -355,7 +355,9 @@
       <div class="grants-grid" id="fed-grants-grid">
         <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>
       </div>
-      <div class="pagination" id="fed-pagination"></div>
+      <div class="split-load-more" id="fed-load-more" style="display:none;">
+        <button onclick="loadMoreFed()">Load more</button>
+      </div>
     </main>
   </div>
 </div>
@@ -515,7 +517,7 @@
 const GRANTS_API = 'https://young-base-f33b.amberdlucky.workers.dev';
 const PAGE_SIZE = 12;
 const SPLIT_SIZE = 30;
-const FED_PAGE_SIZE = 75;
+const FED_PAGE_SIZE = 100;
 
 let state = {
   keyword:'', category:'', eligibility:'02',
@@ -576,11 +578,13 @@ const NON_LOCAL = [
 }
 
 // ── FEDERAL TAB ───────────────────────────────────────────────
-async function fetchFedGrants() {
+async function fetchFedGrants(append) {
   if (fed.loading) return;
   fed.loading = true;
-  document.getElementById('fed-grants-grid').innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>`;
-  document.getElementById('fed-pagination').innerHTML = '';
+  if (!append) {
+    document.getElementById('fed-grants-grid').innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>`;
+    document.getElementById('fed-load-more').style.display = 'none';
+  }
   const [sb,sd] = fed.sort.split('|');
   const body = { rows:FED_PAGE_SIZE, startRecordNum:fed.page*FED_PAGE_SIZE, oppStatuses:fed.statuses.join('|')||'posted', sortBy:`${sb}|${sd}` };
   if (fed.keyword) body.keyword = fed.keyword;
@@ -590,11 +594,14 @@ async function fetchFedGrants() {
     const r = await fetch(GRANTS_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
-  let g = d.oppHits || d.data?.oppHits || [];
-      const rawCount = d.hitCount || d.data?.hitCount || g.length;
-      g = filterLocal(g);
-      fed.grants = g; fed.totalHits = rawCount; fed.filteredCount = g.length; fed.loading = false;
-      renderFedGrants();
+    let g = d.oppHits || d.data?.oppHits || [];
+    const rawCount = d.hitCount || d.data?.hitCount || g.length;
+    g = filterLocal(g);
+    fed.grants = append ? [...fed.grants, ...g] : g;
+    fed.totalHits = rawCount;
+    fed.filteredCount = fed.grants.length;
+    fed.loading = false;
+    renderFedGrants();
   } catch(e) {
     fed.loading = false;
     document.getElementById('fed-grants-grid').innerHTML = `<div class="error-state"><div style="font-size:24px;">⚠️</div><div class="error-msg">Could not connect to Grants.gov API.<br><small>${esc(e.message)}</small></div><button class="retry-btn" onclick="fetchFedGrants()">Retry</button></div>`;
@@ -611,27 +618,28 @@ function applyFedFilters() {
   if (document.getElementById('fed-forecasted').checked) fed.statuses.push('forecasted');
   if (document.getElementById('fed-closed').checked) fed.statuses.push('closed');
   if (!fed.statuses.length) fed.statuses = ['posted'];
-  fed.page = 0; fetchFedGrants();
+  fed.page = 0; fed.grants = []; fetchFedGrants();
 }
 
 function renderFedGrants() {
   const grid = document.getElementById('fed-grants-grid');
   if (!fed.grants.length) {
     grid.innerHTML = `<div class="empty-state"><div style="font-size:28px;">🔍</div><div style="font-size:13px;color:var(--text-mid);">No grants found.</div></div>`;
+    document.getElementById('fed-load-more').style.display = 'none';
     return;
   }
-  let html = `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.filteredCount||fed.grants.length} shown · Grants.gov)</span></div>`;
+  let html = `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.grants.length.toLocaleString()} shown · Grants.gov)</span></div>`;
   html += fed.grants.map(g => renderFedCard(g)).join('');
   grid.innerHTML = html;
-  renderFedPagination();
-  // update active tags
+  const hasMore = (fed.page + 1) * FED_PAGE_SIZE < fed.totalHits;
+  document.getElementById('fed-load-more').style.display = hasMore ? '' : 'none';
   const tags = [];
   if (fed.keyword) tags.push(`keyword: "${fed.keyword}"`);
   if (fed.category) tags.push(`category: ${CAT[fed.category]||fed.category}`);
   document.getElementById('fed-active-tags').innerHTML = tags.map(t=>`<span class="active-tag">${t}</span>`).join('');
 }
 
-function renderFedCard(g) {
+function loadMoreFed() { fed.page++; fetchFedGrants(true); }
   const saved = state.saved.has(g.id);
   const sc = g.oppStatus==='posted'?'tag-posted':g.oppStatus==='forecasted'?'tag-forecasted':'tag-closed';
   let dl = '';
@@ -649,20 +657,6 @@ function renderFedCard(g) {
   </div>`;
 }
 
-function renderFedPagination() {
-  const tot=Math.ceil(fed.totalHits/FED_PAGE_SIZE), cur=fed.page;
-  const el=document.getElementById('fed-pagination');
-  if(tot<=1){el.innerHTML='';return;}
-  let b=`<button class="page-btn" onclick="goFedPage(${cur-1})" ${cur===0?'disabled':''}>‹</button>`;
-  const pages=[];
-  if(tot<=7){for(let i=0;i<tot;i++)pages.push(i);}
-  else{pages.push(0);if(cur>2)pages.push('…');for(let i=Math.max(1,cur-1);i<=Math.min(tot-2,cur+1);i++)pages.push(i);if(cur<tot-3)pages.push('…');pages.push(tot-1);}
-  pages.forEach(p=>{if(p==='…')b+=`<span class="page-btn" style="pointer-events:none;opacity:0.4;">…</span>`;else b+=`<button class="page-btn ${p===cur?'active':''}" onclick="goFedPage(${p})">${p+1}</button>`;});
-  b+=`<button class="page-btn" onclick="goFedPage(${cur+1})" ${cur>=tot-1?'disabled':''}>›</button>`;
-  el.innerHTML=b;
-}
-
-function goFedPage(p){fed.page=p;window.scrollTo(0,0);fetchFedGrants();}
 
 // ── BROWSE FETCH ──────────────────────────────────────────────
 async function fetchGrants() {
