@@ -860,7 +860,6 @@ if (g.dueDate) {
         <span class="tag" style="${sourceStyle}">${esc(g.source||'Agency')}</span>
         <span class="tag ${sc}">${esc(isClosed?'Closed':g.status||'Available')}</span>
       </div>
-      <button class="card-heart ${saved?'saved':''}" onclick="event.stopPropagation();toggleSave('agency-${esc(String(g.id))}',this)">${saved?'♥':'♡'}</button>
     </div>
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'')}</div>
