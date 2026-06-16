@@ -44,7 +44,6 @@
   /* ── TOPBAR ── */
   .topbar { background: var(--blue-dark); padding: 0 20px; display: flex; align-items: center; height: 120px; position: sticky; top: 0; z-index: 100; }
   .brand { display: flex; align-items: center; gap: 8px; font-family: 'Inter', sans-serif; font-weight: 600; font-size: 14px; color: #fff; flex-shrink: 0; margin-right: 6px; }
-  .brand-icon { width: 26px; height: 26px; background: var(--blue-mid); border-radius: 5px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 13px; font-weight: 700; }
   .nav-tabs { display: flex; margin-right: 16px; }
   .nav-tab { padding: 0 14px; height: 46px; display: flex; align-items: center; font-size: 13px; color: rgba(255,255,255,0.6); cursor: pointer; border-bottom: 2px solid transparent; transition: color 0.15s; white-space: nowrap; user-select: none; }
   .nav-tab:hover { color: rgba(255,255,255,0.85); }
@@ -53,14 +52,12 @@
   .topbar-search:focus { border-color: var(--blue-mid); background: rgba(255,255,255,0.15); }
   .topbar-search::placeholder { color: rgba(255,255,255,0.45); }
   .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
-  .result-summary { font-family:'Inter',sans-serif; font-size: 11px; color: rgba(255,255,255,0.55); }
-  .result-summary strong { color: rgba(255,255,255,0.85); }
 
   /* ── LAYOUT ── */
   .layout { display: flex; min-height: calc(100vh - 46px); }
   .sidebar { width: 280px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; position: sticky; top: 46px; height: calc(100vh - 46px); }
   .filter-group { margin-bottom: 20px; }
-  .filter-group h4 { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-faint); font-family: font-family:'Inter',sans-serif; margin-bottom: 8px; }
+  .filter-group h4 { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-faint); font-family:'Inter',sans-serif; margin-bottom: 8px; }
   .filter-item { display: flex; align-items: center; gap: 7px; padding: 3px 0; cursor: pointer; }
   .filter-item input[type=checkbox] { accent-color: var(--blue); cursor: pointer; flex-shrink: 0; }
   .filter-item label { font-size: 12px; color: var(--text-mid); cursor: pointer; flex: 1; }
@@ -72,17 +69,8 @@
   /* ── MAIN ── */
   .main { flex: 1; padding: 18px 20px; min-width: 0; }
   .toolbar { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
-  .active-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; background: var(--blue-pale); border: 1px solid var(--blue-light); border-radius: 4px; font-size: 11px; color: var(--blue-dark); font-family: font-family:'Inter',sans-serif; }
-  .toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .active-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; background: var(--blue-pale); border: 1px solid var(--blue-light); border-radius: 4px; font-size: 11px; color: var(--blue-dark); font-family:'Inter',sans-serif; }
   .grants-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(288px, 1fr)); gap: 12px; }
-
-  /* ── SECTION DIVIDERS ── */
-  .section-header { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; padding: 8px 0 4px; margin-bottom: 2px; }
-  .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; font-family:'Inter',sans-serif; color: var(--text-muted); white-space: nowrap; }
-  .section-line { flex: 1; height: 1px; background: var(--border); }
-  .section-count { font-size: 11px; color: var(--text-faint); font-family: font-family:'Inter',sans-serif; }
-  .section-link { font-size: 11px; color: var(--blue); text-decoration: none; }
-  .section-link:hover { text-decoration: underline; }
 
   /* ── CARDS ── */
   .grant-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color 0.15s, box-shadow 0.15s; cursor: pointer; height: 100%; }
@@ -97,17 +85,17 @@
   .tag-posted { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
   .tag-forecasted { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
   .tag-closed { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
-  .card-heart { color: var(--border-mid); cursor: pointer; font-size: 16px; line-height: 1; flex-shrink: 0; transition: color 0.1s; border: none; background: none; padding: 0; }
-  .card-heart:hover { color: var(--blue-mid); }
-  .card-heart.saved { color: var(--blue); }
+  .tag-advertised { background: var(--blue-light); color: var(--blue-dark); border: 1px solid var(--blue-mid); }
   .card-title { font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--text); }
   .card-agency { font-size: 11px; color: var(--text-faint); }
   .card-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .card-category { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-muted); }
-  .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
+  /* deadline-row pushes to bottom of card above the divider */
+  .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); margin-top: auto; }
   .deadline-row.urgent { color: var(--red); font-weight: 500; }
   .deadline-row.rolling { color: var(--green); }
   .card-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--border); }
+  .deadline-row ~ .card-bottom { margin-top: 0; }
   .card-id { font-size: 10px; color: var(--text-faint); font-family:'Inter',sans-serif; }
   .card-id-row { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--text-faint); font-family:'Inter',sans-serif; }
   .copy-id-btn { font-size: 10px; padding: 2px 6px; border-radius: 3px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-faint); cursor: pointer; font-family:'Inter',sans-serif; transition: all 0.12s; }
@@ -119,64 +107,16 @@
   .edit-btn { padding: 4px 10px; border-radius: var(--radius); font-size: 11px; font-family: 'Inter', sans-serif; cursor: pointer; background: var(--manual-bg); border: 1px solid var(--manual-border); color: var(--manual); transition: all 0.12s; display: inline-flex; align-items: center; gap: 3px; }
   .edit-btn:hover { background: var(--manual); color: #fff; border-color: var(--manual); }
 
-  /* ── SPLIT VIEW ── */
-  .split-body { display: flex; height: calc(100vh - 46px); overflow: hidden; }
-  .split-sidebar { width: 216px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); padding: 16px; overflow-y: auto; height: 100%; }
-  .split-list { width: 340px; flex-shrink: 0; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; height: 100%; display: flex; flex-direction: column; }
-  .split-list-header { padding: 10px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--surface); z-index: 2; }
-  .split-list-count { font-family:'Inter',sans-serif; font-size: 11px; color: var(--text-faint); }
-  .split-list-count strong { color: var(--text-mid); }
-  .split-list-items { flex: 1; }
-  .split-item { padding: 11px 14px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.1s; display: flex; align-items: flex-start; gap: 10px; }
-  .split-item:hover { background: var(--surface-alt); }
-  .split-item.active { background: var(--blue-pale); border-left: 3px solid var(--blue); padding-left: 11px; }
-  .split-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-  .split-dot.open { background: var(--blue); }
-  .split-dot.rolling { background: var(--green); }
-  .split-dot.closed { background: var(--text-faint); }
-  .split-item-body { flex: 1; min-width: 0; }
-  .split-item-title { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.4; margin-bottom: 3px; }
-  .split-item-meta { font-size: 11px; color: var(--text-faint); }
-  .split-item-award { font-family:'Inter',sans-serif; font-size: 12px; font-weight: 500; color: var(--text-mid); flex-shrink: 0; white-space: nowrap; }
+  /* ── LOAD MORE ── */
   .split-load-more { padding: 12px; text-align: center; border-top: 1px solid var(--border); }
   .split-load-more button { padding: 6px 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-alt); color: var(--text-mid); font-size: 12px; font-family: 'Inter', sans-serif; cursor: pointer; }
   .split-load-more button:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-  /* ── DETAIL PANEL ── */
-  .split-detail { flex: 1; overflow-y: auto; height: 100%; padding: 24px 28px; background: var(--bg); }
-  .detail-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-faint); gap: 10px; text-align: center; }
-  .detail-empty-icon { font-size: 32px; }
-  .detail-empty-text { font-size: 13px; color: var(--text-muted); }
-  .detail-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-  .detail-tag { padding: 3px 10px; border-radius: 20px; font-size: 10px; font-family:'Inter',sans-serif; font-weight: 500; letter-spacing: 0.3px; text-transform: uppercase; border: 1px solid var(--border); background: var(--surface); color: var(--text-mid); }
-  .detail-tag.federal { background: var(--blue-dark); color: #fff; border-color: var(--blue-dark); }
-  .detail-title { font-size: 22px; font-weight: 600; line-height: 1.25; color: var(--text); margin-bottom: 5px; }
-  .detail-subtitle { font-size: 12px; color: var(--text-faint); font-family:'Inter',sans-serif; margin-bottom: 18px; }
-  .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-  .btn-primary { padding: 8px 18px; background: var(--blue); color: #fff; border: none; border-radius: var(--radius); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: background 0.12s; }
-  .btn-primary:hover { background: var(--blue-dark); }
-  .btn-action { padding: 7px 14px; background: var(--surface); color: var(--text-mid); border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.12s; display: inline-flex; align-items: center; gap: 5px; text-decoration: none; }
-  .btn-action:hover { background: var(--surface-alt); border-color: var(--border-mid); }
-  .timeline-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
-  .timeline-pill { padding: 5px 12px; border-radius: 5px; font-size: 11px; font-family:'Inter',sans-serif; border: 1px solid var(--border); background: var(--surface); color: var(--text-mid); white-space: nowrap; }
-  .timeline-pill.highlight { background: var(--blue); color: #fff; border-color: var(--blue); font-weight: 500; }
-  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-  .detail-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
-  .detail-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); font-family:'Inter',sans-serif; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-  .detail-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: 12px; gap: 12px; }
-  .detail-row:last-child { border-bottom: none; }
-  .detail-key { color: var(--text-faint); flex-shrink: 0; }
-  .detail-val { color: var(--text); font-weight: 500; text-align: right; }
-  .detail-description { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 16px; }
-  .detail-description p { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
-  .placeholder-line { height: 10px; background: var(--border); border-radius: 3px; margin-bottom: 8px; opacity: 0.6; }
 
   /* ── STATES ── */
   .loading-state, .error-state, .empty-state { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; color: var(--text-faint); gap: 10px; }
   .loading-spinner { width: 26px; height: 26px; border: 2.5px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-label { font-size: 12px; color: var(--text-muted); font-family:'Inter',sans-serif; }
-  .split-loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 10px; flex: 1; }
   .error-msg { font-size: 13px; color: var(--text-mid); max-width: 400px; line-height: 1.5; }
   .retry-btn { padding: 6px 16px; border-radius: var(--radius); background: var(--blue); color: #fff; border: none; cursor: pointer; font-size: 12px; font-family: 'Inter', sans-serif; }
 
@@ -210,6 +150,8 @@
   .modal-key { color: var(--text-faint); }
   .modal-val { color: var(--text); font-weight: 500; text-align: right; }
   .modal-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .btn-primary { padding: 8px 18px; background: var(--blue); color: #fff; border: none; border-radius: var(--radius); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: background 0.12s; }
+  .btn-primary:hover { background: var(--blue-dark); }
   .btn-outline { padding: 7px 14px; background: transparent; color: var(--text-mid); border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: 'Inter', sans-serif; cursor: pointer; transition: all 0.12s; }
   .btn-outline:hover { background: var(--surface-alt); border-color: var(--border-mid); }
 
@@ -229,8 +171,6 @@
   .btn-cancel:hover { background: var(--surface-alt); }
   .btn-save { padding: 8px 20px; background: var(--manual); color: #fff; border: none; border-radius: var(--radius); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; }
   .btn-save:hover { background: #4c1d95; }
-  .add-grant-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--manual-bg); border: 1px solid var(--manual-border); border-radius: var(--radius); font-size: 12px; font-family: 'Inter', sans-serif; font-weight: 500; color: var(--manual); cursor: pointer; transition: all 0.12s; }
-  .add-grant-btn:hover { background: var(--manual); color: #fff; border-color: var(--manual); }
 
   /* ── CFA BANNER ── */
   .cfa-banner { grid-column: 1 / -1; background: var(--surface); border: 1.5px solid #bfdbfe; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 6px; }
@@ -270,15 +210,15 @@
 <header class="topbar">
   <div class="brand"><img src="nycom_white_logo.png" alt="Logo" style="height:55px;width:auto;margin-right:20px;"></div>
   <nav class="nav-tabs">
-    <div class="nav-tab active" onclick="switchTab('browse',this)">State</div>
-<div class="nav-tab" onclick="switchTab('federal',this)">Federal grants</div>
+    <div class="nav-tab active" onclick="switchTab('browse',this)">State Grants</div>
+    <div class="nav-tab" onclick="switchTab('federal',this)">Federal Grants</div>
   </nav>
   <div class="topbar-right">
     <input class="topbar-search" id="keyword-input" type="text" placeholder="Search grants… (e.g. housing, parks, transit)">
   </div>
 </header>
 
-<!-- ══ BROWSE TAB ══ -->
+<!-- ══ STATE GRANTS TAB ══ -->
 <div id="tab-browse">
   <div class="layout">
     <aside class="sidebar">
@@ -288,7 +228,7 @@
         <div class="filter-item"><input type="checkbox" id="s-forecasted"><label for="s-forecasted">Forecasted</label></div>
         <div class="filter-item"><input type="checkbox" id="s-closed"><label for="s-closed">Closed</label></div>
       </div>
-<input type="hidden" id="filter-eligibility" value="02">
+      <input type="hidden" id="filter-eligibility" value="02">
       <div class="filter-group">
         <h4>Sort</h4>
         <select class="select-filter" id="filter-sort">
@@ -300,22 +240,20 @@
       </div>
       <button class="apply-filters-btn" onclick="applyFilters()">Apply filters</button>
       <div style="background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--radius);padding:7px 10px;margin-top:14px;font-size:11px;color:var(--blue-dark);line-height:1.4;">
-       <strong>Disclaimer:</strong> This dashboard is not comprehensive of every grant opportunity available to municipalities and may display incorrect/outdated information. For the most up to date resources, look at state or federal websites directly. 
+        <strong>Disclaimer:</strong> This dashboard is not comprehensive of every grant opportunity available to municipalities and may display incorrect/outdated information. For the most up to date resources, look at state or federal websites directly.
       </div>
     </aside>
     <main class="main">
-      <div class="toolbar">
-        <span id="active-tags"></span>
-      </div>
+      <div class="toolbar"><span id="active-tags"></span></div>
       <div class="grants-grid" id="grants-grid">
-        <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>
+        <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Loading grants…</div></div>
       </div>
       <div class="pagination" id="pagination"></div>
     </main>
   </div>
 </div>
 
-<!-- ══ FEDERAL TAB ══ -->
+<!-- ══ FEDERAL GRANTS TAB ══ -->
 <div id="tab-federal" style="display:none;">
   <div class="layout">
     <aside class="sidebar">
@@ -371,34 +309,6 @@
   </div>
 </div>
 
-
-<!-- ══ PIPELINE TAB ══ -->
-<div id="tab-pipeline" style="display:none;">
-  <div class="tab-placeholder">
-    <div class="tab-placeholder-icon">📋</div>
-    <div class="tab-placeholder-title">Pipeline</div>
-    <div class="tab-placeholder-sub">Grants you're actively tracking will appear here.</div>
-  </div>
-</div>
-
-<!-- ══ APPLIED TAB ══ -->
-<div id="tab-applied" style="display:none;">
-  <div class="tab-placeholder">
-    <div class="tab-placeholder-icon">✉️</div>
-    <div class="tab-placeholder-title">Applied</div>
-    <div class="tab-placeholder-sub">Grants you've submitted applications for will appear here.</div>
-  </div>
-</div>
-
-<!-- ══ REPORTS TAB ══ -->
-<div id="tab-reports" style="display:none;">
-  <div class="tab-placeholder">
-    <div class="tab-placeholder-icon">📊</div>
-    <div class="tab-placeholder-title">Reports</div>
-    <div class="tab-placeholder-sub">Grant activity reports and analytics will appear here.</div>
-  </div>
-</div>
-
 <!-- GRANT DETAIL MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal"><button class="modal-close" onclick="closeModalDirect()">×</button><div id="modal-content"></div></div>
@@ -409,48 +319,20 @@
   <div class="add-modal">
     <button class="modal-close" onclick="closeAddModalDirect()">×</button>
     <h2 id="add-modal-heading">Add grant manually</h2>
-    <p class="add-modal-sub">These grants will appear in their own section alongside federal and NYS grants.</p>
+    <p class="add-modal-sub">These grants will appear in their own section alongside state and federal grants.</p>
     <input type="hidden" id="edit-grant-id">
-    <div class="form-row">
-      <label>Grant title *</label>
-      <input class="form-input" id="f-title" type="text" placeholder="e.g. Community Development Block Grant">
+    <div class="form-row"><label>Grant title *</label><input class="form-input" id="f-title" type="text" placeholder="e.g. Community Development Block Grant"></div>
+    <div class="form-row-2">
+      <div class="form-row" style="margin-bottom:0"><label>Agency / funder</label><input class="form-input" id="f-agency" type="text" placeholder="e.g. HUD, Empire State Dev."></div>
+      <div class="form-row" style="margin-bottom:0"><label>Grant ID / number</label><input class="form-input" id="f-id" type="text" placeholder="e.g. B-24-MC-36-0001"></div>
     </div>
     <div class="form-row-2">
-      <div class="form-row" style="margin-bottom:0">
-        <label>Agency / funder</label>
-        <input class="form-input" id="f-agency" type="text" placeholder="e.g. HUD, Empire State Dev.">
-      </div>
-      <div class="form-row" style="margin-bottom:0">
-        <label>Grant ID / number</label>
-        <input class="form-input" id="f-id" type="text" placeholder="e.g. B-24-MC-36-0001">
-      </div>
+      <div class="form-row" style="margin-bottom:0"><label>Deadline</label><input class="form-input" id="f-deadline" type="text" placeholder="MM/DD/YYYY or Rolling"></div>
+      <div class="form-row" style="margin-bottom:0"><label>Award amount</label><input class="form-input" id="f-award" type="text" placeholder="e.g. $250,000"></div>
     </div>
-    <div class="form-row-2">
-      <div class="form-row" style="margin-bottom:0">
-        <label>Deadline</label>
-        <input class="form-input" id="f-deadline" type="text" placeholder="MM/DD/YYYY or Rolling">
-      </div>
-      <div class="form-row" style="margin-bottom:0">
-        <label>Award amount</label>
-        <input class="form-input" id="f-award" type="text" placeholder="e.g. $250,000">
-      </div>
-    </div>
-    <div class="form-row">
-      <label>Status</label>
-      <select class="form-input" id="f-status" style="appearance:none;cursor:pointer;">
-        <option value="open">Open</option>
-        <option value="forecasted">Forecasted</option>
-        <option value="closed">Closed</option>
-      </select>
-    </div>
-    <div class="form-row">
-      <label>Application URL</label>
-      <input class="form-input" id="f-url" type="text" placeholder="https://…">
-    </div>
-    <div class="form-row">
-      <label>Notes</label>
-      <textarea class="form-textarea" id="f-notes" placeholder="Internal notes, contacts, match requirements…"></textarea>
-    </div>
+    <div class="form-row"><label>Status</label><select class="form-input" id="f-status" style="appearance:none;cursor:pointer;"><option value="open">Open</option><option value="forecasted">Forecasted</option><option value="closed">Closed</option></select></div>
+    <div class="form-row"><label>Application URL</label><input class="form-input" id="f-url" type="text" placeholder="https://…"></div>
+    <div class="form-row"><label>Notes</label><textarea class="form-textarea" id="f-notes" placeholder="Internal notes, contacts, match requirements…"></textarea></div>
     <div class="form-actions">
       <button class="btn-cancel" onclick="closeAddModalDirect()">Cancel</button>
       <button class="btn-save" onclick="saveManualGrant()">Save grant</button>
@@ -468,15 +350,14 @@ let state = {
   statuses:['posted'], sort:'openDate|desc',
   page:0, totalHits:0, grants:[], nysGrants:[], saved:new Set(), loading:false,
   manualGrants: JSON.parse(localStorage.getItem('manualGrants')||'[]'),
-  jsonManualGrants: [],
-  agencyGrants: [],
+  jsonManualGrants: [], agencyGrants: [],
 };
 let fed = {
   keyword:'', category:'', eligibility:'02',
   statuses:['posted'], sort:'openDate|desc',
-  page:0, totalHits:0, filteredCount:0, grants:[], loading:false, loaded:false,
+  page:0, totalHits:0, grants:[], loading:false, loaded:false,
 };
-  
+
 const CAT = {
   AG:'Agriculture',AR:'Arts',BC:'Business & Commerce',CD:'Community Development',
   CP:'Consumer Protection',DPR:'Disaster Prevention',ED:'Education',ELT:'Employment',
@@ -484,6 +365,32 @@ const CAT = {
   HU:'Humanities',IIJ:'Information Technology',IS:'Income Security',LJL:'Law & Justice',
   NR:'Natural Resources',OZ:'Opportunity Zones',RD:'Regional Development',
   ST:'Science & Technology',T:'Transportation',ACA:'Affordable Care Act',RA:'Recovery Act',O:'Other'
+};
+
+// ── NYS AGENCY LOOKUPS ────────────────────────────────────────
+const NYS_AGENCY_LABELS = {
+  'AGM01': 'Ag & Markets',
+  'DCJ01':  'DCJS',
+  'DEC01':  'DEC',
+  'DED01':  'ESD',
+  'DOH01':  'DOH',
+  'DOL01':  'DOL',
+  'OAS01':  'OAS',
+  'OMH01':  'OMH',
+  'PRK01':  'NYS Parks',
+  'TDA01':  'OTDA',
+};
+const NYS_AGENCY_NAMES = {
+  'AGM01': 'NYS Department of Agriculture & Markets',
+  'DCJ01':  'NYS Division of Criminal Justice Services',
+  'DEC01':  'NYS Department of Environmental Conservation',
+  'DED01':  'Empire State Development',
+  'DOH01':  'NYS Department of Health',
+  'DOL01':  'NYS Department of Labor',
+  'OAS01':  'NYS Office of Addiction Services & Supports',
+  'OMH01':  'NYS Office of Mental Health',
+  'PRK01':  'NYS Office of Parks, Recreation & Historic Preservation',
+  'TDA01':  'NYS Office of Temporary & Disability Assistance',
 };
 
 // ── TABS ─────────────────────────────────────────────────────
@@ -500,16 +407,13 @@ function switchTab(tab, el) {
 
 // ── NON-LOCAL FILTER ─────────────────────────────────────────
 const NON_LOCAL = [
-  // Defense & intel
   "DOD","AF","NAVY","ARMY","DARPA","DTRA","DIA","NRO","AFRL","AFOSR","ONR","ARO",
-  // Science/research agencies
   "NASA","NSF","NIST","NOAA","DOE-SC",
-  // Health & human services (NIH institutes + HHS divisions)
   "NIH","HHS","CDC","HRSA","SAMHSA","AHRQ","ACF","ACL","ASPR","IHS","OASH",
   "NCI","NHLBI","NIMH","NIAID","NEI","NIA","NICHD","NIDDK","NIGMS","NINDS",
   "NIDCD","NIAAA","NIDA","NIMHD","NHGRI","NIBIB","NINR","NLM","FIC","NCATS","NCCIH",
 ];
-  function filterLocal(grants) {
+function filterLocal(grants) {
   return grants.filter(g => {
     const c=(g.agencyCode||'').toUpperCase(), r=c.split('-')[0];
     return !NON_LOCAL.some(a=>c.startsWith(a)||r===a);
@@ -538,7 +442,6 @@ async function fetchFedGrants(append) {
     g = filterLocal(g);
     fed.grants = append ? [...fed.grants, ...g] : g;
     fed.totalHits = rawCount;
-    fed.filteredCount = fed.grants.length;
     fed.loading = false;
     renderFedGrants();
   } catch(e) {
@@ -581,7 +484,6 @@ function renderFedGrants() {
 function loadMoreFed() { fed.page++; fetchFedGrants(true); }
 
 function renderFedCard(g) {
-  const saved = state.saved.has(g.id);
   const sc = g.oppStatus==='posted'?'tag-posted':g.oppStatus==='forecasted'?'tag-forecasted':'tag-closed';
   let dl = '';
   if (!g.closeDate) dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
@@ -596,8 +498,6 @@ function renderFedCard(g) {
     <a class="view-btn" href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank" onclick="event.stopPropagation()">View →</a></div>
   </div>`;
 }
-
-
 
 // ── BROWSE FETCH ──────────────────────────────────────────────
 async function fetchGrants() {
@@ -632,11 +532,9 @@ function applyFilters() {
   state.page=0; fetchGrants();
 }
 
-
 // ── MANUAL GRANTS ─────────────────────────────────────────────
 function openAddModal(editId) {
-  const overlay = document.getElementById('add-overlay');
-  overlay.classList.add('open');
+  document.getElementById('add-overlay').classList.add('open');
   if (editId) {
     const g = state.manualGrants.find(x=>x.id===editId);
     if (!g) return;
@@ -657,17 +555,15 @@ function openAddModal(editId) {
     document.getElementById('f-status').value = 'open';
   }
 }
-
 function closeAddModal(e) { if (e.target===document.getElementById('add-overlay')) closeAddModalDirect(); }
 function closeAddModalDirect() { document.getElementById('add-overlay').classList.remove('open'); }
-
 function saveManualGrant() {
   const title = document.getElementById('f-title').value.trim();
   if (!title) { document.getElementById('f-title').focus(); return; }
   const editId = document.getElementById('edit-grant-id').value;
   const grant = {
-    id: editId || ('m-' + Date.now()),
-    title, agency: document.getElementById('f-agency').value.trim(),
+    id: editId || ('m-' + Date.now()), title,
+    agency: document.getElementById('f-agency').value.trim(),
     grantId: document.getElementById('f-id').value.trim(),
     deadline: document.getElementById('f-deadline').value.trim(),
     award: document.getElementById('f-award').value.trim(),
@@ -676,16 +572,11 @@ function saveManualGrant() {
     notes: document.getElementById('f-notes').value.trim(),
     addedAt: editId ? (state.manualGrants.find(x=>x.id===editId)||{}).addedAt || Date.now() : Date.now(),
   };
-  if (editId) {
-    state.manualGrants = state.manualGrants.map(x=>x.id===editId?grant:x);
-  } else {
-    state.manualGrants.push(grant);
-  }
+  if (editId) { state.manualGrants = state.manualGrants.map(x=>x.id===editId?grant:x); }
+  else { state.manualGrants.push(grant); }
   localStorage.setItem('manualGrants', JSON.stringify(state.manualGrants));
-  closeAddModalDirect();
-  renderGrants();
+  closeAddModalDirect(); renderGrants();
 }
-
 function deleteManualGrant(id) {
   if (!confirm('Remove this grant?')) return;
   state.manualGrants = state.manualGrants.filter(x=>x.id!==id);
@@ -695,22 +586,13 @@ function deleteManualGrant(id) {
 
 // ── NYS SERVICE AREA MAPPING ──────────────────────────────────
 const NYS_CATEGORY_MAP = {
-  AG: ['Agricultural Supports'],
-  ED: ['Education Supports'],
-  ENV: ['Environmental Supports'],
-  EN: ['Environmental Supports'],
-  FN: ['Family Supports'],
-  IS: ['Family Supports'],
-  HL: ['Health Services'],
-  HO: ['Housing and Shelter Services'],
-  LJL: ['Justice Services', 'Public Safety Supports'],
-  CD: ['Government Supports'],
-  T: ['Public Transportation Services'],
-  ELT: ['Workforce Development'],
-  NR: ['Environmental Supports'],
-  HU: ['Education Supports'],
+  AG: ['Agricultural Supports'], ED: ['Education Supports'],
+  ENV: ['Environmental Supports'], EN: ['Environmental Supports'],
+  FN: ['Family Supports'], IS: ['Family Supports'], HL: ['Health Services'],
+  HO: ['Housing and Shelter Services'], LJL: ['Justice Services', 'Public Safety Supports'],
+  CD: ['Government Supports'], T: ['Public Transportation Services'],
+  ELT: ['Workforce Development'], NR: ['Environmental Supports'], HU: ['Education Supports'],
 };
-
 function filterNYSByCategory(grants, category) {
   if (!category) return grants;
   const areas = NYS_CATEGORY_MAP[category];
@@ -722,8 +604,6 @@ function filterNYSByCategory(grants, category) {
 }
 
 // ── CFA BANNER ───────────────────────────────────────────────
-// Update CFA_DEADLINE and BCCC_DEADLINE each year when the new CFA opens (typically June).
-// Update CFA_YEAR to match. Program list rarely changes — add/remove as needed.
 const CFA_YEAR = '2026';
 const CFA_DEADLINE = '07/31/2026';
 const CFA_PROGRAMS = [
@@ -737,10 +617,9 @@ const CFA_PROGRAMS = [
   { title: 'NY KICKS Program', agency: 'Empire State Development', dueDate: CFA_DEADLINE, desc: 'Grants for municipalities and public authorities for creation, expansion, or renovation of publicly accessible soccer fields.', link: 'https://esd.ny.gov/ny-kicks-program' },
   { title: 'Water Quality Improvement Project (WQIP)', agency: 'NYS DEC', dueDate: CFA_DEADLINE, desc: 'Competitive reimbursement grants for local governments for nonpoint source pollution reduction and water quality projects.', link: 'https://dec.ny.gov/get-involved/grant-applications/wqip-program' },
   { title: 'Climate Smart Communities Grants', agency: 'NYS DEC', dueDate: CFA_DEADLINE, desc: 'Grants for municipalities for climate change mitigation and adaptation projects. CSC certification earns bonus points.', link: 'https://dec.ny.gov/environmental-protection/climate-change/resources-for-local-governments/grants-for-climate-action' },
-  { title: 'Non-Agricultural Nonpoint Source / MS4 Planning', agency: 'NYS DEC', dueDate: CFA_DEADLINE, desc: 'Planning grants for local governments for stormwater management and Municipal Separate Storm Sewer System (MS4) mapping.', link: 'https://dec.ny.gov/get-involved/grant-applications/non-agricultural-nonpoint-source-planning-ms4-mapping-grant' },
+  { title: 'Non-Agricultural Nonpoint Source / MS4 Planning', agency: 'NYS DEC', dueDate: CFA_DEADLINE, desc: 'Planning grants for local governments for stormwater management and MS4 mapping.', link: 'https://dec.ny.gov/get-involved/grant-applications/non-agricultural-nonpoint-source-planning-ms4-mapping-grant' },
   { title: 'Building Cleaner Communities (BCCC)', agency: 'NYSERDA', dueDate: '08/14/2026', desc: 'Competitive grants for municipalities for building decarbonization and clean energy projects. Has its own deadline separate from the July 31 CFA deadline.', link: 'https://www.nyserda.ny.gov/All-Programs/Building-Cleaner-Communities-Competition' },
 ];
-
 function cfaDaysUntil(dateStr) {
   if (!dateStr) return null;
   const [m, d, y] = dateStr.split('/');
@@ -749,44 +628,31 @@ function cfaDaysUntil(dateStr) {
   const n = new Date(); n.setHours(0, 0, 0, 0);
   return Math.round((c - n) / 86400000);
 }
-
 function renderCFABanner() {
   const days = cfaDaysUntil(CFA_DEADLINE);
-  // Hide entire banner once the latest program deadline (BCCC Aug 14) has passed
   const lastDays = cfaDaysUntil('08/14/2026');
   if (lastDays !== null && lastDays < 0) return '';
-
   const isUrgent = days !== null && days <= 14 && days >= 0;
   const isCFAClosed = days !== null && days < 0;
-  const deadlineLabel = isCFAClosed
-    ? 'Main deadline passed · BCCC closes 08/14/2026'
+  const deadlineLabel = isCFAClosed ? 'Main deadline passed · BCCC closes 08/14/2026'
     : days === 0 ? '⏱ Main deadline: closes today'
     : days === 1 ? '⏱ Main deadline: closes tomorrow'
     : `⏱ Main deadline: ${days} days · ${CFA_DEADLINE}`;
   const pillClass = isUrgent ? 'urgent' : 'normal';
-
   const programCards = CFA_PROGRAMS.map(p => {
     const d = cfaDaysUntil(p.dueDate);
     const isExpired = d !== null && d < 0;
     const isP_Urgent = d !== null && d <= 14 && d >= 0;
-    const deadlineText = d === null ? ''
-      : isExpired ? 'Deadline passed'
-      : d === 0 ? '⏱ Closes today'
-      : d === 1 ? '⏱ Closes tomorrow'
-      : `⏱ ${d} days · ${p.dueDate}`;
+    const deadlineText = d === null ? '' : isExpired ? 'Deadline passed'
+      : d === 0 ? '⏱ Closes today' : d === 1 ? '⏱ Closes tomorrow' : `⏱ ${d} days · ${p.dueDate}`;
     const dlClass = isP_Urgent ? 'urgent' : 'normal';
-    const cardOpacity = isExpired ? 'opacity:0.45;' : '';
-    return `<a class="cfa-program-card" href="${esc(p.link)}" target="_blank" rel="noopener" style="${cardOpacity}">
+    return `<a class="cfa-program-card" href="${esc(p.link)}" target="_blank" rel="noopener" style="${isExpired?'opacity:0.45;':''}">
       <div class="cfa-program-agency">${esc(p.agency)}</div>
       <div class="cfa-program-title">${esc(p.title)}</div>
       <div class="cfa-program-desc">${esc(p.desc)}</div>
-      <div class="cfa-program-footer">
-        <span class="cfa-program-deadline ${dlClass}">${esc(deadlineText)}</span>
-        <span class="cfa-program-link">View ↗</span>
-      </div>
+      <div class="cfa-program-footer"><span class="cfa-program-deadline ${dlClass}">${esc(deadlineText)}</span><span class="cfa-program-link">View ↗</span></div>
     </a>`;
   }).join('');
-
   return `<div class="cfa-banner" id="cfa-banner">
     <div class="cfa-banner-header" onclick="toggleCFA()">
       <span class="cfa-banner-badge">📋 CFA ${esc(CFA_YEAR)}</span>
@@ -802,45 +668,34 @@ function renderCFABanner() {
     </div>
   </div>`;
 }
+function toggleCFA() { document.getElementById('cfa-banner')?.classList.toggle('collapsed'); }
 
-function toggleCFA() {
-  document.getElementById('cfa-banner')?.classList.toggle('collapsed');
-}
-
+// ── RENDER GRANTS ─────────────────────────────────────────────
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
-  const hasFed = state.grants.length>0;
   const filteredNYS = filterNYSByCategory(state.nysGrants, state.category);
-  const hasNYS = filteredNYS.length>0;
+  const hasNYS = filteredNYS.length > 0;
   const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants];
-  const hasManual = allManual.length>0;
-  const hasAgency = (state.agencyGrants||[]).length>0;
-  if (!hasFed && !hasNYS && !hasManual && !hasAgency && !state.loading) {
+  const hasManual = allManual.length > 0;
+  const hasAgency = (state.agencyGrants||[]).length > 0;
+  if (!hasNYS && !hasManual && !hasAgency && !state.loading) {
     grid.innerHTML=`<div class="empty-state"><div style="font-size:28px;">🔍</div><div style="font-size:13px;color:var(--text-mid);">No grants found.</div></div>`;
     return;
   }
   if (!hasNYS && !hasManual && state.loading) return;
-  let html = '';
+  let html = renderCFABanner();
 
-  // CFA Banner — always first, auto-hides after all CFA deadlines have passed
-  html += renderCFABanner();
-
-  // Manually added grants section
   if (hasManual) {
     html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📌 Manually Added Grants <span style="font-weight:400;color:var(--text-faint);">(${allManual.length} grant${allManual.length!==1?'s':''})</span></div>`;
     html += allManual.map(g => renderManualCard(g)).join('');
   }
 
-  // Agency grants section
   if (hasAgency) {
     const now = new Date();
     const ag = (state.agencyGrants||[]).filter(g => {
       const s = (g.status||'').toLowerCase();
       if (s.includes('closed')) return false;
-      if (g.dueDate) {
-        const d = new Date(g.dueDate);
-        if (!isNaN(d.getTime()) && d < now) return false;
-      }
+      if (g.dueDate) { const d = new Date(g.dueDate); if (!isNaN(d.getTime()) && d < now) return false; }
       return true;
     });
     if (ag.length > 0) {
@@ -850,10 +705,9 @@ function renderGrants() {
     }
   }
 
-  // NYS grants section
   if (hasNYS) {
     const label = state.category ? `${filteredNYS.length} matching` : `${filteredNYS.length} opportunities`;
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
+    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual||hasAgency?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
     html += filteredNYS.map(g => renderNYSCard(g)).join('');
   }
 
@@ -861,39 +715,24 @@ function renderGrants() {
 }
 
 function renderManualCard(g) {
-  const saved = state.saved.has(g.id);
   const statusMap = {open:'tag-posted',forecasted:'tag-forecasted',closed:'tag-closed'};
   const sc = statusMap[g.status]||'tag-posted';
   const statusLabel = g.status==='open'?'Open':g.status==='forecasted'?'Forecasted':'Closed';
   let dl = '';
   if (g.deadline && g.deadline.toLowerCase()!=='rolling') {
     const d = daysUntil(g.deadline);
-    if (d !== null) {
-      const cls = d<0?'':d<=14?'urgent':'';
-      dl = `<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.deadline:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.deadline}</span>`;
-    } else {
-      dl = `<span class="deadline-row">⏱ ${esc(g.deadline)}</span>`;
-    }
-  } else if (g.deadline) {
-    dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
-  }
-  const viewHref = g.url || '#';
+    if (d !== null) { const cls = d<0?'':d<=14?'urgent':''; dl = `<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.deadline:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.deadline}</span>`; }
+    else { dl = `<span class="deadline-row">⏱ ${esc(g.deadline)}</span>`; }
+  } else if (g.deadline) { dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`; }
   return `<div class="grant-card manual-card">
-    <div class="card-top">
-      <div style="display:flex;gap:5px;flex-wrap:wrap;">
-        <span class="tag tag-manual">Manual</span>
-        <span class="tag ${sc}">${esc(statusLabel)}</span>
-      </div>
-    </div>
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-manual">Manual</span><span class="tag ${sc}">${esc(statusLabel)}</span></div></div>
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'—')}</div>
     <div class="card-mid">${g.award?`<span class="card-category">${esc(g.award)}</span>`:'<span></span>'}</div>
     ${dl}
     ${g.notes?`<div style="font-size:11px;color:var(--text-faint);line-height:1.4;border-top:1px solid var(--border);padding-top:6px;margin-top:2px;">${esc(g.notes.slice(0,90))}${g.notes.length>90?'…':''}</div>`:''}
     <div class="card-bottom">
-      <div class="card-id-row">
-        ${g.grantId?`<span>${esc(g.grantId)}</span>`:'<span></span>'}
-      </div>
+      <div class="card-id-row">${g.grantId?`<span>${esc(g.grantId)}</span>`:'<span></span>'}</div>
       <div style="display:flex;gap:6px;align-items:center;">
         <button class="edit-btn" onclick="event.stopPropagation();openAddModal('${esc(g.id)}')">Edit</button>
         <button class="edit-btn" style="background:var(--red-bg);border-color:var(--red-border);color:var(--red);" onclick="event.stopPropagation();deleteManualGrant('${esc(g.id)}')">Delete</button>
@@ -903,107 +742,64 @@ function renderManualCard(g) {
   </div>`;
 }
 
-function renderCard(g) {
-  const saved = state.saved.has(g.id);
-  const sc = g.oppStatus==='posted'?'tag-posted':g.oppStatus==='forecasted'?'tag-forecasted':'tag-closed';
-  let dl = '';
-  if (!g.closeDate) dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
-  else { const d=daysUntil(g.closeDate); const cls=d<0?'':d<=14?'urgent':''; dl=`<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.closeDate:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.closeDate}</span>`; }
-  return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')">
-    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div></div>
-    <div class="card-title">${esc(cleanTitle(g.title||'Untitled'))}</div>
-    <div class="card-agency">${esc((g.agencyName||g.agencyCode||'').slice(0,60))}</div>
-    <div class="card-mid">${g.fundingCategories?`<span class="card-category">${esc(CAT[g.fundingCategories]||g.fundingCategories)}</span>`:'<span></span>'}</div>
-    ${dl}
-    <div class="card-bottom"><div class="card-id">ID · ${esc(String(g.number||g.id))}</div>
-    <a class="view-btn" href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank" onclick="event.stopPropagation()">View →</a></div>
-  </div>`;
-}
-
 function renderAgencyCard(g) {
-  const saved = state.saved.has('agency-'+g.id);
   const statusLower = (g.status||'').toLowerCase();
   const isClosed = statusLower.includes('closed') || statusLower.includes('unavailable');
   const sc = isClosed ? 'tag-closed' : 'tag-posted';
-  const sourceColors = {
-    'EFC':'background:#0f5132;color:#fff;',
-    'NYS Parks':'background:#14532d;color:#fff;',
-    'HCR':'background:#1e3a5f;color:#fff;',
-    'DASNY':'background:#3b0764;color:#fff;',
-  };
+  const sourceColors = { 'EFC':'background:#0f5132;color:#fff;', 'NYS Parks':'background:#14532d;color:#fff;', 'HCR':'background:#1e3a5f;color:#fff;', 'DASNY':'background:#3b0764;color:#fff;' };
   const sourceStyle = sourceColors[g.source] || 'background:var(--text-mid);color:#fff;';
   let dl = '';
-if (g.dueDate) {
-  const dueLower = g.dueDate.toLowerCase();
-  if (dueLower.includes('rolling')) {
-    dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
-  } else {
-    const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
-    // Normalize MM/DD/YYYY to YYYY-MM-DD for reliable parsing
-    const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
-    const parsed = new Date(normalized);
-    const today = new Date(); today.setHours(0,0,0,0);
-    if (!isNaN(parsed.getTime())) {
-      const days = Math.round((parsed - today) / 86400000);
-      const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
-      const label = days < 0 ? 'Closed · ' + cleaned
-                  : days === 0 ? 'Closes today'
-                  : days === 1 ? 'Closes tomorrow'
-                  : 'Closes in ' + days + ' days · ' + cleaned;
-      dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
-    } else {
-      dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+  if (g.dueDate) {
+    const dueLower = g.dueDate.toLowerCase();
+    if (dueLower.includes('rolling')) { dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`; }
+    else {
+      const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
+      const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
+      const parsed = new Date(normalized); const today = new Date(); today.setHours(0,0,0,0);
+      if (!isNaN(parsed.getTime())) {
+        const days = Math.round((parsed - today) / 86400000);
+        const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
+        const label = days < 0 ? 'Closed · ' + cleaned : days === 0 ? 'Closes today' : days === 1 ? 'Closes tomorrow' : 'Closes in ' + days + ' days · ' + cleaned;
+        dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+      } else { dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`; }
     }
   }
-}
   return `<div class="grant-card" style="${isClosed?'opacity:0.55;':''}">
-    <div class="card-top">
-      <div style="display:flex;gap:5px;flex-wrap:wrap;">
-        <span class="tag" style="${sourceStyle}">${esc(g.source||'Agency')}</span>
-        <span class="tag ${sc}">${esc(isClosed?'Closed':g.status||'Available')}</span>
-      </div>
-    </div>
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag" style="${sourceStyle}">${esc(g.source||'Agency')}</span><span class="tag ${sc}">${esc(isClosed?'Closed':g.status||'Available')}</span></div></div>
     <div class="card-title">${esc(g.title)}</div>
     <div class="card-agency">${esc(g.agency||'')}</div>
     <div class="card-mid"><span></span></div>
     ${dl}
-    <div class="card-bottom">
-      <div class="card-id">${esc(g.source||'')}</div>
-      <a class="view-btn" href="${esc(g.link||'#')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View ↗</a>
-    </div>
+    <div class="card-bottom"><div class="card-id">${esc(g.source||'')}</div><a class="view-btn" href="${esc(g.link||'#')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View ↗</a></div>
   </div>`;
 }
 
 function renderNYSCard(g) {
-  const saved = state.saved.has('nys-'+g.id);
   const statusLower = (g.status||'').toLowerCase();
-  const sc = statusLower.includes('available')||statusLower.includes('open') ? 'tag-posted' : 'tag-closed';
+  const isAdvertised = statusLower.includes('advertised');
+  const isAvailable  = statusLower.includes('available') || statusLower.includes('open');
+  const sc = isAdvertised ? 'tag-advertised' : isAvailable ? 'tag-posted' : 'tag-closed';
+  const statusLabel = isAdvertised ? 'Advertised in SFS' : isAvailable ? (g.status || 'Available') : (g.status || 'Closed');
   let dl = '';
   if (g.dueDate) {
-  const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
-  const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
-  const parsed = new Date(normalized);
-  const today = new Date(); today.setHours(0,0,0,0);
-  if (!isNaN(parsed.getTime())) {
-    const days = Math.round((parsed - today) / 86400000);
-    const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
-    const label = days < 0 ? 'Closed · ' + cleaned
-                : days === 0 ? 'Closes today'
-                : days === 1 ? 'Closes tomorrow'
-                : 'Closes in ' + days + ' days · ' + cleaned;
-    dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
-  } else {
-    dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
-  }
-}
-  else if (g.award) dl = `<span class="deadline-row rolling">◈ ${esc(g.award)}</span>`;
+    const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
+    const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
+    const parsed = new Date(normalized); const today = new Date(); today.setHours(0,0,0,0);
+    if (!isNaN(parsed.getTime())) {
+      const days = Math.round((parsed - today) / 86400000);
+      const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
+      const label = days < 0 ? 'Closed · ' + cleaned : days === 0 ? 'Closes today' : days === 1 ? 'Closes tomorrow' : 'Closes in ' + days + ' days · ' + cleaned;
+      dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+    } else { dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`; }
+  } else if (g.award) { dl = `<span class="deadline-row rolling">◈ ${esc(g.award)}</span>`; }
   const hasId = g.id && !String(g.id).startsWith('nys-');
   const viewHref = g.link || g.url || 'https://grantsmanagement.ny.gov/search-funding-sfs';
+  const agencyBadge = NYS_AGENCY_LABELS[g.agency] || g.agency || 'NYS';
+  const agencyFull  = NYS_AGENCY_NAMES[g.agency]  || g.agency || 'New York State';
   return `<div class="grant-card">
-    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-nys">NYS</span><span class="tag ${sc}">${esc(g.status||'Available')}</span></div>
-</div>
-    <div class="card-title">${esc(g.title)}</div>
-    <div class="card-agency">${esc(g.agency||'New York State')}</div>
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-nys">${esc(agencyBadge)}</span><span class="tag ${sc}">${esc(statusLabel)}</span></div></div>
+    <div class="card-title">${esc(cleanNYSTitle(g.title))}</div>
+    <div class="card-agency">${esc(agencyFull)}</div>
     <div class="card-mid"><span></span></div>
     ${dl}
     <div class="card-bottom">
@@ -1070,22 +866,25 @@ function toggleSaveModal(id) {
 function daysUntil(s) { if(!s)return null; const[m,d,y]=s.split('/'); if(!y)return null; const c=new Date(y,m-1,d),n=new Date(); n.setHours(0,0,0,0); return Math.round((c-n)/86400000); }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function cleanTitle(s) {
-  return (s||'')
-    .replace(/(&nbsp;|\u00a0)+/g,' ')
-    .replace(/&ldquo;/g,'\u201c')
-    .replace(/&rdquo;/g,'\u201d')
-    .replace(/&lsquo;/g,'\u2018')
-    .replace(/&rsquo;/g,'\u2019')
-    .replace(/&amp;/g,'&')
-    .replace(/&mdash;/g,'—')
-    .replace(/&ndash;/g,'–')
-    .replace(/&hellip;/g,'…')
-    .trim();
+  return (s||'').replace(/(&nbsp;|\u00a0)+/g,' ').replace(/&ldquo;/g,'\u201c').replace(/&rdquo;/g,'\u201d')
+    .replace(/&lsquo;/g,'\u2018').replace(/&rsquo;/g,'\u2019').replace(/&amp;/g,'&')
+    .replace(/&mdash;/g,'—').replace(/&ndash;/g,'–').replace(/&hellip;/g,'…').trim();
 }
-function toggleSave(id,btn) { const sid=String(id); if(state.saved.has(sid)){state.saved.delete(sid);btn.classList.remove('saved');btn.innerHTML='♡';}else{state.saved.add(sid);btn.classList.add('saved');btn.innerHTML='♥';} }
+function cleanNYSTitle(s) {
+  if (!s) return s;
+  s = s.replace(/^(RFA|RFP)\s*#?\d+\s*/i, '');
+  s = s.replace(/^ATL\s*-\s*\d+\s*/i, '');
+  s = s.replace(/([a-z])(\d{4})/g, '$1 $2');
+  const letters = s.replace(/[^a-zA-Z]/g, '');
+  if (letters.length > 0 && letters === letters.toUpperCase()) {
+    s = s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    s = s.replace(/\bFy\b/g, 'FY');
+  }
+  return s.trim();
+}
 function copyId(id,btn) { navigator.clipboard.writeText(id).then(()=>{const o=btn.textContent;btn.textContent='✓';btn.style.background='var(--green)';btn.style.color='white';setTimeout(()=>{btn.textContent=o;btn.style.background='';btn.style.color='';},2000);}).catch(()=>prompt('Copy:',id)); }
-function fmtAward(g) { if(!g.awardCeiling)return''; const n=parseInt(g.awardCeiling); if(n>=1000000)return'$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M'; if(n>=1000)return'$'+Math.round(n/1000)+'k'; return'$'+n; }
 function fmtElig(arr) { if(!arr||!arr.length)return'—'; const L={'00':'State govts','01':'County govts','02':'City/township govts','04':'Special districts','05':'School districts','06':'Public universities','07':'Tribal govts','08':'Housing authorities','22':'Nonprofits (501c3)','99':'Unrestricted'}; return arr.map(e=>L[e]||e).join(', '); }
+function fmtAward(g) { if(!g.awardCeiling)return''; const n=parseInt(g.awardCeiling); if(n>=1000000)return'$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M'; if(n>=1000)return'$'+Math.round(n/1000)+'k'; return'$'+n; }
 
 // ── PAGINATION ────────────────────────────────────────────────
 function renderPagination() {
@@ -1108,28 +907,23 @@ function renderActiveTags(){
   if(state.category)tags.push(`category: ${CAT[state.category]||state.category}`);
   el.innerHTML=tags.map(t=>`<span class="active-tag">${t}</span>`).join('')+' ';
 }
-function showLoading(){document.getElementById('grants-grid').innerHTML=`<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>`;document.getElementById('pagination').innerHTML='';}
+function showLoading(){document.getElementById('grants-grid').innerHTML=`<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Loading grants…</div></div>`;document.getElementById('pagination').innerHTML='';}
 function showError(msg){document.getElementById('grants-grid').innerHTML=`<div class="error-state"><div style="font-size:24px;">⚠️</div><div class="error-msg">Could not connect to Grants.gov API.<br><small>${esc(msg)}</small></div><button class="retry-btn" onclick="fetchGrants()">Retry</button></div>`;}
 
-// ── NYS ───────────────────────────────────────────────────────
+// ── DATA FETCHING ─────────────────────────────────────────────
 async function fetchNYSGrants(){
   try{const r=await fetch('./nys-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();const all=d.grants||[];state.jsonManualGrants=all.filter(g=>g.manual===true);state.nysGrants=all.filter(g=>g.manual!==true);renderGrants();}
   catch(e){console.log('NYS grants not available:',e.message);}
 }
-
 async function fetchAgencyGrants(){
-  try{
-    const r=await fetch('./agency-grants.json?_='+Date.now());if(!r.ok)return;
-    const d=await r.json();
-    state.agencyGrants=d.grants||[];
-    renderGrants();
-  }catch(e){console.log('Agency grants not available:',e.message);}
+  try{const r=await fetch('./agency-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();state.agencyGrants=d.grants||[];renderGrants();}
+  catch(e){console.log('Agency grants not available:',e.message);}
 }
 
 document.getElementById('keyword-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') {
     const activeTab = document.querySelector('.nav-tab.active');
-    if (activeTab && activeTab.textContent.trim()==='Federal grants') applyFedFilters();
+    if (activeTab && activeTab.textContent.trim()==='Federal Grants') applyFedFilters();
     else applyFilters();
   }
 });
