@@ -495,8 +495,17 @@ function switchTab(tab, el) {
 }
 
 // ── NON-LOCAL FILTER ─────────────────────────────────────────
-const NON_LOCAL = ["DOS","NASA","NIH","NSF","AFOSR","ONR","ARO","DARPA","DOD","AF","NAVY","ARMY","DTRA","DIA","NRO","AFRL","NIST","NOAA","DOE-SC","NCI","NHLBI","NIMH","NIAID","NEI","NIA","NICHD","NIDDK","NIGMS"];
-function filterLocal(grants) {
+const NON_LOCAL = [
+  // Defense & intel
+  "DOD","AF","NAVY","ARMY","DARPA","DTRA","DIA","NRO","AFRL","AFOSR","ONR","ARO",
+  // Science/research agencies
+  "NASA","NSF","NIST","NOAA","DOE-SC",
+  // Health & human services (NIH institutes + HHS divisions)
+  "NIH","HHS","CDC","HRSA","SAMHSA","AHRQ","ACF","ACL","ASPR","IHS","OASH",
+  "NCI","NHLBI","NIMH","NIAID","NEI","NIA","NICHD","NIDDK","NIGMS","NINDS",
+  "NIDCD","NIAAA","NIDA","NIMHD","NHGRI","NIBIB","NINR","NLM","FIC","NCATS","NCCIH",
+];
+  function filterLocal(grants) {
   return grants.filter(g => {
     const c=(g.agencyCode||'').toUpperCase(), r=c.split('-')[0];
     return !NON_LOCAL.some(a=>c.startsWith(a)||r===a);
@@ -517,7 +526,7 @@ async function fetchGrants() {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
     let g = d.oppHits || d.data?.oppHits || [];
-    if (state.eligibility==='01|02|04|08') g = filterLocal(g);
+    g = filterLocal(g);
     state.grants=g; state.totalHits=d.hitCount||d.data?.hitCount||0; state.loading=false;
     renderGrants(); renderPagination(); renderSummary(); renderActiveTags();
   } catch(e) { state.loading=false; showError(e.message); }
