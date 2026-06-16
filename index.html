@@ -532,7 +532,7 @@ let sp = {
 let fed = {
   keyword:'', category:'', eligibility:'02',
   statuses:['posted'], sort:'openDate|desc',
-  page:0, totalHits:0, grants:[], loading:false, loaded:false,
+  page:0, totalHits:0, filteredCount:0, grants:[], loading:false, loaded:false,
 };
   
 const CAT = {
@@ -551,7 +551,8 @@ function switchTab(tab, el) {
   ['browse','federal','split'].forEach(t =>
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
-  document.getElementById('keyword-input').style.display = tab==='browse' ? '' : 'none';
+  document.getElementById('keyword-input').style.display = (tab==='browse'||tab==='federal') ? '' : 'none';
+  document.getElementById('keyword-input').placeholder = tab==='federal' ? 'Search federal grants…' : 'Search grants… (e.g. housing, parks, transit)';
   if (tab==='split' && !sp.loaded) { sp.loaded=true; fetchSplit(); }
   if (tab==='federal' && !fed.loaded) { fed.loaded=true; fetchFedGrants(); }
 }
@@ -590,8 +591,9 @@ async function fetchFedGrants() {
     if (!r.ok) throw new Error(`HTTP ${r.status}`);
     const d = await r.json();
   let g = d.oppHits || d.data?.oppHits || [];
+      const rawCount = d.hitCount || d.data?.hitCount || g.length;
       g = filterLocal(g);
-      fed.grants = g; fed.totalHits = g.length; fed.loading = false;
+      fed.grants = g; fed.totalHits = rawCount; fed.filteredCount = g.length; fed.loading = false;
       renderFedGrants();
   } catch(e) {
     fed.loading = false;
@@ -600,6 +602,7 @@ async function fetchFedGrants() {
 }
 
 function applyFedFilters() {
+  fed.keyword = document.getElementById('keyword-input').value.trim();
   fed.category = document.getElementById('fed-filter-category').value;
   fed.eligibility = document.getElementById('fed-filter-eligibility').value;
   fed.sort = document.getElementById('fed-filter-sort').value;
@@ -617,12 +620,13 @@ function renderFedGrants() {
     grid.innerHTML = `<div class="empty-state"><div style="font-size:28px;">🔍</div><div style="font-size:13px;color:var(--text-mid);">No grants found.</div></div>`;
     return;
   }
-  let html = `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.totalHits.toLocaleString()} results · Grants.gov)</span></div>`;
+  let html = `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.filteredCount||fed.grants.length} shown · Grants.gov)</span></div>`;
   html += fed.grants.map(g => renderFedCard(g)).join('');
   grid.innerHTML = html;
   renderFedPagination();
   // update active tags
   const tags = [];
+  if (fed.keyword) tags.push(`keyword: "${fed.keyword}"`);
   if (fed.category) tags.push(`category: ${CAT[fed.category]||fed.category}`);
   document.getElementById('fed-active-tags').innerHTML = tags.map(t=>`<span class="active-tag">${t}</span>`).join('');
 }
@@ -1263,7 +1267,13 @@ async function fetchAgencyGrants(){
   }catch(e){console.log('Agency grants not available:',e.message);}
 }
 
-document.getElementById('keyword-input').addEventListener('keydown',e=>{if(e.key==='Enter')applyFilters();});
+document.getElementById('keyword-input').addEventListener('keydown',e=>{
+  if(e.key==='Enter') {
+    const activeTab = document.querySelector('.nav-tab.active');
+    if (activeTab && activeTab.textContent.trim()==='Federal grants') applyFedFilters();
+    else applyFilters();
+  }
+});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalDirect();closeAddModalDirect();}});
 
 fetchGrants();
