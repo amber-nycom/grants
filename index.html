@@ -243,6 +243,7 @@
   <nav class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('browse',this)">Browse</div>
     <div class="nav-tab" onclick="switchTab('split',this)">Split view</div>
+<div class="nav-tab" onclick="switchTab('federal',this)">Federal grants</div>
   </nav>
   <div class="topbar-right">
     <input class="topbar-search" id="keyword-input" type="text" placeholder="Search grants… (e.g. housing, parks, transit)">
@@ -305,6 +306,60 @@
   </div>
 </div>
 
+<!-- ══ FEDERAL TAB ══ -->
+<div id="tab-federal" style="display:none;">
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="filter-group">
+        <h4>Category</h4>
+        <select class="select-filter" id="fed-filter-category">
+          <option value="">All categories</option>
+          <option value="AG">Agriculture</option><option value="AR">Arts</option>
+          <option value="BC">Business &amp; Commerce</option><option value="CD">Community Development</option>
+          <option value="CP">Consumer Protection</option><option value="DPR">Disaster Prevention</option>
+          <option value="ED">Education</option><option value="ELT">Employment</option>
+          <option value="EN">Energy</option><option value="ENV">Environment</option>
+          <option value="FN">Food &amp; Nutrition</option><option value="HL">Health</option>
+          <option value="HO">Housing</option><option value="HU">Humanities</option>
+          <option value="IIJ">Information Technology</option><option value="IS">Income Security</option>
+          <option value="LJL">Law &amp; Justice</option><option value="NR">Natural Resources</option>
+          <option value="OZ">Opportunity Zones</option><option value="RD">Regional Development</option>
+          <option value="ST">Science &amp; Technology</option><option value="T">Transportation</option>
+          <option value="ACA">Affordable Care Act</option><option value="RA">Recovery Act</option>
+          <option value="O">Other</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <h4>Status</h4>
+        <div class="filter-item"><input type="checkbox" id="fed-posted" checked><label for="fed-posted">Posted / Open</label></div>
+        <div class="filter-item"><input type="checkbox" id="fed-forecasted"><label for="fed-forecasted">Forecasted</label></div>
+        <div class="filter-item"><input type="checkbox" id="fed-closed"><label for="fed-closed">Closed</label></div>
+      </div>
+      <input type="hidden" id="fed-filter-eligibility" value="02">
+      <div class="filter-group">
+        <h4>Sort</h4>
+        <select class="select-filter" id="fed-filter-sort">
+          <option value="openDate|desc">Newest first</option>
+          <option value="closeDate|asc">Deadline soonest</option>
+          <option value="closeDate|desc">Deadline latest</option>
+          <option value="openDate|asc">Oldest first</option>
+        </select>
+      </div>
+      <button class="apply-filters-btn" onclick="applyFedFilters()">Apply filters</button>
+      <div style="background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--radius);padding:7px 10px;margin-top:14px;font-size:11px;color:var(--blue-dark);line-height:1.4;">
+        <strong>Disclaimer:</strong> This dashboard is not comprehensive of every grant opportunity available to municipalities and may display incorrect/outdated information. For the most up to date resources, look at state or federal websites directly.
+      </div>
+    </aside>
+    <main class="main">
+      <div class="toolbar"><span id="fed-active-tags"></span></div>
+      <div class="grants-grid" id="fed-grants-grid">
+        <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>
+      </div>
+      <div class="pagination" id="fed-pagination"></div>
+    </main>
+  </div>
+</div>
+  
 <!-- ══ SPLIT VIEW TAB ══ -->
 <div id="tab-split" style="display:none;">
   <div class="split-body">
@@ -473,7 +528,12 @@ let sp = {
   category:'', eligibility:'02', statuses:['posted'], sort:'openDate|desc',
   page:0, totalHits:0, grants:[], loading:false, selectedId:null, loaded:false,
 };
-
+let fed = {
+  keyword:'', category:'', eligibility:'02',
+  statuses:['posted'], sort:'openDate|desc',
+  page:0, totalHits:0, grants:[], loading:false, loaded:false,
+};
+  
 const CAT = {
   AG:'Agriculture',AR:'Arts',BC:'Business & Commerce',CD:'Community Development',
   CP:'Consumer Protection',DPR:'Disaster Prevention',ED:'Education',ELT:'Employment',
@@ -487,11 +547,12 @@ const CAT = {
 function switchTab(tab, el) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  ['browse','split'].forEach(t =>
+  ['browse','federal','split'].forEach(t =>
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
   document.getElementById('keyword-input').style.display = tab==='browse' ? '' : 'none';
   if (tab==='split' && !sp.loaded) { sp.loaded=true; fetchSplit(); }
+  if (tab==='federal' && !fed.loaded) { fed.loaded=true; fetchFedGrants(); }
 }
 
 // ── NON-LOCAL FILTER ─────────────────────────────────────────
@@ -511,6 +572,91 @@ const NON_LOCAL = [
     return !NON_LOCAL.some(a=>c.startsWith(a)||r===a);
   });
 }
+
+// ── FEDERAL TAB ───────────────────────────────────────────────
+async function fetchFedGrants() {
+  if (fed.loading) return;
+  fed.loading = true;
+  document.getElementById('fed-grants-grid').innerHTML = `<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>`;
+  document.getElementById('fed-pagination').innerHTML = '';
+  const [sb,sd] = fed.sort.split('|');
+  const body = { rows:PAGE_SIZE, startRecordNum:fed.page*PAGE_SIZE, oppStatuses:fed.statuses.join('|')||'posted', sortBy:`${sb}|${sd}` };
+  if (fed.keyword) body.keyword = fed.keyword;
+  if (fed.category) body.fundingCategories = fed.category;
+  if (fed.eligibility) body.eligibilities = fed.eligibility;
+  try {
+    const r = await fetch(GRANTS_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    let g = d.oppHits || d.data?.oppHits || [];
+    fed.grants = g; fed.totalHits = d.hitCount||d.data?.hitCount||0; fed.loading = false;
+    renderFedGrants();
+  } catch(e) {
+    fed.loading = false;
+    document.getElementById('fed-grants-grid').innerHTML = `<div class="error-state"><div style="font-size:24px;">⚠️</div><div class="error-msg">Could not connect to Grants.gov API.<br><small>${esc(e.message)}</small></div><button class="retry-btn" onclick="fetchFedGrants()">Retry</button></div>`;
+  }
+}
+
+function applyFedFilters() {
+  fed.category = document.getElementById('fed-filter-category').value;
+  fed.eligibility = document.getElementById('fed-filter-eligibility').value;
+  fed.sort = document.getElementById('fed-filter-sort').value;
+  fed.statuses = [];
+  if (document.getElementById('fed-posted').checked) fed.statuses.push('posted');
+  if (document.getElementById('fed-forecasted').checked) fed.statuses.push('forecasted');
+  if (document.getElementById('fed-closed').checked) fed.statuses.push('closed');
+  if (!fed.statuses.length) fed.statuses = ['posted'];
+  fed.page = 0; fetchFedGrants();
+}
+
+function renderFedGrants() {
+  const grid = document.getElementById('fed-grants-grid');
+  if (!fed.grants.length) {
+    grid.innerHTML = `<div class="empty-state"><div style="font-size:28px;">🔍</div><div style="font-size:13px;color:var(--text-mid);">No grants found.</div></div>`;
+    return;
+  }
+  let html = `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.totalHits.toLocaleString()} results · Grants.gov)</span></div>`;
+  html += fed.grants.map(g => renderFedCard(g)).join('');
+  grid.innerHTML = html;
+  renderFedPagination();
+  // update active tags
+  const tags = [];
+  if (fed.category) tags.push(`category: ${CAT[fed.category]||fed.category}`);
+  document.getElementById('fed-active-tags').innerHTML = tags.map(t=>`<span class="active-tag">${t}</span>`).join('');
+}
+
+function renderFedCard(g) {
+  const saved = state.saved.has(g.id);
+  const sc = g.oppStatus==='posted'?'tag-posted':g.oppStatus==='forecasted'?'tag-forecasted':'tag-closed';
+  let dl = '';
+  if (!g.closeDate) dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
+  else { const d=daysUntil(g.closeDate); const cls=d<=14&&d>=0?'urgent':''; dl=`<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.closeDate:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.closeDate}</span>`; }
+  return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')">
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div>
+    <button class="card-heart ${saved?'saved':''}" onclick="event.stopPropagation();toggleSave('${esc(String(g.id))}',this)">${saved?'♥':'♡'}</button></div>
+    <div class="card-title">${esc(cleanTitle(g.title||'Untitled'))}</div>
+    <div class="card-agency">${esc((g.agencyName||g.agencyCode||'').slice(0,60))}</div>
+    <div class="card-mid">${g.fundingCategories?`<span class="card-category">${esc(CAT[g.fundingCategories]||g.fundingCategories)}</span>`:'<span></span>'}</div>
+    ${dl}
+    <div class="card-bottom"><div class="card-id">ID · ${esc(String(g.number||g.id))}</div>
+    <a class="view-btn" href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank" onclick="event.stopPropagation()">View →</a></div>
+  </div>`;
+}
+
+function renderFedPagination() {
+  const tot=Math.ceil(fed.totalHits/PAGE_SIZE), cur=fed.page;
+  const el=document.getElementById('fed-pagination');
+  if(tot<=1){el.innerHTML='';return;}
+  let b=`<button class="page-btn" onclick="goFedPage(${cur-1})" ${cur===0?'disabled':''}>‹</button>`;
+  const pages=[];
+  if(tot<=7){for(let i=0;i<tot;i++)pages.push(i);}
+  else{pages.push(0);if(cur>2)pages.push('…');for(let i=Math.max(1,cur-1);i<=Math.min(tot-2,cur+1);i++)pages.push(i);if(cur<tot-3)pages.push('…');pages.push(tot-1);}
+  pages.forEach(p=>{if(p==='…')b+=`<span class="page-btn" style="pointer-events:none;opacity:0.4;">…</span>`;else b+=`<button class="page-btn ${p===cur?'active':''}" onclick="goFedPage(${p})">${p+1}</button>`;});
+  b+=`<button class="page-btn" onclick="goFedPage(${cur+1})" ${cur>=tot-1?'disabled':''}>›</button>`;
+  el.innerHTML=b;
+}
+
+function goFedPage(p){fed.page=p;window.scrollTo(0,0);fetchFedGrants();}
 
 // ── BROWSE FETCH ──────────────────────────────────────────────
 async function fetchGrants() {
@@ -841,12 +987,6 @@ function renderGrants() {
     const label = state.category ? `${filteredNYS.length} matching` : `${filteredNYS.length} opportunities`;
     html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
     html += filteredNYS.map(g => renderNYSCard(g)).join('');
-  }
-
-  // Federal grants section
-  if (hasFed) {
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${(hasManual||hasNYS)?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${state.totalHits.toLocaleString()} results · Grants.gov)</span></div>`;
-    html += state.grants.map(g => renderCard(g)).join('');
   }
 
   grid.innerHTML = html;
