@@ -250,7 +250,34 @@
     <input class="topbar-search" id="keyword-input" type="text" placeholder="Search grants… (e.g. housing, parks, transit)">
   </div>
 </header>
-
+  
+  /* ── CFA BANNER ── */
+  .cfa-banner { grid-column: 1 / -1; background: var(--surface); border: 1.5px solid #bfdbfe; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 4px; }
+  .cfa-banner-header { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); padding: 14px 18px; display: flex; align-items: center; gap: 12px; cursor: pointer; user-select: none; }
+  .cfa-banner-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 600; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }
+  .cfa-banner-title { font-size: 13px; font-weight: 600; color: #fff; flex: 1; }
+  .cfa-banner-title span { font-weight: 400; opacity: 0.75; font-size: 12px; margin-left: 6px; }
+  .cfa-deadline-pill { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+  .cfa-deadline-pill.normal { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid rgba(255,255,255,0.3); }
+  .cfa-deadline-pill.urgent { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
+  .cfa-toggle { color: rgba(255,255,255,0.7); font-size: 13px; transition: transform 0.2s; }
+  .cfa-banner.collapsed .cfa-toggle { transform: rotate(-90deg); }
+  .cfa-banner-body { padding: 14px 18px 16px; }
+  .cfa-description { font-size: 12px; color: var(--text-mid); line-height: 1.55; margin-bottom: 14px; }
+  .cfa-apply-btn { display: inline-flex; align-items: center; gap: 5px; padding: 5px 13px; background: var(--blue); color: #fff; border-radius: var(--radius); font-size: 12px; font-weight: 500; text-decoration: none; font-family: 'Inter', sans-serif; transition: background 0.12s; }
+  .cfa-apply-btn:hover { background: var(--blue-dark); }
+  .cfa-programs-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; color: var(--text-faint); margin: 14px 0 8px; }
+  .cfa-programs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+  .cfa-program-card { background: var(--surface-alt); border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; transition: border-color 0.12s; }
+  .cfa-program-card:hover { border-color: var(--blue-mid); }
+  .cfa-program-agency { font-size: 10px; color: var(--text-faint); }
+  .cfa-program-title { font-size: 12px; font-weight: 500; color: var(--text); line-height: 1.35; }
+  .cfa-program-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; margin-top: 2px; }
+  .cfa-program-deadline { font-size: 10.5px; margin-top: 4px; }
+  .cfa-program-deadline.urgent { color: var(--red); font-weight: 500; }
+  .cfa-program-deadline.normal { color: var(--text-faint); }
+  .cfa-banner.collapsed .cfa-banner-body { display: none; }
+    
 <!-- ══ BROWSE TAB ══ -->
 <div id="tab-browse">
   <div class="layout">
@@ -718,7 +745,73 @@ function filterNYSByCategory(grants, category) {
     return areas.some(a => g.serviceArea.toLowerCase().includes(a.toLowerCase()));
   });
 }
+// ── CFA BANNER ───────────────────────────────────────────────
+const CFA_PROGRAMS = [
+  { title: 'Regional Council Capital Funds', agency: 'Empire State Development', dueDate: '07/31/2026', desc: 'Capital grants for economic development projects. Cities, towns, and villages must be Pro-Housing certified.', link: 'https://esd.ny.gov/regional-council-capital-fund-program' },
+  { title: 'NY Main Street Program', agency: 'NYS Homes & Community Renewal', dueDate: '07/31/2026', desc: 'Grants for Main Street and downtown revitalization. Municipalities must be Pro-Housing certified.', link: 'https://hcr.ny.gov/ny-main-street' },
+  { title: 'Local Waterfront Revitalization Program', agency: 'NYS Department of State', dueDate: '07/31/2026', desc: 'Planning and capital grants for municipalities on coasts or designated inland waterways.', link: 'https://dos.ny.gov/local-waterfront-revitalization-program' },
+  { title: 'Smart Growth Community Planning', agency: 'NYS Department of State', dueDate: '07/31/2026', desc: 'Reimbursement grants for towns, counties, villages, and cities for climate resilience and community planning.', link: 'https://dos.ny.gov/smart-growth-community-planning-program' },
+  { title: 'Brownfield Opportunity Areas (BOA)', agency: 'NYS Department of State', dueDate: '07/31/2026', desc: 'Planning grants for municipalities to assess and plan brownfield redevelopment sites.', link: 'https://dos.ny.gov/brownfield-opportunity-areas-program' },
+  { title: 'Canalway Grant Program', agency: 'NYS Canal Corporation', dueDate: '07/31/2026', desc: 'Capital grants for canal-related projects for municipalities along the NYS Canal System.', link: 'https://www.canals.ny.gov/grants/' },
+  { title: 'NY KICKS Program', agency: 'Empire State Development', dueDate: '07/31/2026', desc: 'Grants for municipalities for creation, expansion, or renovation of publicly accessible soccer fields.', link: 'https://esd.ny.gov/ny-kicks-program' },
+  { title: 'Building Cleaner Communities (BCCC)', agency: 'NYSERDA', dueDate: '08/14/2026', desc: 'Competitive grants for municipalities for building decarbonization and clean energy projects.', link: 'https://www.nyserda.ny.gov/All-Programs/Building-Cleaner-Communities-Competition' },
+  { title: 'EPF — Parks, Preservation & Heritage', agency: 'NYS Parks', dueDate: '07/31/2026', desc: 'Environmental Protection Fund grants for municipal parks, historic preservation, and heritage programs.', link: 'https://parks.ny.gov/grants/environmental-protection-fund' },
+  { title: 'Water Quality Improvement Project (WQIP)', agency: 'NYS DEC', dueDate: '07/31/2026', desc: 'Competitive reimbursement grants for local governments for nonpoint source pollution reduction and water quality.', link: 'https://dec.ny.gov/get-involved/grant-applications/wqip-program' },
+  { title: 'Climate Smart Communities Grants', agency: 'NYS DEC', dueDate: '07/31/2026', desc: 'Grants for municipalities for climate change mitigation and adaptation projects.', link: 'https://dec.ny.gov/environmental-protection/climate-change/resources-for-local-governments/grants-for-climate-action' },
+  { title: 'Non-Agricultural Nonpoint Source / MS4 Planning', agency: 'NYS DEC', dueDate: '07/31/2026', desc: 'Planning grants for local governments for stormwater management and MS4 mapping.', link: 'https://dec.ny.gov/get-involved/grant-applications/non-agricultural-nonpoint-source-planning-ms4-mapping-grant' },
+];
 
+function cfaDaysUntil(dateStr) {
+  if (!dateStr) return null;
+  const [m, d, y] = dateStr.split('/');
+  if (!y) return null;
+  const c = new Date(y, m - 1, d), n = new Date();
+  n.setHours(0, 0, 0, 0);
+  return Math.round((c - n) / 86400000);
+}
+
+function renderCFABanner() {
+  const cfaDeadline = '07/31/2026';
+  const days = cfaDaysUntil(cfaDeadline);
+  const isExpired = days !== null && days < 0;
+  if (isExpired) return ''; // Hide the whole banner once CFA deadline has passed
+
+  const isUrgent = days !== null && days <= 14;
+  const deadlineLabel = days === 0 ? 'Closes today' : days === 1 ? 'Closes tomorrow' : `Closes in ${days} days · ${cfaDeadline}`;
+  const pillClass = isUrgent ? 'urgent' : 'normal';
+
+  const programCards = CFA_PROGRAMS.map(p => {
+    const d = cfaDaysUntil(p.dueDate);
+    const isP_Urgent = d !== null && d <= 14 && d >= 0;
+    const deadlineText = d === null ? '' : d < 0 ? `Closed` : d === 0 ? '⏱ Closes today' : d === 1 ? '⏱ Closes tomorrow' : `⏱ ${d} days · ${p.dueDate}`;
+    const dlClass = isP_Urgent ? 'urgent' : 'normal';
+    return `<a class="cfa-program-card" href="${esc(p.link)}" target="_blank" rel="noopener" style="text-decoration:none;">
+      <div class="cfa-program-agency">${esc(p.agency)}</div>
+      <div class="cfa-program-title">${esc(p.title)}</div>
+      <div class="cfa-program-desc">${esc(p.desc)}</div>
+      ${deadlineText ? `<div class="cfa-program-deadline ${dlClass}">${esc(deadlineText)}</div>` : ''}
+    </a>`;
+  }).join('');
+
+  return `<div class="cfa-banner" id="cfa-banner">
+    <div class="cfa-banner-header" onclick="toggleCFA()">
+      <span class="cfa-banner-badge">📋 CFA 2026</span>
+      <span class="cfa-banner-title">NYS Consolidated Funding Application <span>· 12 programs available through one application</span></span>
+      <span class="cfa-deadline-pill ${pillClass}">⏱ ${esc(deadlineLabel)}</span>
+      <span class="cfa-toggle">▾</span>
+    </div>
+    <div class="cfa-banner-body">
+      <p class="cfa-description">The <strong>Consolidated Funding Application (CFA)</strong> is New York State's single-entry portal for accessing grants across 8 state agencies. Municipalities submit one application to be considered for multiple programs simultaneously. Most programs share the <strong>July 31, 2026</strong> deadline; BCCC (NYSERDA) closes August 14.</p>
+      <a class="cfa-apply-btn" href="https://apps.cio.ny.gov/apps/cfa" target="_blank" rel="noopener">Apply via CFA Portal ↗</a>
+      <div class="cfa-programs-label">Programs included</div>
+      <div class="cfa-programs-grid">${programCards}</div>
+    </div>
+  </div>`;
+}
+
+function toggleCFA() {
+  document.getElementById('cfa-banner')?.classList.toggle('collapsed');
+}
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
   const hasFed = state.grants.length>0;
@@ -733,7 +826,10 @@ function renderGrants() {
   }
   if (!hasNYS && !hasManual && state.loading) return;
   let html = '';
-
+  
+  // CFA Banner — always first on state tab
+  html += renderCFABanner();
+    
   // Manually added grants section
   if (hasManual) {
     html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📌 Manually Added Grants <span style="font-weight:400;color:var(--text-faint);">(${allManual.length} grant${allManual.length!==1?'s':''})</span></div>`;
