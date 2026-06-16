@@ -97,12 +97,13 @@
   .tag-posted { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
   .tag-forecasted { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
   .tag-closed { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .tag-advertised { background: var(--blue-light); color: var(--blue-dark); border: 1px solid var(--blue-mid); }
   .card-heart { color: var(--border-mid); cursor: pointer; font-size: 16px; line-height: 1; flex-shrink: 0; transition: color 0.1s; border: none; background: none; padding: 0; }
   .card-heart:hover { color: var(--blue-mid); }
   .card-heart.saved { color: var(--blue); }
   .card-title { font-size: 13.5px; font-weight: 500; line-height: 1.4; color: var(--text); }
   .card-agency { font-size: 11px; color: var(--text-faint); }
-  .card-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex: 1; }
+  .card-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .card-category { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-muted); }
   .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
   .deadline-row.urgent { color: var(--red); font-weight: 500; }
@@ -242,7 +243,7 @@
   <div class="brand"><img src="nycom_white_logo.png" alt="Logo" style="height:55px;width:auto;margin-right:20px;"></div>
   <nav class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('browse',this)">State</div>
-<div class="nav-tab" onclick="switchTab('federal',this)">Federal grants</div>
+    <div class="nav-tab" onclick="switchTab('federal',this)">Federal grants</div>
   </nav>
   <div class="topbar-right">
     <input class="topbar-search" id="keyword-input" type="text" placeholder="Search grants… (e.g. housing, parks, transit)">
@@ -259,7 +260,7 @@
         <div class="filter-item"><input type="checkbox" id="s-forecasted"><label for="s-forecasted">Forecasted</label></div>
         <div class="filter-item"><input type="checkbox" id="s-closed"><label for="s-closed">Closed</label></div>
       </div>
-<input type="hidden" id="filter-eligibility" value="02">
+      <input type="hidden" id="filter-eligibility" value="02">
       <div class="filter-group">
         <h4>Sort</h4>
         <select class="select-filter" id="filter-sort">
@@ -341,7 +342,6 @@
     </main>
   </div>
 </div>
-
 
 <!-- ══ PIPELINE TAB ══ -->
 <div id="tab-pipeline" style="display:none;">
@@ -447,7 +447,7 @@ let fed = {
   statuses:['posted'], sort:'openDate|desc',
   page:0, totalHits:0, filteredCount:0, grants:[], loading:false, loaded:false,
 };
-  
+
 const CAT = {
   AG:'Agriculture',AR:'Arts',BC:'Business & Commerce',CD:'Community Development',
   CP:'Consumer Protection',DPR:'Disaster Prevention',ED:'Education',ELT:'Employment',
@@ -455,6 +455,29 @@ const CAT = {
   HU:'Humanities',IIJ:'Information Technology',IS:'Income Security',LJL:'Law & Justice',
   NR:'Natural Resources',OZ:'Opportunity Zones',RD:'Regional Development',
   ST:'Science & Technology',T:'Transportation',ACA:'Affordable Care Act',RA:'Recovery Act',O:'Other'
+};
+
+// ── NYS AGENCY LOOKUPS ────────────────────────────────────────
+// Short labels for badges — matched to agency-grants.json source values where applicable
+const NYS_AGENCY_LABELS = {
+  'AGM01': 'Ag & Markets',
+  'DEC01':  'DEC',
+  'DOH01':  'DOH',
+  'DOL01':  'DOL',
+  'OAS01':  'OAS',
+  'OMH01':  'OMH',
+  'PRK01':  'NYS Parks',
+};
+
+// Full agency names for display under card titles
+const NYS_AGENCY_NAMES = {
+  'AGM01': 'NYS Department of Agriculture & Markets',
+  'DEC01':  'NYS Department of Environmental Conservation',
+  'DOH01':  'NYS Department of Health',
+  'DOL01':  'NYS Department of Labor',
+  'OAS01':  'NYS Office of Addiction Services & Supports',
+  'OMH01':  'NYS Office of Mental Health',
+  'PRK01':  'NYS Office of Parks, Recreation & Historic Preservation',
 };
 
 // ── TABS ─────────────────────────────────────────────────────
@@ -480,7 +503,7 @@ const NON_LOCAL = [
   "NCI","NHLBI","NIMH","NIAID","NEI","NIA","NICHD","NIDDK","NIGMS","NINDS",
   "NIDCD","NIAAA","NIDA","NIMHD","NHGRI","NIBIB","NINR","NLM","FIC","NCATS","NCCIH",
 ];
-  function filterLocal(grants) {
+function filterLocal(grants) {
   return grants.filter(g => {
     const c=(g.agencyCode||'').toUpperCase(), r=c.split('-')[0];
     return !NON_LOCAL.some(a=>c.startsWith(a)||r===a);
@@ -568,8 +591,6 @@ function renderFedCard(g) {
   </div>`;
 }
 
-
-
 // ── BROWSE FETCH ──────────────────────────────────────────────
 async function fetchGrants() {
   if (state.loading) return;
@@ -602,7 +623,6 @@ function applyFilters() {
   if (!state.statuses.length) state.statuses = ['posted'];
   state.page=0; fetchGrants();
 }
-
 
 // ── MANUAL GRANTS ─────────────────────────────────────────────
 function openAddModal(editId) {
@@ -691,6 +711,7 @@ function filterNYSByCategory(grants, category) {
     return areas.some(a => g.serviceArea.toLowerCase().includes(a.toLowerCase()));
   });
 }
+
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
   const hasFed = state.grants.length>0;
@@ -814,29 +835,28 @@ function renderAgencyCard(g) {
   };
   const sourceStyle = sourceColors[g.source] || 'background:var(--text-mid);color:#fff;';
   let dl = '';
-if (g.dueDate) {
-  const dueLower = g.dueDate.toLowerCase();
-  if (dueLower.includes('rolling')) {
-    dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
-  } else {
-    const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
-    // Normalize MM/DD/YYYY to YYYY-MM-DD for reliable parsing
-    const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
-    const parsed = new Date(normalized);
-    const today = new Date(); today.setHours(0,0,0,0);
-    if (!isNaN(parsed.getTime())) {
-      const days = Math.round((parsed - today) / 86400000);
-      const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
-      const label = days < 0 ? 'Closed · ' + cleaned
-                  : days === 0 ? 'Closes today'
-                  : days === 1 ? 'Closes tomorrow'
-                  : 'Closes in ' + days + ' days · ' + cleaned;
-      dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+  if (g.dueDate) {
+    const dueLower = g.dueDate.toLowerCase();
+    if (dueLower.includes('rolling')) {
+      dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
     } else {
-      dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+      const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
+      const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
+      const parsed = new Date(normalized);
+      const today = new Date(); today.setHours(0,0,0,0);
+      if (!isNaN(parsed.getTime())) {
+        const days = Math.round((parsed - today) / 86400000);
+        const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
+        const label = days < 0 ? 'Closed · ' + cleaned
+                    : days === 0 ? 'Closes today'
+                    : days === 1 ? 'Closes tomorrow'
+                    : 'Closes in ' + days + ' days · ' + cleaned;
+        dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+      } else {
+        dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+      }
     }
   }
-}
   return `<div class="grant-card" style="${isClosed?'opacity:0.55;':''}">
     <div class="card-top">
       <div style="display:flex;gap:5px;flex-wrap:wrap;">
@@ -856,35 +876,44 @@ if (g.dueDate) {
 }
 
 function renderNYSCard(g) {
-  const saved = state.saved.has('nys-'+g.id);
   const statusLower = (g.status||'').toLowerCase();
-  const sc = statusLower.includes('available')||statusLower.includes('open') ? 'tag-posted' : 'tag-closed';
+  const isAdvertised = statusLower.includes('advertised');
+  const isAvailable  = statusLower.includes('available') || statusLower.includes('open');
+  const sc = isAdvertised ? 'tag-advertised'
+           : isAvailable  ? 'tag-posted'
+           : 'tag-closed';
+  const statusLabel = isAdvertised ? 'Advertised in SFS'
+                    : isAvailable  ? (g.status || 'Available')
+                    : (g.status || 'Closed');
   let dl = '';
   if (g.dueDate) {
-  const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
-  const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
-  const parsed = new Date(normalized);
-  const today = new Date(); today.setHours(0,0,0,0);
-  if (!isNaN(parsed.getTime())) {
-    const days = Math.round((parsed - today) / 86400000);
-    const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
-    const label = days < 0 ? 'Closed · ' + cleaned
-                : days === 0 ? 'Closes today'
-                : days === 1 ? 'Closes tomorrow'
-                : 'Closes in ' + days + ' days · ' + cleaned;
-    dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
-  } else {
-    dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+    const cleaned = g.dueDate.replace(/\s+\d{1,2}:\d{2}.*$/, '').trim();
+    const normalized = cleaned.replace(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, '$3-$1-$2');
+    const parsed = new Date(normalized);
+    const today = new Date(); today.setHours(0,0,0,0);
+    if (!isNaN(parsed.getTime())) {
+      const days = Math.round((parsed - today) / 86400000);
+      const cls = days < 0 ? '' : days <= 14 ? 'urgent' : '';
+      const label = days < 0 ? 'Closed · ' + cleaned
+                  : days === 0 ? 'Closes today'
+                  : days === 1 ? 'Closes tomorrow'
+                  : 'Closes in ' + days + ' days · ' + cleaned;
+      dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
+    } else {
+      dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`;
+    }
+  } else if (g.award) {
+    dl = `<span class="deadline-row rolling">◈ ${esc(g.award)}</span>`;
   }
-}
-  else if (g.award) dl = `<span class="deadline-row rolling">◈ ${esc(g.award)}</span>`;
   const hasId = g.id && !String(g.id).startsWith('nys-');
   const viewHref = g.link || g.url || 'https://grantsmanagement.ny.gov/search-funding-sfs';
+  const agencyBadge = NYS_AGENCY_LABELS[g.agency] || g.agency || 'NYS';
+  const agencyFull  = NYS_AGENCY_NAMES[g.agency]  || g.agency || 'New York State';
   return `<div class="grant-card">
-    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-nys">NYS</span><span class="tag ${sc}">${esc(g.status||'Available')}</span></div>
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-nys">${esc(agencyBadge)}</span><span class="tag ${sc}">${esc(statusLabel)}</span></div>
 </div>
     <div class="card-title">${esc(g.title)}</div>
-    <div class="card-agency">${esc(g.agency||'New York State')}</div>
+    <div class="card-agency">${esc(agencyFull)}</div>
     <div class="card-mid"><span></span></div>
     ${dl}
     <div class="card-bottom">
