@@ -1064,7 +1064,19 @@ function toggleSaveModal(id) {
 // ── HELPERS ───────────────────────────────────────────────────
 function daysUntil(s) { if(!s)return null; const[m,d,y]=s.split('/'); if(!y)return null; const c=new Date(y,m-1,d),n=new Date(); n.setHours(0,0,0,0); return Math.round((c-n)/86400000); }
 function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function cleanTitle(s) { return (s||'').replace(/(&nbsp;|\u00a0)+/g,' ').trim(); }
+function cleanTitle(s) {
+  return (s||'')
+    .replace(/(&nbsp;|\u00a0)+/g,' ')
+    .replace(/&ldquo;/g,'\u201c')
+    .replace(/&rdquo;/g,'\u201d')
+    .replace(/&lsquo;/g,'\u2018')
+    .replace(/&rsquo;/g,'\u2019')
+    .replace(/&amp;/g,'&')
+    .replace(/&mdash;/g,'—')
+    .replace(/&ndash;/g,'–')
+    .replace(/&hellip;/g,'…')
+    .trim();
+}
 function toggleSave(id,btn) { const sid=String(id); if(state.saved.has(sid)){state.saved.delete(sid);btn.classList.remove('saved');btn.innerHTML='♡';}else{state.saved.add(sid);btn.classList.add('saved');btn.innerHTML='♥';} }
 function copyId(id,btn) { navigator.clipboard.writeText(id).then(()=>{const o=btn.textContent;btn.textContent='✓';btn.style.background='var(--green)';btn.style.color='white';setTimeout(()=>{btn.textContent=o;btn.style.background='';btn.style.color='';},2000);}).catch(()=>prompt('Copy:',id)); }
 function fmtAward(g) { if(!g.awardCeiling)return''; const n=parseInt(g.awardCeiling); if(n>=1000000)return'$'+(n/1000000).toFixed(n%1000000===0?0:1)+'M'; if(n>=1000)return'$'+Math.round(n/1000)+'k'; return'$'+n; }
