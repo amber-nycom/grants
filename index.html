@@ -919,7 +919,7 @@ function renderNYSCard(g) {
   return `<div class="grant-card">
     <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-nys">${esc(agencyBadge)}</span><span class="tag ${sc}">${esc(statusLabel)}</span></div>
 </div>
-    <div class="card-title">${esc(g.title)}</div>
+    <div class="card-title">${esc(cleanNYSTitle(g.title))}</div>
     <div class="card-agency">${esc(agencyFull)}</div>
     <div class="card-mid"><span></span></div>
     ${dl}
@@ -998,6 +998,22 @@ function cleanTitle(s) {
     .replace(/&ndash;/g,'–')
     .replace(/&hellip;/g,'…')
     .trim();
+}
+function cleanNYSTitle(s) {
+  if (!s) return s;
+  // Strip leading RFA/RFP/ATL identifiers e.g. "RFA #20766 ", "RFA#20770 ", "ATL - 26001 "
+  s = s.replace(/^(RFA|RFP)\s*#?\d+\s*/i, '');
+  s = s.replace(/^ATL\s*-\s*\d+\s*/i, '');
+  // Add space before a 4-digit year directly attached to a word e.g. "Integration2026"
+  s = s.replace(/([a-z])(\d{4})/g, '$1 $2');
+  // If the whole string is uppercase (ignoring digits/symbols), convert to title case
+  const letters = s.replace(/[^a-zA-Z]/g, '');
+  if (letters.length > 0 && letters === letters.toUpperCase()) {
+    s = s.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+    // Restore known acronyms that should stay uppercase
+    s = s.replace(/\bFy\b/g, 'FY');
+  }
+  return s.trim();
 }
 function toggleSave(id,btn) { const sid=String(id); if(state.saved.has(sid)){state.saved.delete(sid);btn.classList.remove('saved');btn.innerHTML='♡';}else{state.saved.add(sid);btn.classList.add('saved');btn.innerHTML='♥';} }
 function copyId(id,btn) { navigator.clipboard.writeText(id).then(()=>{const o=btn.textContent;btn.textContent='✓';btn.style.background='var(--green)';btn.style.color='white';setTimeout(()=>{btn.textContent=o;btn.style.background='';btn.style.color='';},2000);}).catch(()=>prompt('Copy:',id)); }
