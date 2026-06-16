@@ -640,6 +640,8 @@ function renderFedGrants() {
 }
 
 function loadMoreFed() { fed.page++; fetchFedGrants(true); }
+
+function renderFedCard(g) {
   const saved = state.saved.has(g.id);
   const sc = g.oppStatus==='posted'?'tag-posted':g.oppStatus==='forecasted'?'tag-forecasted':'tag-closed';
   let dl = '';
