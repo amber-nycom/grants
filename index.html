@@ -254,25 +254,6 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="filter-group">
-        <h4>Category</h4>
-        <select class="select-filter" id="filter-category">
-          <option value="">All categories</option>
-          <option value="AG">Agriculture</option><option value="AR">Arts</option>
-          <option value="BC">Business &amp; Commerce</option><option value="CD">Community Development</option>
-          <option value="CP">Consumer Protection</option><option value="DPR">Disaster Prevention</option>
-          <option value="ED">Education</option><option value="ELT">Employment</option>
-          <option value="EN">Energy</option><option value="ENV">Environment</option>
-          <option value="FN">Food &amp; Nutrition</option><option value="HL">Health</option>
-          <option value="HO">Housing</option><option value="HU">Humanities</option>
-          <option value="IIJ">Information Technology</option><option value="IS">Income Security</option>
-          <option value="LJL">Law &amp; Justice</option><option value="NR">Natural Resources</option>
-          <option value="OZ">Opportunity Zones</option><option value="RD">Regional Development</option>
-          <option value="ST">Science &amp; Technology</option><option value="T">Transportation</option>
-          <option value="ACA">Affordable Care Act</option><option value="RA">Recovery Act</option>
-          <option value="O">Other</option>
-        </select>
-      </div>
-      <div class="filter-group">
         <h4>Status</h4>
         <div class="filter-item"><input type="checkbox" id="s-posted" checked><label for="s-posted">Posted / Open</label></div>
         <div class="filter-item"><input type="checkbox" id="s-forecasted"><label for="s-forecasted">Forecasted</label></div>
@@ -482,7 +463,7 @@ function switchTab(tab, el) {
   ['browse','federal'].forEach(t =>
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
-  document.getElementById('keyword-input').style.display = (tab==='browse'||tab==='federal') ? '' : 'none';
+  document.getElementById('keyword-input').style.display = tab==='federal' ? '' : 'none';
   document.getElementById('keyword-input').placeholder = tab==='federal' ? 'Search federal grants…' : 'Search grants… (e.g. housing, parks, transit)';
   if (tab==='federal' && !fed.loaded) { fed.loaded=true; fetchFedGrants(); }
 }
@@ -609,7 +590,7 @@ async function fetchGrants() {
 
 function applyFilters() {
   state.keyword = document.getElementById('keyword-input').value.trim();
-  state.category = document.getElementById('filter-category').value;
+  state.category = '';
   state.eligibility = document.getElementById('filter-eligibility').value;
   state.sort = document.getElementById('filter-sort').value;
   state.statuses = [];
