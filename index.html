@@ -242,7 +242,6 @@
   <div class="brand"><img src="nycom_white_logo.png" alt="Logo" style="height:55px;width:auto;margin-right:20px;"></div>
   <nav class="nav-tabs">
     <div class="nav-tab active" onclick="switchTab('browse',this)">Browse</div>
-    <div class="nav-tab" onclick="switchTab('split',this)">Split view</div>
 <div class="nav-tab" onclick="switchTab('federal',this)">Federal grants</div>
   </nav>
   <div class="topbar-right">
@@ -301,7 +300,7 @@
       <div class="grants-grid" id="grants-grid">
         <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>
       </div>
-      <div class="pagination" id="pagination"></div>
+      <div id="pagination"></div>
     </main>
   </div>
 </div>
@@ -359,71 +358,6 @@
         <button onclick="loadMoreFed()">Load more</button>
       </div>
     </main>
-  </div>
-</div>
-  
-<!-- ══ SPLIT VIEW TAB ══ -->
-<div id="tab-split" style="display:none;">
-  <div class="split-body">
-    <aside class="split-sidebar">
-      <div class="filter-group">
-        <h4>Category</h4>
-        <select class="select-filter" id="sp-filter-category">
-          <option value="">All categories</option>
-          <option value="AG">Agriculture</option><option value="AR">Arts</option>
-          <option value="BC">Business &amp; Commerce</option><option value="CD">Community Development</option>
-          <option value="CP">Consumer Protection</option><option value="DPR">Disaster Prevention</option>
-          <option value="ED">Education</option><option value="ELT">Employment</option>
-          <option value="EN">Energy</option><option value="ENV">Environment</option>
-          <option value="FN">Food &amp; Nutrition</option><option value="HL">Health</option>
-          <option value="HO">Housing</option><option value="HU">Humanities</option>
-          <option value="IIJ">Information Technology</option><option value="IS">Income Security</option>
-          <option value="LJL">Law &amp; Justice</option><option value="NR">Natural Resources</option>
-          <option value="OZ">Opportunity Zones</option><option value="RD">Regional Development</option>
-          <option value="ST">Science &amp; Technology</option><option value="T">Transportation</option>
-          <option value="ACA">Affordable Care Act</option><option value="RA">Recovery Act</option>
-          <option value="O">Other</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <h4>Status</h4>
-        <div class="filter-item"><input type="checkbox" id="sp-posted" checked><label for="sp-posted">Posted / Open</label></div>
-        <div class="filter-item"><input type="checkbox" id="sp-forecasted"><label for="sp-forecasted">Forecasted</label></div>
-        <div class="filter-item"><input type="checkbox" id="sp-closed"><label for="sp-closed">Closed</label></div>
-      </div>
-      <div class="filter-group">
-        <h4>Eligibility</h4>
-        <input type="hidden" id="sp-filter-eligibility" value="02">
-        <p style="font-size:12px;color:var(--text-mid);">City &amp; township governments</p>
-      </div>
-      <div class="filter-group">
-        <h4>Sort</h4>
-        <select class="select-filter" id="sp-filter-sort">
-          <option value="openDate|desc">Newest first</option>
-          <option value="closeDate|asc">Deadline soonest</option>
-          <option value="closeDate|desc">Deadline latest</option>
-          <option value="openDate|asc">Oldest first</option>
-        </select>
-      </div>
-      <button class="apply-filters-btn" onclick="applySplitFilters()">Apply filters</button>
-    </aside>
-    <div class="split-list" id="split-list">
-      <div class="split-list-header">
-        <span class="split-list-count" id="split-count">Loading…</span>
-      </div>
-      <div class="split-list-items" id="split-items">
-        <div class="split-loading"><div class="loading-spinner"></div><div class="loading-label">Fetching grants…</div></div>
-      </div>
-      <div class="split-load-more" id="split-more" style="display:none;">
-        <button onclick="loadMoreSplit()">Load more</button>
-      </div>
-    </div>
-    <div class="split-detail" id="split-detail">
-      <div class="detail-empty">
-        <div class="detail-empty-icon">←</div>
-        <div class="detail-empty-text">Select a grant to see details</div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -516,7 +450,6 @@
 <script>
 const GRANTS_API = 'https://young-base-f33b.amberdlucky.workers.dev';
 const PAGE_SIZE = 12;
-const SPLIT_SIZE = 30;
 const FED_PAGE_SIZE = 100;
 
 let state = {
@@ -526,10 +459,6 @@ let state = {
   manualGrants: JSON.parse(localStorage.getItem('manualGrants')||'[]'),
   jsonManualGrants: [],
   agencyGrants: [],
-};
-let sp = {
-  category:'', eligibility:'02', statuses:['posted'], sort:'openDate|desc',
-  page:0, totalHits:0, grants:[], loading:false, selectedId:null, loaded:false,
 };
 let fed = {
   keyword:'', category:'', eligibility:'02',
@@ -550,12 +479,11 @@ const CAT = {
 function switchTab(tab, el) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  ['browse','federal','split'].forEach(t =>
+  ['browse','federal'].forEach(t =>
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
   document.getElementById('keyword-input').style.display = (tab==='browse'||tab==='federal') ? '' : 'none';
   document.getElementById('keyword-input').placeholder = tab==='federal' ? 'Search federal grants…' : 'Search grants… (e.g. housing, parks, transit)';
-  if (tab==='split' && !sp.loaded) { sp.loaded=true; fetchSplit(); }
   if (tab==='federal' && !fed.loaded) { fed.loaded=true; fetchFedGrants(); }
 }
 
@@ -676,7 +604,7 @@ async function fetchGrants() {
     let g = d.oppHits || d.data?.oppHits || [];
     g = filterLocal(g);
     state.grants=g; state.totalHits=d.hitCount||d.data?.hitCount||0; state.loading=false;
-    renderGrants(); renderPagination(); renderSummary(); renderActiveTags();
+    renderGrants(); renderSummary(); renderActiveTags();
   } catch(e) { state.loading=false; showError(e.message); }
 }
 
@@ -693,169 +621,6 @@ function applyFilters() {
   state.page=0; fetchGrants();
 }
 
-// ── SPLIT FETCH ───────────────────────────────────────────────
-async function fetchSplit(append) {
-  if (sp.loading) return;
-  sp.loading = true;
-  if (!append) {
-    document.getElementById('split-items').innerHTML = `<div class="split-loading"><div class="loading-spinner"></div><div class="loading-label">Fetching grants…</div></div>`;
-    document.getElementById('split-count').textContent = 'Loading…';
-    document.getElementById('split-more').style.display = 'none';
-  }
-  const [sb,sd] = sp.sort.split('|');
-  const body = { rows:SPLIT_SIZE, startRecordNum:sp.page*SPLIT_SIZE, oppStatuses:sp.statuses.join('|')||'posted', sortBy:`${sb}|${sd}` };
-  if (sp.category) body.fundingCategories = sp.category;
-  if (sp.eligibility) body.eligibilities = sp.eligibility;
-  try {
-    const r = await fetch(GRANTS_API, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
-    const d = await r.json();
-    let g = d.oppHits || d.data?.oppHits || [];
-    if (sp.eligibility==='01|02|04|08') g = filterLocal(g);
-    sp.grants = append ? [...sp.grants,...g] : g;
-    sp.totalHits = d.hitCount||d.data?.hitCount||0; sp.loading=false;
-    renderSplitList();
-  } catch(e) {
-    sp.loading=false;
-    document.getElementById('split-items').innerHTML = `<div class="split-loading"><div style="font-size:24px;">⚠️</div><div style="font-size:12px;color:var(--text-mid);">Could not load.<br><small>${esc(e.message)}</small></div><button class="retry-btn" onclick="fetchSplit()">Retry</button></div>`;
-  }
-}
-
-function applySplitFilters() {
-  sp.category = document.getElementById('sp-filter-category').value;
-  sp.eligibility = document.getElementById('sp-filter-eligibility').value;
-  sp.sort = document.getElementById('sp-filter-sort').value;
-  sp.statuses = [];
-  if (document.getElementById('sp-posted').checked) sp.statuses.push('posted');
-  if (document.getElementById('sp-forecasted').checked) sp.statuses.push('forecasted');
-  if (document.getElementById('sp-closed').checked) sp.statuses.push('closed');
-  if (!sp.statuses.length) sp.statuses = ['posted'];
-  sp.page=0; sp.selectedId=null; fetchSplit();
-}
-
-function loadMoreSplit() { sp.page++; fetchSplit(true); }
-
-function renderSplitList() {
-  document.getElementById('split-count').innerHTML = `<strong>${sp.totalHits.toLocaleString()}</strong> results`;
-  const c = document.getElementById('split-items');
-  if (!sp.grants.length) { c.innerHTML=`<div class="split-loading" style="color:var(--text-faint);"><div style="font-size:24px;">🔍</div><div>No grants found.</div></div>`; return; }
-  c.innerHTML = sp.grants.map((g,i) => {
-    const days = g.closeDate ? daysUntil(g.closeDate) : null;
-    const dot = !g.closeDate ? 'rolling' : days!==null&&days<0 ? 'closed' : 'open';
-    let meta = (g.agencyCode||'FED').split('-')[0];
-    if (!g.closeDate) meta += ' · rolling';
-    else if (days!==null&&days>=0) meta += ` · ${days}d`;
-    else meta += ' · closed';
-    const active = sp.selectedId===g.id ? ' active' : '';
-    const award = fmtAward(g);
-    return `<div class="split-item${active}" onclick="selectGrant('${esc(String(g.id))}',${i})">
-      <div class="split-dot ${dot}"></div>
-      <div class="split-item-body">
-        <div class="split-item-title">${esc(cleanTitle(g.title||'').slice(0,55))}${cleanTitle(g.title||'').length>55?'…':''}</div>
-        <div class="split-item-meta">${esc(meta)}</div>
-      </div>
-      ${award?`<div class="split-item-award">${award}</div>`:''}
-    </div>`;
-  }).join('');
-  document.getElementById('split-more').style.display = sp.grants.length < sp.totalHits ? '' : 'none';
-  if (!sp.selectedId && sp.grants.length) selectGrant(sp.grants[0].id, 0);
-}
-
-async function selectGrant(id, idx) {
-  sp.selectedId = id;
-  document.querySelectorAll('.split-item').forEach((el,i) => el.classList.toggle('active', i===idx));
-  const g = sp.grants[idx] || sp.grants.find(x=>x.id===id) || {id};
-  const panel = document.getElementById('split-detail');
-  panel.innerHTML = `
-    <div class="detail-tags"><span class="detail-tag federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="detail-tag">${esc(g.oppStatus||'posted')}</span></div>
-    <div class="detail-title">${esc(g.title||'Grant Details')}</div>
-    <div class="detail-subtitle">${esc(g.agencyName||'')} · ID ${esc(String(g.number||g.id))}</div>
-    <div class="detail-actions">
-      <a class="btn-primary" href="https://grants.gov/search-results-detail/${esc(String(id))}" target="_blank">Start application →</a>
-      <button class="btn-action" onclick="toggleSplitSave('${esc(String(id))}',this)">♡ Save to shortlist</button>
-      <a class="btn-action" href="https://grants.gov/search-results-detail/${esc(String(id))}" target="_blank">↗ Share</a>
-    </div>
-    <div style="display:flex;align-items:center;gap:8px;padding:20px 0;color:var(--text-faint);">
-      <div class="loading-spinner" style="width:16px;height:16px;border-width:2px;"></div>
-      <span style="font-size:12px;font-family:'Inter',sans-serif;">Loading details…</span>
-    </div>`;
-  try {
-    const r = await fetch(`https://api.grants.gov/v1/api/fetchOpportunity?oppId=${id}`);
-    const d = await r.json();
-    renderDetail(g, d.data?.opportunityDetails||{});
-  } catch(e) { renderDetail(g, {}); }
-}
-
-function renderDetail(g, opp) {
-  const panel = document.getElementById('split-detail');
-  const title = opp.opportunityTitle||g.title||'Grant Details';
-  const agency = opp.agencyName||g.agencyName||'';
-  const num = opp.opportunityNumber||g.number||g.id;
-  const status = opp.opportunityStatus||g.oppStatus||'posted';
-  const openDate = opp.postDate||g.openDate||'';
-  const closeDate = opp.closeDate||g.closeDate||'';
-  const cfda = opp.cfdaNumbers?.join(', ')||(g.alnist||[]).join(', ')||'—';
-  const desc = opp.synopsis?.synopsis||'';
-  const cats = opp.fundingCategories?.map(c=>CAT[c]||c)||[];
-  const ceiling = opp.awardCeiling ? '$'+parseInt(opp.awardCeiling).toLocaleString() : g.awardCeiling ? '$'+parseInt(g.awardCeiling).toLocaleString() : '—';
-  const floor = opp.awardFloor ? '$'+parseInt(opp.awardFloor).toLocaleString() : '—';
-  const expected = opp.expectedNumberOfAwards||'—';
-  const period = opp.performanceLength ? opp.performanceLength+' months' : '—';
-  const match = opp.costSharingOrMatchingRequirement==='Y'?'Required':opp.costSharingOrMatchingRequirement==='N'?'Not required':'—';
-  const elig = fmtElig(opp.eligibleApplicants);
-  const days = closeDate ? daysUntil(closeDate) : null;
-  const isSaved = state.saved.has(String(g.id));
-  const tagHtml = [
-    `<span class="detail-tag federal">${esc((opp.agencyCode||g.agencyCode||'FEDERAL').split('-')[0])}</span>`,
-    cats.map(c=>`<span class="detail-tag">${esc(c)}</span>`).join(''),
-    match==='Required'?'<span class="detail-tag">Match required</span>':'',
-    !closeDate?'<span class="detail-tag">Rolling review</span>':'',
-  ].join('');
-  const t2Cls = days!==null&&days>=0&&days<=30 ? 'highlight' : '';
-  const t2Txt = !closeDate ? 'Rolling' : days<0 ? `Closed ${closeDate}` : `Apply · closes ${closeDate}`;
-  const descHtml = desc
-    ? `<p>${esc(desc).replace(/\n/g,'<br>')}</p>`
-    : `<div><div class="placeholder-line" style="width:95%"></div><div class="placeholder-line" style="width:88%"></div><div class="placeholder-line" style="width:60%"></div></div><p style="font-size:11px;color:var(--text-faint);margin-top:10px;"><a href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank" style="color:var(--blue);">Read full description on Grants.gov →</a></p>`;
-  panel.innerHTML = `
-    <div class="detail-tags">${tagHtml}</div>
-    <div class="detail-title">${esc(title)}</div>
-    <div class="detail-subtitle">${esc(agency)}${cfda!=='—'?' · CFDA '+cfda:''} · ID ${esc(String(num))}</div>
-    <div class="detail-actions">
-      <a class="btn-primary" href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank">Start application →</a>
-      <button class="btn-action" id="sp-save-btn" onclick="toggleSplitSave('${esc(String(g.id))}',this)">${isSaved?'♥ Saved':'♡ Save to shortlist'}</button>
-      <a class="btn-action" href="https://grants.gov/search-results-detail/${esc(String(g.id))}" target="_blank">↗ Share with team</a>
-    </div>
-    <div class="timeline-row">
-      ${openDate?`<span class="timeline-pill">Posted · ${esc(openDate)}</span>`:''}
-      <span class="timeline-pill ${t2Cls}">${esc(t2Txt)}</span>
-    </div>
-    <div class="detail-grid">
-      <div class="detail-section">
-        <div class="detail-section-title">At a glance</div>
-        <div class="detail-row"><span class="detail-key">Award ceiling</span><span class="detail-val">${ceiling}</span></div>
-        <div class="detail-row"><span class="detail-key">Award floor</span><span class="detail-val">${floor}</span></div>
-        <div class="detail-row"><span class="detail-key">Expected awards</span><span class="detail-val">${expected}</span></div>
-        <div class="detail-row"><span class="detail-key">Match required</span><span class="detail-val">${match}</span></div>
-        <div class="detail-row"><span class="detail-key">Period of performance</span><span class="detail-val">${period}</span></div>
-      </div>
-      <div class="detail-section">
-        <div class="detail-section-title">Eligibility</div>
-        <div class="detail-row"><span class="detail-key">Applicant type</span><span class="detail-val" style="font-size:11px;">${elig}</span></div>
-        <div class="detail-row"><span class="detail-key">CFDA / ALN</span><span class="detail-val">${cfda}</span></div>
-        <div class="detail-row"><span class="detail-key">Status</span><span class="detail-val">${esc(status)}</span></div>
-      </div>
-    </div>
-    <div class="detail-description">
-      <div class="detail-section-title">Summary</div>
-      ${descHtml}
-    </div>`;
-}
-
-function toggleSplitSave(id, btn) {
-  const sid = String(id);
-  if (state.saved.has(sid)) { state.saved.delete(sid); btn.textContent='♡ Save to shortlist'; }
-  else { state.saved.add(sid); btn.textContent='♥ Saved'; }
-}
 
 // ── MANUAL GRANTS ─────────────────────────────────────────────
 function openAddModal(editId) {
@@ -1272,7 +1037,6 @@ document.getElementById('keyword-input').addEventListener('keydown',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalDirect();closeAddModalDirect();}});
 
-fetchGrants();
 fetchNYSGrants();
 fetchAgencyGrants();
 </script>
