@@ -4,7 +4,7 @@
       "id": "efc-water-infrastructure-improveme",
       "title": "Water Infrastructure Improvement and Intermunicipal Grants",
       "agency": "NYS Environmental Facilities Corporation",
-      "status": "Available",
+      "status": "Closed",
       "dueDate": "",
       "description": "Competitive grants that empower municipalities to undertake water quality projects crucial to safeguarding public health, protecting the environment, bolstering climate readiness, and promoting economic development.",
       "link": "https://efc.ny.gov/wiia",
@@ -15,7 +15,7 @@
       "title": "Clean Vessel Assistance Program",
       "agency": "NYS Environmental Facilities Corporation",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "description": "Reimbursement grants to marinas for the installation, renovation & replacement of pumpout stations.",
       "link": "https://efc.ny.gov/clean-vessel",
       "source": "EFC"
@@ -25,20 +25,18 @@
       "title": "Environmental Protection Fund",
       "agency": "NYS Office of Parks, Recreation & Historic Preservation",
       "status": "Available",
-      "dueDate": "",
+      "dueDate": "July 31, 2026",
       "link": "https://parks.ny.gov/grants/environmental-protection-fund",
-      "source": "NYS Parks",
-      "notes": "Typically opens in spring. Check parks.ny.gov for current round."
+      "source": "NYS Parks"
     },
     {
       "id": "parks-municipal-parks-and-recreation-grant",
       "title": "Municipal Parks and Recreation Grant",
       "agency": "NYS Office of Parks, Recreation & Historic Preservation",
-      "status": "Closed",
+      "status": "Available",
       "dueDate": "",
       "link": "https://parks.ny.gov/grants/municipal-parks-recreation-grant",
-      "source": "NYS Parks",
-      "notes": "Check parks.ny.gov for current round."
+      "source": "NYS Parks"
     },
     {
       "id": "parks-recreational-trails-program",
@@ -47,8 +45,7 @@
       "status": "Available",
       "dueDate": "",
       "link": "https://parks.ny.gov/grants/recreational-trails-program",
-      "source": "NYS Parks",
-      "notes": "Federal pass-through program. Check parks.ny.gov for current round."
+      "source": "NYS Parks"
     },
     {
       "id": "parks-african-american-heritage-grant",
@@ -111,15 +108,14 @@
       "status": "Available",
       "dueDate": "",
       "link": "https://parks.ny.gov/activities/snowmobiling/snowmobile-grant-program",
-      "source": "NYS Parks",
-      "notes": "Annual program. Applications typically due in fall."
+      "source": "NYS Parks"
     },
     {
       "id": "hcr-community-development-block-gr",
       "title": "Community Development Block Grant (CDBG)",
       "agency": "NYS Homes & Community Renewal",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "description": "Federal funding for cities, towns, villages and counties to assist low- and moderate-income communities.",
       "link": "https://hcr.ny.gov/community-development-block-grant",
       "source": "HCR"
@@ -129,7 +125,7 @@
       "title": "NYS HOME Program",
       "agency": "NYS Homes & Community Renewal",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "description": "Funding for affordable housing development, down payment assistance, and rehabilitation for municipalities and nonprofits.",
       "link": "https://hcr.ny.gov/nys-home-program",
       "source": "HCR"
@@ -139,7 +135,7 @@
       "title": "Pro-Housing Community Program",
       "agency": "NYS Homes & Community Renewal",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "description": "Certified localities gain exclusive access to up to $750 million in discretionary State funding.",
       "link": "https://hcr.ny.gov/pro-housing-community-program",
       "source": "HCR"
@@ -159,7 +155,7 @@
       "title": "Municipal Waste Reduction, Recycling",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "eligibility": "MUNI",
       "link": "https://dec.ny.gov/environmental-protection/waste-management/grants",
       "source": "DEC"
@@ -169,7 +165,7 @@
       "title": "Household Hazardous Waste Disposal",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "eligibility": "MUNI",
       "link": "https://dec.ny.gov/environmental-protection/waste-management/grants/household-hazardous-waste-programs-grants",
       "source": "DEC"
@@ -179,7 +175,7 @@
       "title": "Solid Waste Municipal Landfill Closure",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "eligibility": "MUNI",
       "link": "https://dec.ny.gov/environmental-protection/waste-management/grants/municipal-landfill-closure-projects",
       "source": "DEC"
@@ -189,7 +185,7 @@
       "title": "Municipal Landfill Gas Management",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "eligibility": "MUNI",
       "link": "https://dec.ny.gov/environmental-protection/waste-management/grants/municipal-landfill-gas-management-projects",
       "source": "DEC"
@@ -209,7 +205,7 @@
       "title": "Water Quality Improvement Project (WQIP) Program",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "",
+      "dueDate": "July 31, 2026",
       "eligibility": "MUNI, NFP, OT",
       "link": "https://dec.ny.gov/get-involved/grant-applications/wqip-program",
       "source": "DEC"
@@ -229,7 +225,7 @@
       "title": "Non-Agricultural Nonpoint Source Planning and MS4 Mapping Grant",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "",
+      "dueDate": "July 31, 2026",
       "eligibility": "MUNI, OT",
       "link": "https://dec.ny.gov/get-involved/grant-applications/non-agricultural-nonpoint-source-planning-ms4-mapping-grant",
       "source": "DEC"
@@ -249,7 +245,7 @@
       "title": "Brownfield Opportunity Areas - DOS",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Available",
-      "dueDate": "Rolling",
+      "dueDate": "",
       "eligibility": "MUNI, NFP",
       "link": "https://dos.ny.gov/brownfield-redevelopment",
       "source": "DEC"
@@ -319,7 +315,7 @@
       "title": "Open Space Conservation Grant Program",
       "agency": "NYS Department of Environmental Conservation",
       "status": "Closed",
-      "dueDate": "",
+      "dueDate": "April 15",
       "eligibility": "MUNI, NFP, OT",
       "link": "https://dec.ny.gov/nature/open-space/open-space-conservation-grant",
       "source": "DEC"
@@ -365,7 +361,7 @@
       "source": "DEC"
     }
   ],
-  "fetched": "2026-06-15T20:40:09.943Z",
+  "fetched": "2026-06-16T18:22:05.039Z",
   "count": 37,
   "sources": {
     "efc": 2,
