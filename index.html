@@ -214,7 +214,7 @@
     <div class="nav-tab" onclick="switchTab('federal',this)">Federal Grants</div>
   </nav>
   <div class="topbar-right">
-    <input class="topbar-search" id="keyword-input" type="text" placeholder="Search grants… (e.g. housing, parks, transit)">
+    <input class="topbar-search" id="keyword-input" type="text" placeholder="Search federal grants…" style="display:none;">
   </div>
 </header>
 
@@ -414,8 +414,14 @@ function switchTab(tab, el) {
   ['browse','federal'].forEach(t =>
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
-  document.getElementById('keyword-input').style.display = tab==='federal' ? '' : 'none';
-  document.getElementById('keyword-input').placeholder = 'Search federal grants…';
+  const searchEl = document.getElementById('keyword-input');
+  if (tab === 'federal') {
+    searchEl.style.display = '';
+    searchEl.placeholder = 'Search federal grants…';
+  } else {
+    searchEl.style.display = 'none';
+    searchEl.value = '';
+  }
   if (tab==='federal' && !fed.loaded) { fed.loaded=true; fetchFedGrants(); }
 }
 
@@ -534,7 +540,7 @@ async function fetchGrants() {
 }
 
 function applyFilters() {
-  state.keyword = document.getElementById('keyword-input').value.trim();
+  state.keyword = '';
   state.category = '';
   state.eligibility = document.getElementById('filter-eligibility').value;
   state.sort = document.getElementById('filter-sort').value;
@@ -984,7 +990,6 @@ function goPage(p){state.page=p;window.scrollTo(0,0);fetchGrants();}
 function renderSummary(){}
 function renderActiveTags(){
   const el=document.getElementById('active-tags');const tags=[];
-  if(state.keyword)tags.push(`keyword: "${state.keyword}"`);
   if(state.category)tags.push(`category: ${CAT[state.category]||state.category}`);
   el.innerHTML=tags.map(t=>`<span class="active-tag">${t}</span>`).join('')+' ';
 }
@@ -1002,11 +1007,7 @@ async function fetchAgencyGrants(){
 }
 
 document.getElementById('keyword-input').addEventListener('keydown',e=>{
-  if(e.key==='Enter') {
-    const activeTab = document.querySelector('.nav-tab.active');
-    if (activeTab && activeTab.textContent.trim()==='Federal Grants') applyFedFilters();
-    else applyFilters();
-  }
+  if(e.key==='Enter') applyFedFilters();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalDirect();closeAddModalDirect();}});
 
