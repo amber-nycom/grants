@@ -688,15 +688,14 @@ function toggleCFA() { document.getElementById('cfa-banner')?.classList.toggle('
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
   const filteredNYS = filterNYSByCategory(state.nysGrants, state.category);
-  const hasNYS = filteredNYS.length > 0;
   const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants];
   const hasManual = allManual.length > 0;
-  const hasAgency = (state.agencyGrants||[]).length > 0;
-  if (!hasNYS && !hasManual && !hasAgency && !state.loading) {
+  const hasAnything = filteredNYS.length > 0 || hasManual || (state.agencyGrants||[]).length > 0;
+  if (!hasAnything && !state.loading) {
     grid.innerHTML=`<div class="empty-state"><div style="font-size:28px;">🔍</div><div style="font-size:13px;color:var(--text-mid);">No grants found.</div></div>`;
     return;
   }
-  if (!hasNYS && !hasManual && state.loading) return;
+  if (!hasAnything && state.loading) return;
   let html = renderCFABanner();
 
   if (hasManual) {
@@ -704,25 +703,54 @@ function renderGrants() {
     html += allManual.map(g => renderManualCard(g)).join('');
   }
 
-  if (hasAgency) {
-    const now = new Date();
-    const ag = (state.agencyGrants||[]).filter(g => {
-      const s = (g.status||'').toLowerCase();
-      if (s.includes('closed')) return false;
-      if (g.dueDate) { const d = new Date(g.dueDate); if (!isNaN(d.getTime()) && d < now) return false; }
-      return true;
-    });
-    if (ag.length > 0) {
-      const sources = [...new Set(ag.map(g=>g.source))].join(', ');
-      html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🏛 Agency Grants <span style="font-weight:400;color:var(--text-faint);">(${ag.length} opportunities · ${sources})</span></div>`;
-      html += ag.map(g => renderAgencyCard(g)).join('');
-    }
+  // ── COMBINED NYS SECTION ──────────────────────────────────────
+  // Merge agency grants + SFS grants into one list, deduplicating by topic.
+  // Rule: when both sources have the same grant, prefer the one with a
+  // functioning external link (not the SFS fallback) AND a dueDate.
+  // Agency grants that are closed or past-deadline are excluded first.
+  const now = new Date();
+  const norm25 = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,25);
+
+  const agencyVisible = (state.agencyGrants||[]).filter(g => {
+    const s = (g.status||'').toLowerCase();
+    if (s.includes('closed')) return false;
+    if (g.dueDate) { const d = new Date(g.dueDate); if (!isNaN(d.getTime()) && d < now) return false; }
+    return true;
+  }).map(g => ({ ...g, _type: 'agency' }));
+
+  const nysVisible = filteredNYS.map(g => ({ ...g, _type: 'nys' }));
+
+  // Score a grant: higher = better candidate to keep when deduplicating.
+  // A real external link scores +2, a dueDate scores +1.
+  const SFS_FALLBACK = 'esupplier.sfs.ny.gov';
+  function grantScore(g) {
+    let score = 0;
+    const link = g.link || g.url || '';
+    if (link && !link.includes(SFS_FALLBACK) && link.startsWith('http')) score += 2;
+    if (g.dueDate && g.dueDate.trim()) score += 1;
+    return score;
   }
 
-  if (hasNYS) {
-    const label = state.category ? `${filteredNYS.length} matching` : `${filteredNYS.length} opportunities`;
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual||hasAgency?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
-    html += filteredNYS.map(g => renderNYSCard(g)).join('');
+  // Build a map keyed by normalized 25-char title prefix.
+  // If a key already exists, keep whichever scores higher.
+  const seen = new Map();
+  [...agencyVisible, ...nysVisible].forEach(g => {
+    const key = norm25(g.title);
+    if (!seen.has(key)) {
+      seen.set(key, g);
+    } else {
+      const existing = seen.get(key);
+      if (grantScore(g) > grantScore(existing)) seen.set(key, g);
+    }
+  });
+
+  const combined = [...seen.values()];
+  const hasNYSorAgency = combined.length > 0;
+
+  if (hasNYSorAgency) {
+    const label = `${combined.length} opportunities`;
+    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
+    html += combined.map(g => g._type === 'agency' ? renderAgencyCard(g) : renderNYSCard(g)).join('');
   }
 
   grid.innerHTML = html;
@@ -819,7 +847,7 @@ function renderNYSCard(g) {
     ${dl}
     <div class="card-bottom">
       ${hasId?`<div class="card-id-row"><span>ID · ${esc(String(g.id))}</span><button class="copy-id-btn" onclick="event.stopPropagation();copyId('${esc(String(g.id))}',this)">copy</button></div>`:'<div></div>'}
-      <a class="view-btn nys" href="${esc(viewHref)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View ↗</a>
+      <a class="view-btn" href="${esc(viewHref)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">View ↗</a>
     </div>
   </div>`;
 }
