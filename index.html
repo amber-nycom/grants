@@ -233,7 +233,7 @@
         <h4>Sort</h4>
         <select class="select-filter" id="filter-sort">
           <option value="openDate|desc">Newest first</option>
-          <option value="closeDate|asc">Deadline soonest</option>
+          <option value="closeDate|asc" selected>Deadline soonest</option>
           <option value="closeDate|desc">Deadline latest</option>
           <option value="openDate|asc">Oldest first</option>
         </select>
@@ -287,7 +287,7 @@
         <h4>Sort</h4>
         <select class="select-filter" id="fed-filter-sort">
           <option value="openDate|desc">Newest first</option>
-          <option value="closeDate|asc">Deadline soonest</option>
+          <option value="closeDate|asc" selected>Deadline soonest</option>
           <option value="closeDate|desc">Deadline latest</option>
           <option value="openDate|asc">Oldest first</option>
         </select>
@@ -347,14 +347,14 @@ const FED_PAGE_SIZE = 100;
 
 let state = {
   keyword:'', category:'', eligibility:'02',
-  statuses:['posted'], sort:'openDate|desc',
+  statuses:['posted'], sort:'closeDate|asc',
   page:0, totalHits:0, grants:[], nysGrants:[], saved:new Set(), loading:false,
   manualGrants: JSON.parse(localStorage.getItem('manualGrants')||'[]'),
   jsonManualGrants: [], agencyGrants: [],
 };
 let fed = {
   keyword:'', category:'', eligibility:'02',
-  statuses:['posted'], sort:'openDate|desc',
+  statuses:['posted'], sort:'closeDate|asc',
   page:0, totalHits:0, grants:[], loading:false, loaded:false,
 };
 
