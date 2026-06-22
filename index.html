@@ -223,77 +223,6 @@
   .cfa-program-deadline.urgent { color: var(--red); font-weight: 500; }
   .cfa-program-deadline.normal { color: var(--text-faint); }
   .cfa-program-link { font-size: 10.5px; color: var(--blue); }
-  /* ── MOBILE FILTER DRAWER ── */
-  .mobile-filter-bar { display: none; padding: 10px 14px; background: var(--surface); border-bottom: 1px solid var(--border); gap: 8px; align-items: center; }
-  .mobile-filter-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: var(--surface-alt); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--text-mid); cursor: pointer; transition: all 0.12s; }
-  .mobile-filter-btn:hover, .mobile-filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
-  .mobile-filter-drawer { display: none; position: fixed; inset: 0; z-index: 250; }
-  .mobile-filter-drawer.open { display: block; }
-  .mobile-filter-overlay { position: absolute; inset: 0; background: rgba(15,23,42,0.4); }
-  .mobile-filter-panel { position: absolute; bottom: 0; left: 0; right: 0; background: var(--surface); border-radius: 16px 16px 0 0; padding: 20px 20px 32px; max-height: 80vh; overflow-y: auto; }
-  .mobile-filter-handle { width: 36px; height: 4px; background: var(--border-mid); border-radius: 2px; margin: 0 auto 18px; }
-  .mobile-filter-panel h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 18px; }
-  .mobile-filter-actions { display: flex; gap: 10px; margin-top: 20px; }
-  .mobile-filter-actions button { flex: 1; padding: 10px; border-radius: var(--radius); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; border: 1px solid var(--border); }
-  .mobile-filter-reset { background: var(--surface-alt); color: var(--text-mid); }
-  .mobile-filter-apply { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    /* Topbar */
-    .topbar { height: auto; min-height: 56px; padding: 0 12px; flex-wrap: wrap; gap: 0; }
-    .brand img { height: 38px; margin-right: 8px; }
-    .nav-tabs { order: 2; width: 100%; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; border-top: 1px solid rgba(255,255,255,0.1); margin-right: 0; }
-    .nav-tabs::-webkit-scrollbar { display: none; }
-    .nav-tab { padding: 0 12px; height: 38px; font-size: 12px; flex-shrink: 0; }
-    .topbar-right { order: 1; margin-left: auto; gap: 8px; }
-    .topbar-search { max-width: 160px; height: 28px; font-size: 12px; }
-    .info-btn { width: 24px; height: 24px; font-size: 11px; }
-    .info-tooltip { width: 260px; right: -8px; }
-
-    /* Hide desktop sidebar, show mobile filter bar */
-    .sidebar { display: none; }
-    .mobile-filter-bar { display: flex; }
-    .layout { flex-direction: column; min-height: auto; }
-
-    /* Main content */
-    .main { padding: 12px 12px; }
-
-    /* Cards — single column */
-    .grants-grid { grid-template-columns: 1fr; gap: 10px; }
-
-    /* CFA banner */
-    .cfa-banner-header { flex-wrap: wrap; gap: 6px; padding: 10px 14px; }
-    .cfa-banner-badge { order: 1; }
-    .cfa-toggle { order: 2; margin-left: auto; }
-    .cfa-banner-title { order: 3; width: 100%; font-size: 13px; }
-    .cfa-banner-title span { display: none; }
-    .cfa-deadline-pill { order: 4; width: 100%; text-align: center; font-size: 10px; }
-    .cfa-programs-grid { grid-template-columns: 1fr; }
-    .cfa-banner-body { padding: 12px 14px 16px; }
-
-    /* Resources page */
-    .resources-page { padding: 16px 14px 40px; }
-    .resources-grid { grid-template-columns: 1fr; }
-
-    /* Modal */
-    .modal { padding: 16px; max-height: 92vh; }
-    .modal-grid { grid-template-columns: 1fr; }
-
-    /* Add grant modal */
-    .add-modal { padding: 16px; max-height: 92vh; }
-    .form-row-2 { grid-template-columns: 1fr; }
-
-    /* Disclaimer banner */
-    .wip-banner { font-size: 11px; padding: 6px 12px; }
-  }
-
-  @media (max-width: 480px) {
-    .nav-tab { padding: 0 10px; font-size: 11px; }
-    .topbar-search { max-width: 130px; }
-    .grant-card { padding: 12px 14px; }
-    .cfa-banner-header { padding: 8px 12px; }
-  }
 </style>
 </head>
 <body>
@@ -328,38 +257,6 @@
 
 <!-- ══ STATE GRANTS TAB ══ -->
 <div id="tab-browse">
-  <!-- Mobile filter bar -->
-  <div class="mobile-filter-bar">
-    <button class="mobile-filter-btn" onclick="openMobileFilters('browse')">⚙ Filters</button>
-    <span id="mobile-active-filter-label" style="font-size:11px;color:var(--text-faint);"></span>
-  </div>
-  <!-- Mobile filter drawer -->
-  <div class="mobile-filter-drawer" id="mobile-filter-drawer-browse">
-    <div class="mobile-filter-overlay" onclick="closeMobileFilters('browse')"></div>
-    <div class="mobile-filter-panel">
-      <div class="mobile-filter-handle"></div>
-      <h3>Filter Grants</h3>
-      <div class="filter-group">
-        <h4>Status</h4>
-        <div class="filter-item"><input type="checkbox" id="m-s-posted" checked><label for="m-s-posted">Posted / Open</label></div>
-        <div class="filter-item"><input type="checkbox" id="m-s-forecasted"><label for="m-s-forecasted">Forecasted</label></div>
-        <div class="filter-item"><input type="checkbox" id="m-s-closed"><label for="m-s-closed">Closed</label></div>
-      </div>
-      <div class="filter-group">
-        <h4>Sort</h4>
-        <select class="select-filter" id="m-filter-sort">
-          <option value="openDate|desc">Newest first</option>
-          <option value="closeDate|asc" selected>Deadline soonest</option>
-          <option value="closeDate|desc">Deadline latest</option>
-          <option value="openDate|asc">Oldest first</option>
-        </select>
-      </div>
-      <div class="mobile-filter-actions">
-        <button class="mobile-filter-reset" onclick="resetMobileFilters('browse')">Reset</button>
-        <button class="mobile-filter-apply" onclick="applyMobileFilters('browse')">Apply</button>
-      </div>
-    </div>
-  </div>
   <div class="layout">
     <aside class="sidebar">
       <div class="filter-group">
@@ -395,53 +292,6 @@
 
 <!-- ══ FEDERAL GRANTS TAB ══ -->
 <div id="tab-federal" style="display:none;">
-  <!-- Mobile filter bar -->
-  <div class="mobile-filter-bar">
-    <button class="mobile-filter-btn" onclick="openMobileFilters('federal')">⚙ Filters</button>
-    <span id="mobile-fed-filter-label" style="font-size:11px;color:var(--text-faint);"></span>
-  </div>
-  <!-- Mobile filter drawer -->
-  <div class="mobile-filter-drawer" id="mobile-filter-drawer-federal">
-    <div class="mobile-filter-overlay" onclick="closeMobileFilters('federal')"></div>
-    <div class="mobile-filter-panel">
-      <div class="mobile-filter-handle"></div>
-      <h3>Filter Federal Grants</h3>
-      <div class="filter-group">
-        <h4>Category</h4>
-        <select class="select-filter" id="m-fed-filter-category">
-          <option value="">All categories</option>
-          <option value="AG">Agriculture</option><option value="AR">Arts</option>
-          <option value="BC">Business &amp; Commerce</option><option value="CD">Community Development</option>
-          <option value="CP">Consumer Protection</option><option value="DPR">Disaster Prevention</option>
-          <option value="ED">Education</option><option value="ELT">Employment</option>
-          <option value="EN">Energy</option><option value="ENV">Environment</option>
-          <option value="FN">Food &amp; Nutrition</option><option value="HL">Health</option>
-          <option value="HO">Housing</option><option value="NR">Natural Resources</option>
-          <option value="RD">Regional Development</option><option value="ST">Science &amp; Technology</option>
-          <option value="T">Transportation</option><option value="O">Other</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <h4>Status</h4>
-        <div class="filter-item"><input type="checkbox" id="m-fed-posted" checked><label for="m-fed-posted">Posted / Open</label></div>
-        <div class="filter-item"><input type="checkbox" id="m-fed-forecasted"><label for="m-fed-forecasted">Forecasted</label></div>
-        <div class="filter-item"><input type="checkbox" id="m-fed-closed"><label for="m-fed-closed">Closed</label></div>
-      </div>
-      <div class="filter-group">
-        <h4>Sort</h4>
-        <select class="select-filter" id="m-fed-filter-sort">
-          <option value="openDate|desc">Newest first</option>
-          <option value="closeDate|asc" selected>Deadline soonest</option>
-          <option value="closeDate|desc">Deadline latest</option>
-          <option value="openDate|asc">Oldest first</option>
-        </select>
-      </div>
-      <div class="mobile-filter-actions">
-        <button class="mobile-filter-reset" onclick="resetMobileFilters('federal')">Reset</button>
-        <button class="mobile-filter-apply" onclick="applyMobileFilters('federal')">Apply</button>
-      </div>
-    </div>
-  </div>
   <div class="layout">
     <aside class="sidebar">
       <div class="filter-group">
@@ -529,6 +379,10 @@
           <div class="resource-card-name">FEMA Grants Portal <span>↗</span></div>
           <div class="resource-card-desc">All FEMA hazard mitigation, BRIC, EMPG, and public assistance grants in one place. Municipalities apply directly for most programs.</div>
         </a>
+        <a class="resource-card" href="https://environmentalbondact.ny.gov/pages/funding-opportunities" target="_blank" rel="noopener">
+          <div class="resource-card-name">NYS Environmental Bond Act Funding Finder <span>↗</span></div>
+          <div class="resource-card-desc">Search $4.2 billion in Bond Act grants for climate, water, land conservation, and environmental justice projects — filterable by applicant type and project phase.</div>
+        </a>
       </div>
     </div>
 
@@ -539,7 +393,7 @@
           <div class="resource-card-name">USDA Rural Development <span>↗</span></div>
           <div class="resource-card-desc">Community Facilities grants and loans for rural municipalities for essential public services including water, healthcare, and public safety infrastructure.</div>
         </a>
-        <a class="resource-card" href="https://www.eda.gov/resources/find-grant-resources" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.eda.gov/grants" target="_blank" rel="noopener">
           <div class="resource-card-name">EDA — Economic Development Administration <span>↗</span></div>
           <div class="resource-card-desc">Federal grants for economic development, workforce, and infrastructure projects including Public Works and Planning programs.</div>
         </a>
@@ -555,7 +409,7 @@
           <div class="resource-card-name">DOT Safe Streets & Roads for All <span>↗</span></div>
           <div class="resource-card-desc">Planning and capital grants for municipalities to prevent roadway deaths and serious injuries through infrastructure and safety improvements.</div>
         </a>
-        <a class="resource-card" href="https://www.energy.gov/topics/funding-opportunities" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.energy.gov/scep/slsc/state-and-local-solution-center" target="_blank" rel="noopener">
           <div class="resource-card-name">DOE State & Local Solution Center <span>↗</span></div>
           <div class="resource-card-desc">Energy efficiency and clean energy grants and technical assistance for local governments, including the Energy Efficiency and Conservation Block Grant.</div>
         </a>
@@ -565,25 +419,29 @@
     <div class="resources-section">
       <div class="resources-section-title">NYS Agency Programs</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://esd.ny.gov/growth-support" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://esd.ny.gov/doing-business-ny/main-street-program" target="_blank" rel="noopener">
           <div class="resource-card-name">Empire State Development <span>↗</span></div>
           <div class="resource-card-desc">Downtown Revitalization Initiative (DRI), Restore NY, NY Forward, and other ESD programs for municipal economic development and placemaking.</div>
         </a>
-        <a class="resource-card" href="https://www.nyserda.ny.gov/All-Programs" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.nyserda.ny.gov/Researchers-and-Policymakers/Local-Governments" target="_blank" rel="noopener">
           <div class="resource-card-name">NYSERDA — Local Governments <span>↗</span></div>
           <div class="resource-card-desc">Clean Energy Communities, REV Connect, Building Cleaner Communities, and other energy programs for municipalities beyond the annual CFA cycle.</div>
         </a>
-        <a class="resource-card" href="https://dos.ny.gov/funding-bid-opportunities" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://dos.ny.gov/local-government-grants" target="_blank" rel="noopener">
           <div class="resource-card-name">NYS Department of State — Grants <span>↗</span></div>
           <div class="resource-card-desc">Local Waterfront Revitalization, Smart Growth, Brownfield Opportunity Areas, and other DOS programs for municipal planning and revitalization.</div>
         </a>
-        <a class="resource-card" href="https://hcr.ny.gov/funding-opportunities" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://hcr.ny.gov/grants" target="_blank" rel="noopener">
           <div class="resource-card-name">NYS Homes & Community Renewal <span>↗</span></div>
           <div class="resource-card-desc">HOME, CDBG, Housing Trust Fund, NY Main Street, and other HCR programs for affordable housing and community development.</div>
         </a>
-        <a class="resource-card" href="https://dos.ny.gov/local-government-efficiency-citizens-re-organization-empowerment-grant-creg-program" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.dos.ny.gov/lg/lge.html" target="_blank" rel="noopener">
           <div class="resource-card-name">Local Government Efficiency (LGE) Program <span>↗</span></div>
           <div class="resource-card-desc">NYS grants specifically to help municipalities study and implement shared services, consolidations, and efficiency improvements.</div>
+        </a>
+        <a class="resource-card" href="https://regionalcouncils.ny.gov/resources" target="_blank" rel="noopener">
+          <div class="resource-card-name">Regional Economic Development Councils <span>↗</span></div>
+          <div class="resource-card-desc">Resources and funding information from NYS's 10 Regional Economic Development Councils, including CFA guidance, strategic plans, and regional priorities.</div>
         </a>
       </div>
     </div>
@@ -591,11 +449,11 @@
     <div class="resources-section">
       <div class="resources-section-title">Regional & Special Programs</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://www.arc.gov/grants-and-opportunities/" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.arc.gov/funding-opportunities" target="_blank" rel="noopener">
           <div class="resource-card-name">Appalachian Regional Commission (ARC) <span>↗</span></div>
           <div class="resource-card-desc">Federal-state partnership funding economic, infrastructure, and community development in Appalachian counties of New York and 12 other states.</div>
         </a>
-        <a class="resource-card" href="https://www.nbrc.gov/content/resources" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.nbrc.gov/funding" target="_blank" rel="noopener">
           <div class="resource-card-name">Northern Border Regional Commission <span>↗</span></div>
           <div class="resource-card-desc">Federal-state economic development grants for distressed communities in northern New York and three other border states.</div>
         </a>
@@ -611,9 +469,21 @@
           <div class="resource-card-name">Great Lakes Restoration Initiative <span>↗</span></div>
           <div class="resource-card-desc">Federal grants for water quality, habitat, and invasive species projects for municipalities near the Great Lakes in western New York.</div>
         </a>
-        <a class="resource-card" href="https://lispartnership.org/about/grants/" target="_blank" rel="noopener">
+        <a class="resource-card" href="https://www.epa.gov/long-island-sound/long-island-sound-grants" target="_blank" rel="noopener">
           <div class="resource-card-name">Long Island Sound Study <span>↗</span></div>
           <div class="resource-card-desc">EPA grants for water quality and coastal resilience projects for downstate municipalities along Long Island Sound.</div>
+        </a>
+        <a class="resource-card" href="https://www.nfwf.org/apply-grant" target="_blank" rel="noopener">
+          <div class="resource-card-name">National Fish & Wildlife Foundation <span>↗</span></div>
+          <div class="resource-card-desc">Competitive grants for conservation, habitat restoration, and watershed projects. Several programs are eligible for municipalities and local governments.</div>
+        </a>
+        <a class="resource-card" href="https://www.lcbp.org/about-us/grants-rfps/request-for-proposals-rfps/#nywetlands" target="_blank" rel="noopener">
+          <div class="resource-card-name">Lake Champlain Basin Program <span>↗</span></div>
+          <div class="resource-card-desc">Grants for water quality, wetlands, and habitat projects in the Lake Champlain watershed. Relevant for municipalities in Clinton, Essex, Franklin, and Washington counties.</div>
+        </a>
+        <a class="resource-card" href="https://nysfola.org/current-and-ongoing-grant-opportunities/" target="_blank" rel="noopener">
+          <div class="resource-card-name">NYS Federation of Lakes Associations <span>↗</span></div>
+          <div class="resource-card-desc">Curated list of current grant opportunities for lake and watershed protection projects in New York State.</div>
         </a>
       </div>
     </div>
@@ -1337,48 +1207,6 @@ async function fetchNYSGrants(){
 async function fetchAgencyGrants(){
   try{const r=await fetch('./agency-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();state.agencyGrants=d.grants||[];renderGrants();}
   catch(e){console.log('Agency grants not available:',e.message);}
-}
-
-// ── MOBILE FILTERS ────────────────────────────────────────────
-function openMobileFilters(tab) {
-  document.getElementById('mobile-filter-drawer-' + tab).classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeMobileFilters(tab) {
-  document.getElementById('mobile-filter-drawer-' + tab).classList.remove('open');
-  document.body.style.overflow = '';
-}
-function resetMobileFilters(tab) {
-  if (tab === 'browse') {
-    document.getElementById('m-s-posted').checked = true;
-    document.getElementById('m-s-forecasted').checked = false;
-    document.getElementById('m-s-closed').checked = false;
-    document.getElementById('m-filter-sort').value = 'closeDate|asc';
-  } else {
-    document.getElementById('m-fed-posted').checked = true;
-    document.getElementById('m-fed-forecasted').checked = false;
-    document.getElementById('m-fed-closed').checked = false;
-    document.getElementById('m-fed-filter-category').value = '';
-    document.getElementById('m-fed-filter-sort').value = 'closeDate|asc';
-  }
-}
-function applyMobileFilters(tab) {
-  if (tab === 'browse') {
-    // Sync mobile controls to desktop controls then apply
-    document.getElementById('s-posted').checked = document.getElementById('m-s-posted').checked;
-    document.getElementById('s-forecasted').checked = document.getElementById('m-s-forecasted').checked;
-    document.getElementById('s-closed').checked = document.getElementById('m-s-closed').checked;
-    document.getElementById('filter-sort').value = document.getElementById('m-filter-sort').value;
-    applyFilters();
-  } else {
-    document.getElementById('fed-posted').checked = document.getElementById('m-fed-posted').checked;
-    document.getElementById('fed-forecasted').checked = document.getElementById('m-fed-forecasted').checked;
-    document.getElementById('fed-closed').checked = document.getElementById('m-fed-closed').checked;
-    document.getElementById('fed-filter-category').value = document.getElementById('m-fed-filter-category').value;
-    document.getElementById('fed-filter-sort').value = document.getElementById('m-fed-filter-sort').value;
-    applyFedFilters();
-  }
-  closeMobileFilters(tab);
 }
 
 function toggleInfoTooltip() {
