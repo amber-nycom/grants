@@ -197,10 +197,11 @@
   .resource-card-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
 
   .cfa-banner { grid-column: 1 / -1; background: var(--surface); border: 1.5px solid #bfdbfe; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 6px; }
-  .cfa-banner-header { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); padding: 13px 18px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .cfa-banner-header { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); padding: 13px 18px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; flex-wrap: wrap; }
   .cfa-banner-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 600; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-  .cfa-banner-title { font-size: 13px; font-weight: 600; color: #fff; flex: 1; min-width: 0; }
-  .cfa-banner-title span { font-weight: 400; opacity: 0.72; font-size: 12px; margin-left: 5px; }
+  .cfa-banner-title { font-size: 13px; font-weight: 600; color: #fff; flex: 1; min-width: 120px; }
+  .cfa-banner-title span { font-weight: 400; opacity: 0.72; font-size: 12px; margin-left: 5px; display: inline; }
+  @media (max-width: 480px) { .cfa-banner-title span { display: none; } }
   .cfa-deadline-pill { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
   .cfa-deadline-pill.normal { background: rgba(255,255,255,0.18); color: #fff; border: 1px solid rgba(255,255,255,0.28); }
   .cfa-deadline-pill.urgent { background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
