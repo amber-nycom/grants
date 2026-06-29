@@ -165,17 +165,6 @@
   .btn-save { padding: 8px 20px; background: var(--manual); color: #fff; border: none; border-radius: var(--radius); font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; cursor: pointer; }
   .btn-save:hover { background: #4c1d95; }
 
-  /* ── INFO TOOLTIP ── */
-  .info-btn { width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.12); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; position: relative; transition: background 0.15s; font-family: 'Inter', sans-serif; }
-  .info-btn:hover { background: rgba(255,255,255,0.22); }
-  .info-tooltip { display: none; position: absolute; top: calc(100% + 10px); right: 0; width: 300px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; box-shadow: 0 4px 20px rgba(15,23,42,0.15); z-index: 300; }
-  .info-btn:focus .info-tooltip, .info-btn.open .info-tooltip { display: block; }
-  .info-tooltip-title { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 8px; font-family: 'Inter', sans-serif; }
-  .info-tooltip-section { margin-bottom: 10px; }
-  .info-tooltip-section:last-child { margin-bottom: 0; }
-  .info-tooltip-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-faint); margin-bottom: 4px; font-family: 'Inter', sans-serif; }
-  .info-tooltip p { font-size: 11.5px; color: var(--text-mid); line-height: 1.6; }
-
   /* ── OTHER RESOURCES TAB ── */
   .resources-page { max-width: 860px; margin: 0 auto; padding: 28px 24px 48px; }
   .resources-page h1 { font-size: 20px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
@@ -261,20 +250,6 @@
   </nav>
   <div class="topbar-right">
     <input class="topbar-search" id="keyword-input" type="text" placeholder="Search federal grants…" style="display:none;">
-    <div class="info-btn" id="info-btn" onclick="toggleInfoTooltip()" tabindex="0" aria-label="About this dashboard">
-      i
-      <div class="info-tooltip" id="info-tooltip">
-        <div class="info-tooltip-title">About this dashboard</div>
-        <div class="info-tooltip-section">
-          <div class="info-tooltip-label">Data sources</div>
-          <p>Federal grants are pulled live from <strong>Grants.gov</strong> filtered to city/township eligibility. State grants come from the <strong>NYS SFS portal</strong> and agency websites including EFC, Parks, HCR, DEC, and DASNY, refreshed nightly.</p>
-        </div>
-        <div class="info-tooltip-section">
-          <div class="info-tooltip-label">Using the dashboard</div>
-          <p>Use the <strong>ID · copy</strong> button on NYS SFS cards to copy the grant ID, then paste it into the SFS search page to find the full listing. Links and deadlines may be outdated — always verify on the agency's website before applying.</p>
-        </div>
-      </div>
-    </div>
   </div>
 </header>
 
@@ -1275,15 +1250,6 @@ async function fetchAgencyGrants(){
   try{const r=await fetch('./agency-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();state.agencyGrants=d.grants||[];buildAgencyFilter();renderGrants();}
   catch(e){console.log('Agency grants not available:',e.message);}
 }
-
-function toggleInfoTooltip() {
-  const btn = document.getElementById('info-btn');
-  btn.classList.toggle('open');
-}
-document.addEventListener('click', e => {
-  const btn = document.getElementById('info-btn');
-  if (btn && !btn.contains(e.target)) btn.classList.remove('open');
-});
 
 document.getElementById('keyword-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') applyFedFilters();
