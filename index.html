@@ -667,7 +667,10 @@ function renderFedGrants() {
     document.getElementById('fed-load-more').style.display = 'none';
     return;
   }
-  let html = `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.grants.length.toLocaleString()} shown · Grants.gov)</span></div>`;
+  let html = `<div style="grid-column:1/-1;padding:6px 0 8px;border-bottom:1.5px solid var(--border);margin-bottom:2px;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">🇺🇸 Federal Grants <span style="font-weight:400;color:var(--text-faint);">(${fed.grants.length.toLocaleString()} shown · Grants.gov)</span></span>
+  <a href="https://grants.gov/search-results?eligibilities=02&oppStatuses=posted" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--blue);border-radius:var(--radius);font-size:11px;font-weight:500;color:var(--blue);text-decoration:none;font-family:'Inter',sans-serif;transition:all 0.12s;" onmouseover="this.style.background='var(--blue)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--blue)'">Browse Grants.gov ↗</a>
+</div>`;
   html += fed.grants.map(g => renderFedCard(g)).join('');
   grid.innerHTML = html;
   const hasMore = (fed.page + 1) * FED_PAGE_SIZE < fed.totalHits;
