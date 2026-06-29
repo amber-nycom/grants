@@ -126,12 +126,6 @@
   .page-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
   .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
-  /* ── PLACEHOLDER TABS ── */
-  .tab-placeholder { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 80px 20px; text-align: center; color: var(--text-faint); gap: 10px; min-height: calc(100vh - 46px); }
-  .tab-placeholder-icon { font-size: 32px; margin-bottom: 4px; }
-  .tab-placeholder-title { font-size: 16px; color: var(--text-mid); font-weight: 500; }
-  .tab-placeholder-sub { font-size: 12px; color: var(--text-faint); max-width: 320px; line-height: 1.6; }
-
   /* ── MODAL ── */
   .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.5); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
   .modal-overlay.open { display: flex; }
@@ -227,8 +221,6 @@
 
   /* ── MOBILE ── */
   @media (max-width: 768px) {
-
-    /* Topbar: stack logo + tabs vertically */
     .topbar { height: auto; flex-wrap: wrap; padding: 10px 14px 0 14px; gap: 0; }
     .brand img { height: 38px; margin-right: 0; }
     .brand { margin-right: auto; padding-bottom: 8px; }
@@ -237,36 +229,22 @@
     .info-btn { display: none; }
     .nav-tabs { order: 2; width: 100%; border-top: 1px solid rgba(255,255,255,0.12); margin-right: 0; overflow-x: auto; }
     .nav-tab { font-size: 12px; padding: 0 12px; height: 38px; white-space: nowrap; }
-
-    /* Hide sidebar, go full width */
     .sidebar { display: none; }
     .layout { display: block; }
     .main { padding: 12px; }
-
-    /* Mobile filter bar */
     .mobile-filter-bar { display: flex !important; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
     .mobile-filter-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-family: 'Inter', sans-serif; background: var(--surface); color: var(--text-mid); cursor: pointer; }
     .mobile-filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
     .mobile-cat-select { height: 32px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: 0 8px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--text-mid); cursor: pointer; }
-
-    /* Single column cards */
     .grants-grid { grid-template-columns: 1fr; gap: 10px; }
-
-    /* CFA banner */
     .cfa-banner { margin-bottom: 12px; }
     .cfa-banner-header { padding: 10px 12px; gap: 8px; }
     .cfa-programs-grid { grid-template-columns: 1fr !important; }
-
-    /* Modal slides up from bottom */
     .modal-box { width: 100% !important; max-width: 100% !important; margin: 0 !important; border-radius: 12px 12px 0 0 !important; position: fixed !important; bottom: 0 !important; top: auto !important; left: 0 !important; max-height: 85vh; overflow-y: auto; }
     .modal-overlay { align-items: flex-end !important; }
     .modal-grid { grid-template-columns: 1fr !important; }
-
-    /* Resources */
     .resources-page { padding: 16px 12px 40px; }
     .resources-grid { grid-template-columns: 1fr; }
-
-    /* Forms */
     .form-row-2 { grid-template-columns: 1fr; }
   }
 </style>
@@ -294,6 +272,7 @@
           <div class="info-tooltip-label">Using the dashboard</div>
           <p>Use the <strong>ID · copy</strong> button on NYS SFS cards to copy the grant ID, then paste it into the SFS search page to find the full listing. Links and deadlines may be outdated — always verify on the agency's website before applying.</p>
         </div>
+      </div>
     </div>
   </div>
 </header>
@@ -308,6 +287,12 @@
         <div class="filter-item"><input type="checkbox" id="s-closed"><label for="s-closed">Closed</label></div>
       </div>
       <input type="hidden" id="filter-eligibility" value="02">
+      <div class="filter-group">
+        <h4>Agency</h4>
+        <select class="select-filter" id="filter-agency">
+          <option value="">All agencies</option>
+        </select>
+      </div>
       <div class="filter-group">
         <h4>Sort</h4>
         <select class="select-filter" id="filter-sort">
@@ -326,6 +311,9 @@
       <div class="mobile-filter-bar" style="display:none;" id="mobile-filter-bar">
         <button class="mobile-filter-btn active" onclick="mobileStatus('posted',this)">Open</button>
         <button class="mobile-filter-btn" onclick="mobileStatus('closed',this)">Closed</button>
+        <select class="mobile-cat-select" id="mobile-filter-agency" onchange="mobileAgency(this.value)">
+          <option value="">All agencies</option>
+        </select>
       </div>
       <div class="toolbar"><span id="active-tags"></span></div>
       <div class="grants-grid" id="grants-grid">
@@ -421,166 +409,62 @@
   <div class="resources-page">
     <h1>Other Resources</h1>
     <p class="resources-sub">Direct links to grant portals, funding programs, and technical assistance resources for NYS municipalities.</p>
-
     <div class="resources-section">
       <div class="resources-section-title">Grant Portals</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS SFS Grant Search <span>↗</span></div>
-          <div class="resource-card-desc">Search the Statewide Financial System directly for all currently advertised state grant opportunities.</div>
-        </a>
-        <a class="resource-card" href="https://grants.gov" target="_blank" rel="noopener">
-          <div class="resource-card-name">Grants.gov <span>↗</span></div>
-          <div class="resource-card-desc">The federal government's central database of grant opportunities across all agencies. Required for most federal grant applications.</div>
-        </a>
-        <a class="resource-card" href="https://sam.gov/" target="_blank" rel="noopener">
-          <div class="resource-card-name">SAM.gov <span>↗</span></div>
-          <div class="resource-card-desc">System for Award Management — required registration for federal grants and contracts. Also lists federal funding opportunities.</div>
-        </a>
-        <a class="resource-card" href="https://apps.cio.ny.gov/apps/cfa" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS CFA Portal <span>↗</span></div>
-          <div class="resource-card-desc">New York State's Consolidated Funding Application — one application for grants across 8 state agencies. Opens annually each spring.</div>
-        </a>
-        <a class="resource-card" href="https://www.fema.gov/grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">FEMA Grants Portal <span>↗</span></div>
-          <div class="resource-card-desc">All FEMA hazard mitigation, BRIC, EMPG, and public assistance grants in one place. Municipalities apply directly for most programs.</div>
-        </a>
-        <a class="resource-card" href="https://environmentalbondact.ny.gov/pages/funding-opportunities" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Environmental Bond Act Funding Finder <span>↗</span></div>
-          <div class="resource-card-desc">Search $4.2 billion in Bond Act grants for climate, water, land conservation, and environmental justice projects — filterable by applicant type and project phase.</div>
-        </a>
-        <a class="resource-card" href="https://nyassembly.gov/gan/" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Assembly Grants Action News <span>↗</span></div>
-          <div class="resource-card-desc">Monthly newsletter from the NYS Assembly highlighting new and upcoming grant opportunities for municipalities, nonprofits, and community organizations across New York State.</div>
-        </a>
-        <a class="resource-card" href="https://www.nyscr.ny.gov" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Contract Reporter <span>↗</span></div>
-          <div class="resource-card-desc">Official source for NYS government procurement and grant opportunities, including advertised-only programs not listed in SFS.</div>
-        </a>
+        <a class="resource-card" href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" rel="noopener"><div class="resource-card-name">NYS SFS Grant Search <span>↗</span></div><div class="resource-card-desc">Search the Statewide Financial System directly for all currently advertised state grant opportunities.</div></a>
+        <a class="resource-card" href="https://grants.gov" target="_blank" rel="noopener"><div class="resource-card-name">Grants.gov <span>↗</span></div><div class="resource-card-desc">The federal government's central database of grant opportunities across all agencies. Required for most federal grant applications.</div></a>
+        <a class="resource-card" href="https://sam.gov/" target="_blank" rel="noopener"><div class="resource-card-name">SAM.gov <span>↗</span></div><div class="resource-card-desc">System for Award Management — required registration for federal grants and contracts. Also lists federal funding opportunities.</div></a>
+        <a class="resource-card" href="https://apps.cio.ny.gov/apps/cfa" target="_blank" rel="noopener"><div class="resource-card-name">NYS CFA Portal <span>↗</span></div><div class="resource-card-desc">New York State's Consolidated Funding Application — one application for grants across 8 state agencies. Opens annually each spring.</div></a>
+        <a class="resource-card" href="https://www.fema.gov/grants" target="_blank" rel="noopener"><div class="resource-card-name">FEMA Grants Portal <span>↗</span></div><div class="resource-card-desc">All FEMA hazard mitigation, BRIC, EMPG, and public assistance grants in one place. Municipalities apply directly for most programs.</div></a>
+        <a class="resource-card" href="https://environmentalbondact.ny.gov/pages/funding-opportunities" target="_blank" rel="noopener"><div class="resource-card-name">NYS Environmental Bond Act Funding Finder <span>↗</span></div><div class="resource-card-desc">Search $4.2 billion in Bond Act grants for climate, water, land conservation, and environmental justice projects — filterable by applicant type and project phase.</div></a>
+        <a class="resource-card" href="https://nyassembly.gov/gan/" target="_blank" rel="noopener"><div class="resource-card-name">NYS Assembly Grants Action News <span>↗</span></div><div class="resource-card-desc">Monthly newsletter from the NYS Assembly highlighting new and upcoming grant opportunities for municipalities, nonprofits, and community organizations across New York State.</div></a>
+        <a class="resource-card" href="https://www.nyscr.ny.gov" target="_blank" rel="noopener"><div class="resource-card-name">NYS Contract Reporter <span>↗</span></div><div class="resource-card-desc">Official source for NYS government procurement and grant opportunities, including advertised-only programs not listed in SFS.</div></a>
       </div>
     </div>
-
     <div class="resources-section">
       <div class="resources-section-title">Federal Programs</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://www.rd.usda.gov/programs-services/all-programs/community-facilities-programs" target="_blank" rel="noopener">
-          <div class="resource-card-name">USDA Rural Development <span>↗</span></div>
-          <div class="resource-card-desc">Community Facilities grants and loans for rural municipalities for essential public services including water, healthcare, and public safety infrastructure.</div>
-        </a>
-        <a class="resource-card" href="https://www.eda.gov/grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">EDA — Economic Development Administration <span>↗</span></div>
-          <div class="resource-card-desc">Federal grants for economic development, workforce, and infrastructure projects including Public Works and Planning programs.</div>
-        </a>
-        <a class="resource-card" href="https://www.hud.gov/program_offices/comm_planning/cdbg" target="_blank" rel="noopener">
-          <div class="resource-card-name">HUD Community Development <span>↗</span></div>
-          <div class="resource-card-desc">Community Development Block Grant (CDBG) entitlement and state-administered programs for low- and moderate-income community projects.</div>
-        </a>
-        <a class="resource-card" href="https://www.transportation.gov/RAISEgrants" target="_blank" rel="noopener">
-          <div class="resource-card-name">DOT RAISE Grants <span>↗</span></div>
-          <div class="resource-card-desc">Discretionary transportation grants for local governments for road, bridge, transit, port, and multimodal infrastructure projects.</div>
-        </a>
-        <a class="resource-card" href="https://www.transportation.gov/SS4A" target="_blank" rel="noopener">
-          <div class="resource-card-name">DOT Safe Streets &amp; Roads for All <span>↗</span></div>
-          <div class="resource-card-desc">Planning and capital grants for municipalities to prevent roadway deaths and serious injuries through infrastructure and safety improvements.</div>
-        </a>
-        <a class="resource-card" href="https://www.energy.gov/scep/slsc/state-and-local-solution-center" target="_blank" rel="noopener">
-          <div class="resource-card-name">DOE State &amp; Local Solution Center <span>↗</span></div>
-          <div class="resource-card-desc">Energy efficiency and clean energy grants and technical assistance for local governments, including the Energy Efficiency and Conservation Block Grant.</div>
-        </a>
+        <a class="resource-card" href="https://www.rd.usda.gov/programs-services/all-programs/community-facilities-programs" target="_blank" rel="noopener"><div class="resource-card-name">USDA Rural Development <span>↗</span></div><div class="resource-card-desc">Community Facilities grants and loans for rural municipalities for essential public services including water, healthcare, and public safety infrastructure.</div></a>
+        <a class="resource-card" href="https://www.eda.gov/grants" target="_blank" rel="noopener"><div class="resource-card-name">EDA — Economic Development Administration <span>↗</span></div><div class="resource-card-desc">Federal grants for economic development, workforce, and infrastructure projects including Public Works and Planning programs.</div></a>
+        <a class="resource-card" href="https://www.hud.gov/program_offices/comm_planning/cdbg" target="_blank" rel="noopener"><div class="resource-card-name">HUD Community Development <span>↗</span></div><div class="resource-card-desc">Community Development Block Grant (CDBG) entitlement and state-administered programs for low- and moderate-income community projects.</div></a>
+        <a class="resource-card" href="https://www.transportation.gov/RAISEgrants" target="_blank" rel="noopener"><div class="resource-card-name">DOT RAISE Grants <span>↗</span></div><div class="resource-card-desc">Discretionary transportation grants for local governments for road, bridge, transit, port, and multimodal infrastructure projects.</div></a>
+        <a class="resource-card" href="https://www.transportation.gov/SS4A" target="_blank" rel="noopener"><div class="resource-card-name">DOT Safe Streets &amp; Roads for All <span>↗</span></div><div class="resource-card-desc">Planning and capital grants for municipalities to prevent roadway deaths and serious injuries through infrastructure and safety improvements.</div></a>
+        <a class="resource-card" href="https://www.energy.gov/scep/slsc/state-and-local-solution-center" target="_blank" rel="noopener"><div class="resource-card-name">DOE State &amp; Local Solution Center <span>↗</span></div><div class="resource-card-desc">Energy efficiency and clean energy grants and technical assistance for local governments, including the Energy Efficiency and Conservation Block Grant.</div></a>
       </div>
     </div>
-
     <div class="resources-section">
       <div class="resources-section-title">NYS Agency Programs</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://esd.ny.gov/doing-business-ny/main-street-program" target="_blank" rel="noopener">
-          <div class="resource-card-name">Empire State Development <span>↗</span></div>
-          <div class="resource-card-desc">Downtown Revitalization Initiative (DRI), Restore NY, NY Forward, and other ESD programs for municipal economic development and placemaking.</div>
-        </a>
-        <a class="resource-card" href="https://www.nyserda.ny.gov/Researchers-and-Policymakers/Local-Governments" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYSERDA — Local Governments <span>↗</span></div>
-          <div class="resource-card-desc">Clean Energy Communities, REV Connect, Building Cleaner Communities, and other energy programs for municipalities beyond the annual CFA cycle.</div>
-        </a>
-        <a class="resource-card" href="https://dos.ny.gov/local-government-grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Department of State — Grants <span>↗</span></div>
-          <div class="resource-card-desc">Local Waterfront Revitalization, Smart Growth, Brownfield Opportunity Areas, and other DOS programs for municipal planning and revitalization.</div>
-        </a>
-        <a class="resource-card" href="https://hcr.ny.gov/grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Homes &amp; Community Renewal <span>↗</span></div>
-          <div class="resource-card-desc">HOME, CDBG, Housing Trust Fund, NY Main Street, and other HCR programs for affordable housing and community development.</div>
-        </a>
-        <a class="resource-card" href="https://www.dos.ny.gov/lg/lge.html" target="_blank" rel="noopener">
-          <div class="resource-card-name">Local Government Efficiency (LGE) Program <span>↗</span></div>
-          <div class="resource-card-desc">NYS grants specifically to help municipalities study and implement shared services, consolidations, and efficiency improvements.</div>
-        </a>
-        <a class="resource-card" href="https://regionalcouncils.ny.gov/resources" target="_blank" rel="noopener">
-          <div class="resource-card-name">Regional Economic Development Councils <span>↗</span></div>
-          <div class="resource-card-desc">Resources and funding information from NYS's 10 Regional Economic Development Councils, including CFA guidance, strategic plans, and regional priorities.</div>
-        </a>
+        <a class="resource-card" href="https://esd.ny.gov/doing-business-ny/main-street-program" target="_blank" rel="noopener"><div class="resource-card-name">Empire State Development <span>↗</span></div><div class="resource-card-desc">Downtown Revitalization Initiative (DRI), Restore NY, NY Forward, and other ESD programs for municipal economic development and placemaking.</div></a>
+        <a class="resource-card" href="https://www.nyserda.ny.gov/Researchers-and-Policymakers/Local-Governments" target="_blank" rel="noopener"><div class="resource-card-name">NYSERDA — Local Governments <span>↗</span></div><div class="resource-card-desc">Clean Energy Communities, REV Connect, Building Cleaner Communities, and other energy programs for municipalities beyond the annual CFA cycle.</div></a>
+        <a class="resource-card" href="https://dos.ny.gov/local-government-grants" target="_blank" rel="noopener"><div class="resource-card-name">NYS Department of State — Grants <span>↗</span></div><div class="resource-card-desc">Local Waterfront Revitalization, Smart Growth, Brownfield Opportunity Areas, and other DOS programs for municipal planning and revitalization.</div></a>
+        <a class="resource-card" href="https://hcr.ny.gov/grants" target="_blank" rel="noopener"><div class="resource-card-name">NYS Homes &amp; Community Renewal <span>↗</span></div><div class="resource-card-desc">HOME, CDBG, Housing Trust Fund, NY Main Street, and other HCR programs for affordable housing and community development.</div></a>
+        <a class="resource-card" href="https://www.dos.ny.gov/lg/lge.html" target="_blank" rel="noopener"><div class="resource-card-name">Local Government Efficiency (LGE) Program <span>↗</span></div><div class="resource-card-desc">NYS grants specifically to help municipalities study and implement shared services, consolidations, and efficiency improvements.</div></a>
+        <a class="resource-card" href="https://regionalcouncils.ny.gov/resources" target="_blank" rel="noopener"><div class="resource-card-name">Regional Economic Development Councils <span>↗</span></div><div class="resource-card-desc">Resources and funding information from NYS's 10 Regional Economic Development Councils, including CFA guidance, strategic plans, and regional priorities.</div></a>
       </div>
     </div>
-
     <div class="resources-section">
       <div class="resources-section-title">Regional &amp; Special Programs</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://www.arc.gov/funding-opportunities" target="_blank" rel="noopener">
-          <div class="resource-card-name">Appalachian Regional Commission (ARC) <span>↗</span></div>
-          <div class="resource-card-desc">Federal-state partnership funding economic, infrastructure, and community development in Appalachian counties of New York and 12 other states.</div>
-        </a>
-        <a class="resource-card" href="https://www.nbrc.gov/funding" target="_blank" rel="noopener">
-          <div class="resource-card-name">Northern Border Regional Commission <span>↗</span></div>
-          <div class="resource-card-desc">Federal-state economic development grants for distressed communities in northern New York and three other border states.</div>
-        </a>
-        <a class="resource-card" href="https://services.nypa.gov/Services/Incentives/Grant-Services-and-Programs" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYPA Grant Services &amp; Programs <span>↗</span></div>
-          <div class="resource-card-desc">New York Power Authority programs providing energy efficiency grants and incentives to municipal and public sector customers.</div>
-        </a>
-        <a class="resource-card" href="https://tughill.org/what-we-do/grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">Tug Hill Commission <span>↗</span></div>
-          <div class="resource-card-desc">Grants and technical assistance for municipalities and organizations in the Tug Hill region of northern New York.</div>
-        </a>
-        <a class="resource-card" href="https://www.epa.gov/great-lakes-funding" target="_blank" rel="noopener">
-          <div class="resource-card-name">Great Lakes Restoration Initiative <span>↗</span></div>
-          <div class="resource-card-desc">Federal grants for water quality, habitat, and invasive species projects for municipalities near the Great Lakes in western New York.</div>
-        </a>
-        <a class="resource-card" href="https://www.epa.gov/long-island-sound/long-island-sound-grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">Long Island Sound Study <span>↗</span></div>
-          <div class="resource-card-desc">EPA grants for water quality and coastal resilience projects for downstate municipalities along Long Island Sound.</div>
-        </a>
-        <a class="resource-card" href="https://www.nfwf.org/apply-grant" target="_blank" rel="noopener">
-          <div class="resource-card-name">National Fish &amp; Wildlife Foundation <span>↗</span></div>
-          <div class="resource-card-desc">Competitive grants for conservation, habitat restoration, and watershed projects. Several programs are eligible for municipalities and local governments.</div>
-        </a>
-        <a class="resource-card" href="https://www.lcbp.org/about-us/grants-rfps/request-for-proposals-rfps/#nywetlands" target="_blank" rel="noopener">
-          <div class="resource-card-name">Lake Champlain Basin Program <span>↗</span></div>
-          <div class="resource-card-desc">Grants for water quality, wetlands, and habitat projects in the Lake Champlain watershed. Relevant for municipalities in Clinton, Essex, Franklin, and Washington counties.</div>
-        </a>
-        <a class="resource-card" href="https://nysfola.org/current-and-ongoing-grant-opportunities/" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Federation of Lakes Associations <span>↗</span></div>
-          <div class="resource-card-desc">Curated list of current grant opportunities for lake and watershed protection projects in New York State.</div>
-        </a>
+        <a class="resource-card" href="https://www.arc.gov/funding-opportunities" target="_blank" rel="noopener"><div class="resource-card-name">Appalachian Regional Commission (ARC) <span>↗</span></div><div class="resource-card-desc">Federal-state partnership funding economic, infrastructure, and community development in Appalachian counties of New York and 12 other states.</div></a>
+        <a class="resource-card" href="https://www.nbrc.gov/funding" target="_blank" rel="noopener"><div class="resource-card-name">Northern Border Regional Commission <span>↗</span></div><div class="resource-card-desc">Federal-state economic development grants for distressed communities in northern New York and three other border states.</div></a>
+        <a class="resource-card" href="https://services.nypa.gov/Services/Incentives/Grant-Services-and-Programs" target="_blank" rel="noopener"><div class="resource-card-name">NYPA Grant Services &amp; Programs <span>↗</span></div><div class="resource-card-desc">New York Power Authority programs providing energy efficiency grants and incentives to municipal and public sector customers.</div></a>
+        <a class="resource-card" href="https://tughill.org/what-we-do/grants" target="_blank" rel="noopener"><div class="resource-card-name">Tug Hill Commission <span>↗</span></div><div class="resource-card-desc">Grants and technical assistance for municipalities and organizations in the Tug Hill region of northern New York.</div></a>
+        <a class="resource-card" href="https://www.epa.gov/great-lakes-funding" target="_blank" rel="noopener"><div class="resource-card-name">Great Lakes Restoration Initiative <span>↗</span></div><div class="resource-card-desc">Federal grants for water quality, habitat, and invasive species projects for municipalities near the Great Lakes in western New York.</div></a>
+        <a class="resource-card" href="https://www.epa.gov/long-island-sound/long-island-sound-grants" target="_blank" rel="noopener"><div class="resource-card-name">Long Island Sound Study <span>↗</span></div><div class="resource-card-desc">EPA grants for water quality and coastal resilience projects for downstate municipalities along Long Island Sound.</div></a>
+        <a class="resource-card" href="https://www.nfwf.org/apply-grant" target="_blank" rel="noopener"><div class="resource-card-name">National Fish &amp; Wildlife Foundation <span>↗</span></div><div class="resource-card-desc">Competitive grants for conservation, habitat restoration, and watershed projects. Several programs are eligible for municipalities and local governments.</div></a>
+        <a class="resource-card" href="https://www.lcbp.org/about-us/grants-rfps/request-for-proposals-rfps/#nywetlands" target="_blank" rel="noopener"><div class="resource-card-name">Lake Champlain Basin Program <span>↗</span></div><div class="resource-card-desc">Grants for water quality, wetlands, and habitat projects in the Lake Champlain watershed. Relevant for municipalities in Clinton, Essex, Franklin, and Washington counties.</div></a>
+        <a class="resource-card" href="https://nysfola.org/current-and-ongoing-grant-opportunities/" target="_blank" rel="noopener"><div class="resource-card-name">NYS Federation of Lakes Associations <span>↗</span></div><div class="resource-card-desc">Curated list of current grant opportunities for lake and watershed protection projects in New York State.</div></a>
       </div>
     </div>
-
     <div class="resources-section">
       <div class="resources-section-title">Technical Assistance</div>
       <div class="resources-grid">
-        <a class="resource-card" href="https://www.osc.ny.gov/local-government" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Comptroller — Local Government <span>↗</span></div>
-          <div class="resource-card-desc">Guidance, fiscal stress monitoring, and resources for local governments including grants management best practices.</div>
-        </a>
-        <a class="resource-card" href="https://www.rcap.org" target="_blank" rel="noopener">
-          <div class="resource-card-name">RCAP — Rural Community Assistance Partnership <span>↗</span></div>
-          <div class="resource-card-desc">Free and low-cost technical assistance for small and rural communities on water, wastewater, and grant applications.</div>
-        </a>
-        <a class="resource-card" href="https://efc.ny.gov" target="_blank" rel="noopener">
-          <div class="resource-card-name">Environmental Finance Center (EFC) <span>↗</span></div>
-          <div class="resource-card-desc">Technical and financial assistance helping NYS municipalities access environmental funding for water, wastewater, and green infrastructure projects.</div>
-        </a>
-        <a class="resource-card" href="https://www.clrp.cornell.edu" target="_blank" rel="noopener">
-          <div class="resource-card-name">Cornell Local Roads Program <span>↗</span></div>
-          <div class="resource-card-desc">Training and technical assistance for local highway officials and municipal engineers across New York State.</div>
-        </a>
+        <a class="resource-card" href="https://www.osc.ny.gov/local-government" target="_blank" rel="noopener"><div class="resource-card-name">NYS Comptroller — Local Government <span>↗</span></div><div class="resource-card-desc">Guidance, fiscal stress monitoring, and resources for local governments including grants management best practices.</div></a>
+        <a class="resource-card" href="https://www.rcap.org" target="_blank" rel="noopener"><div class="resource-card-name">RCAP — Rural Community Assistance Partnership <span>↗</span></div><div class="resource-card-desc">Free and low-cost technical assistance for small and rural communities on water, wastewater, and grant applications.</div></a>
+        <a class="resource-card" href="https://efc.ny.gov" target="_blank" rel="noopener"><div class="resource-card-name">Environmental Finance Center (EFC) <span>↗</span></div><div class="resource-card-desc">Technical and financial assistance helping NYS municipalities access environmental funding for water, wastewater, and green infrastructure projects.</div></a>
+        <a class="resource-card" href="https://www.clrp.cornell.edu" target="_blank" rel="noopener"><div class="resource-card-name">Cornell Local Roads Program <span>↗</span></div><div class="resource-card-desc">Training and technical assistance for local highway officials and municipal engineers across New York State.</div></a>
       </div>
     </div>
   </div>
@@ -623,7 +507,7 @@ const PAGE_SIZE = 12;
 const FED_PAGE_SIZE = 100;
 
 let state = {
-  keyword:'', category:'', eligibility:'02',
+  keyword:'', category:'', agency:'', eligibility:'02',
   statuses:['posted'], sort:'closeDate|asc',
   page:0, totalHits:0, grants:[], nysGrants:[], saved:new Set(), loading:false,
   manualGrants: JSON.parse(localStorage.getItem('manualGrants')||'[]'),
@@ -644,43 +528,23 @@ const CAT = {
   ST:'Science & Technology',T:'Transportation',ACA:'Affordable Care Act',RA:'Recovery Act',O:'Other'
 };
 
-// ── NYS AGENCY LOOKUPS ────────────────────────────────────────
 const NYS_AGENCY_COLORS = {
-  'DEC01':  'background:#0f5132;color:#fff;',
-  'PRK01':  'background:#14532d;color:#fff;',
-  'DOH01':  'background:#1e3a5f;color:#fff;',
-  'AGM01':  'background:#3b5e2b;color:#fff;',
-  'DCJ01':  'background:#1e3a5f;color:#fff;',
-  'DED01':  'background:#164e63;color:#fff;',
-  'DOL01':  'background:#1e3a5f;color:#fff;',
-  'OAS01':  'background:#3b0764;color:#fff;',
-  'OMH01':  'background:#3b0764;color:#fff;',
-  'TDA01':  'background:#1e3a5f;color:#fff;',
+  'DEC01':'background:#0f5132;color:#fff;','PRK01':'background:#14532d;color:#fff;',
+  'DOH01':'background:#1e3a5f;color:#fff;','AGM01':'background:#3b5e2b;color:#fff;',
+  'DCJ01':'background:#1e3a5f;color:#fff;','DED01':'background:#164e63;color:#fff;',
+  'DOL01':'background:#1e3a5f;color:#fff;','OAS01':'background:#3b0764;color:#fff;',
+  'OMH01':'background:#3b0764;color:#fff;','TDA01':'background:#1e3a5f;color:#fff;',
 };
-
 const NYS_AGENCY_LABELS = {
-  'AGM01': 'Ag & Markets',
-  'DCJ01':  'DCJS',
-  'DEC01':  'DEC',
-  'DED01':  'ESD',
-  'DOH01':  'DOH',
-  'DOL01':  'DOL',
-  'OAS01':  'OAS',
-  'OMH01':  'OMH',
-  'PRK01':  'NYS Parks',
-  'TDA01':  'OTDA',
+  'AGM01':'Ag & Markets','DCJ01':'DCJS','DEC01':'DEC','DED01':'ESD','DOH01':'DOH',
+  'DOL01':'DOL','OAS01':'OAS','OMH01':'OMH','PRK01':'NYS Parks','TDA01':'OTDA',
 };
 const NYS_AGENCY_NAMES = {
-  'AGM01': 'NYS Department of Agriculture & Markets',
-  'DCJ01':  'NYS Division of Criminal Justice Services',
-  'DEC01':  'NYS Department of Environmental Conservation',
-  'DED01':  'Empire State Development',
-  'DOH01':  'NYS Department of Health',
-  'DOL01':  'NYS Department of Labor',
-  'OAS01':  'NYS Office of Addiction Services & Supports',
-  'OMH01':  'NYS Office of Mental Health',
-  'PRK01':  'NYS Office of Parks, Recreation & Historic Preservation',
-  'TDA01':  'NYS Office of Temporary & Disability Assistance',
+  'AGM01':'NYS Department of Agriculture & Markets','DCJ01':'NYS Division of Criminal Justice Services',
+  'DEC01':'NYS Department of Environmental Conservation','DED01':'Empire State Development',
+  'DOH01':'NYS Department of Health','DOL01':'NYS Department of Labor',
+  'OAS01':'NYS Office of Addiction Services & Supports','OMH01':'NYS Office of Mental Health',
+  'PRK01':'NYS Office of Parks, Recreation & Historic Preservation','TDA01':'NYS Office of Temporary & Disability Assistance',
 };
 
 // ── TABS ─────────────────────────────────────────────────────
@@ -714,6 +578,26 @@ function filterLocal(grants) {
     const c=(g.agencyCode||'').toUpperCase(), r=c.split('-')[0];
     return !NON_LOCAL.some(a=>c.startsWith(a)||r===a);
   });
+}
+
+// ── AGENCY FILTER ─────────────────────────────────────────────
+function buildAgencyFilter() {
+  const agencies = new Map();
+  (state.agencyGrants||[]).forEach(g => { if (g.source) agencies.set(g.source, g.source); });
+  (state.nysGrants||[]).forEach(g => { if (g.agency) agencies.set(g.agency, NYS_AGENCY_NAMES[g.agency]||g.agency); });
+  const opts = '<option value="">All agencies</option>' +
+    [...agencies.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([val,label])=>`<option value="${esc(val)}">${esc(label)}</option>`).join('');
+  ['filter-agency','mobile-filter-agency'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    const cur = sel.value;
+    sel.innerHTML = opts;
+    if (cur) sel.value = cur;
+  });
+}
+function filterNYSByAgency(grants, agency) {
+  if (!agency) return grants;
+  return grants.filter(g => (g.source === agency) || (g.agency === agency));
 }
 
 // ── FEDERAL TAB ───────────────────────────────────────────────
@@ -818,6 +702,7 @@ async function fetchGrants() {
 function applyFilters() {
   state.keyword = '';
   state.category = '';
+  state.agency = document.getElementById('filter-agency').value;
   state.eligibility = document.getElementById('filter-eligibility').value;
   state.sort = document.getElementById('filter-sort').value;
   state.statuses = [];
@@ -881,7 +766,7 @@ function deleteManualGrant(id) {
   renderGrants();
 }
 
-// ── NYS SERVICE AREA MAPPING ──────────────────────────────────
+// ── NYS CATEGORY MAP ──────────────────────────────────────────
 const NYS_CATEGORY_MAP = {
   AG: ['Agricultural Supports'], ED: ['Education Supports'],
   ENV: ['Environmental Supports'], EN: ['Environmental Supports'],
@@ -970,7 +855,7 @@ function toggleCFA() { document.getElementById('cfa-banner')?.classList.toggle('
 // ── RENDER GRANTS ─────────────────────────────────────────────
 function renderGrants() {
   const grid = document.getElementById('grants-grid');
-  const filteredNYS = filterNYSByCategory(state.nysGrants, state.category);
+  const filteredNYS = filterNYSByAgency(filterNYSByCategory(state.nysGrants, state.category), state.agency);
   const allManual = [...(state.jsonManualGrants||[]), ...state.manualGrants];
   const hasManual = allManual.length > 0;
   const hasAnything = filteredNYS.length > 0 || hasManual || (state.agencyGrants||[]).length > 0;
@@ -990,6 +875,7 @@ function renderGrants() {
   const norm25 = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,25);
 
   const agencyVisible = (state.agencyGrants||[]).filter(g => {
+    if (state.agency && g.source !== state.agency) return false;
     const s = (g.status||'').toLowerCase();
     const isClosed = s.includes('closed') || s.includes('unavailable');
     if (isClosed && !state.statuses.includes('closed')) return false;
@@ -1021,12 +907,8 @@ function renderGrants() {
   const seen = new Map();
   [...agencyVisible, ...nysVisible].forEach(g => {
     const key = norm25(g.title);
-    if (!seen.has(key)) {
-      seen.set(key, g);
-    } else {
-      const existing = seen.get(key);
-      if (grantScore(g) > grantScore(existing)) seen.set(key, g);
-    }
+    if (!seen.has(key)) { seen.set(key, g); }
+    else { const existing = seen.get(key); if (grantScore(g) > grantScore(existing)) seen.set(key, g); }
   });
 
   const combined = [...seen.values()];
@@ -1043,15 +925,12 @@ function renderGrants() {
   if (sortField === 'closeDate') {
     combined.sort((a, b) => {
       const da = parseCombinedDate(a), db = parseCombinedDate(b);
-      if (!da && !db) return 0;
-      if (!da) return 1;
-      if (!db) return -1;
+      if (!da && !db) return 0; if (!da) return 1; if (!db) return -1;
       return sortDir === 'asc' ? da - db : db - da;
     });
   }
-  const hasNYSorAgency = combined.length > 0;
 
-  if (hasNYSorAgency) {
+  if (combined.length > 0) {
     const label = `${combined.length} opportunities`;
     html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
     html += combined.map(g => g._type === 'agency' ? renderAgencyCard(g) : renderNYSCard(g)).join('');
@@ -1092,7 +971,7 @@ function renderAgencyCard(g) {
   const statusLower = (g.status||'').toLowerCase();
   const isClosed = statusLower.includes('closed') || statusLower.includes('unavailable');
   const sc = isClosed ? 'tag-closed' : 'tag-posted';
-  const sourceColors = { 'EFC':'background:#0f5132;color:#fff;', 'NYS Parks':'background:#14532d;color:#fff;', 'HCR':'background:#1e3a5f;color:#fff;', 'DASNY':'background:#3b0764;color:#fff;' };
+  const sourceColors = { 'EFC':'background:#0f5132;color:#fff;','NYS Parks':'background:#14532d;color:#fff;','HCR':'background:#1e3a5f;color:#fff;','DASNY':'background:#3b0764;color:#fff;' };
   const sourceStyle = sourceColors[g.source] || 'background:var(--text-mid);color:#fff;';
   let dl = '';
   if (g.dueDate) {
@@ -1109,9 +988,7 @@ function renderAgencyCard(g) {
         dl = `<span class="deadline-row ${cls}">⏱ ${esc(label)}</span>`;
       } else { dl = `<span class="deadline-row">⏱ ${esc(g.dueDate.slice(0, 80))}</span>`; }
     }
-  } else {
-    dl = `<span class="deadline-row rolling">⟳ Rolling / Open</span>`;
-  }
+  } else { dl = `<span class="deadline-row rolling">⟳ Rolling / Open</span>`; }
   return `<div class="grant-card" style="${isClosed?'opacity:0.55;':''}">
     <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag" style="${sourceStyle}">${esc(g.source||'Agency')}</span><span class="tag ${sc}">${esc(isClosed?'Closed':g.status||'Available')}</span></div></div>
     <div class="card-title">${esc(g.title)}</div>
@@ -1222,8 +1099,6 @@ function closeModalDirect() { document.getElementById('modal-overlay').classList
 function toggleSaveModal(id) {
   const sid=String(id);
   if (state.saved.has(sid)) state.saved.delete(sid); else state.saved.add(sid);
-  const b=document.querySelector('.modal-actions .btn-outline');
-  if (b) b.textContent=state.saved.has(sid)?'♥ Saved':'♡ Save to shortlist';
 }
 
 // ── HELPERS ───────────────────────────────────────────────────
@@ -1267,7 +1142,7 @@ function goPage(p){state.page=p;window.scrollTo(0,0);fetchGrants();}
 function renderSummary(){}
 function renderActiveTags(){
   const el=document.getElementById('active-tags');const tags=[];
-  if(state.category)tags.push(`category: ${CAT[state.category]||state.category}`);
+  if(state.agency){const name=NYS_AGENCY_NAMES[state.agency]||state.agency;tags.push(`agency: ${name}`);}
   el.innerHTML=tags.map(t=>`<span class="active-tag">${t}</span>`).join('')+' ';
 }
 function showLoading(){document.getElementById('grants-grid').innerHTML=`<div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Loading grants…</div></div>`;document.getElementById('pagination').innerHTML='';}
@@ -1275,11 +1150,11 @@ function showError(msg){document.getElementById('grants-grid').innerHTML=`<div c
 
 // ── DATA FETCHING ─────────────────────────────────────────────
 async function fetchNYSGrants(){
-  try{const r=await fetch('./nys-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();const all=d.grants||[];state.jsonManualGrants=all.filter(g=>g.manual===true);state.nysGrants=all.filter(g=>g.manual!==true);renderGrants();}
+  try{const r=await fetch('./nys-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();const all=d.grants||[];state.jsonManualGrants=all.filter(g=>g.manual===true);state.nysGrants=all.filter(g=>g.manual!==true);buildAgencyFilter();renderGrants();}
   catch(e){console.log('NYS grants not available:',e.message);}
 }
 async function fetchAgencyGrants(){
-  try{const r=await fetch('./agency-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();state.agencyGrants=d.grants||[];renderGrants();}
+  try{const r=await fetch('./agency-grants.json?_='+Date.now());if(!r.ok)return;const d=await r.json();state.agencyGrants=d.grants||[];buildAgencyFilter();renderGrants();}
   catch(e){console.log('Agency grants not available:',e.message);}
 }
 
@@ -1304,6 +1179,10 @@ function mobileStatus(status, btn) {
   state.statuses = status === 'closed' ? ['closed'] : ['posted'];
   renderGrants();
 }
+function mobileAgency(agency) {
+  state.agency = agency;
+  renderGrants();
+}
 function mobileFedCategory(category) {
   fed.category = category;
   fed.page = 0; fed.grants = []; fetchFedGrants();
@@ -1314,7 +1193,7 @@ function mobileFedStatus(status, btn) {
   fed.statuses = [status];
   fed.page = 0; fed.grants = []; fetchFedGrants();
 }
-// mobile filter bars shown via CSS media query only
+
 fetchNYSGrants();
 fetchAgencyGrants();
 </script>
