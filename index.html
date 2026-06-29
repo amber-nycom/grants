@@ -257,6 +257,7 @@
     <div class="nav-tab active" onclick="switchTab('browse',this)">State Grants</div>
     <div class="nav-tab" onclick="switchTab('federal',this)">Federal Grants</div>
     <div class="nav-tab" onclick="switchTab('resources',this)">Other Resources</div>
+    <div class="nav-tab" onclick="switchTab('howto',this)">How to Use</div>
   </nav>
   <div class="topbar-right">
     <input class="topbar-search" id="keyword-input" type="text" placeholder="Search federal grants…" style="display:none;">
@@ -470,6 +471,81 @@
   </div>
 </div>
 
+<!-- ══ HOW TO USE TAB ══ -->
+<div id="tab-howto" style="display:none;">
+  <div class="resources-page">
+    <h1>How to Use This Dashboard</h1>
+    <p class="resources-sub">A guide to finding and exploring grant opportunities for New York State municipalities.</p>
+
+    <div class="resources-section">
+      <div class="resources-section-title">Navigating the Dashboard</div>
+      <div class="resources-grid" style="grid-template-columns:1fr;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;">
+          <p style="font-size:13px;color:var(--text-mid);line-height:1.7;">The dashboard has three main tabs accessible from the top navigation bar:</p>
+          <ul style="margin-top:10px;padding-left:18px;display:flex;flex-direction:column;gap:8px;">
+            <li style="font-size:13px;color:var(--text-mid);line-height:1.6;"><strong>State Grants</strong> — Grant opportunities from New York State agencies and the NYS Statewide Financial System (SFS), refreshed nightly. Also includes the CFA banner with deadline information for the Consolidated Funding Application.</li>
+            <li style="font-size:13px;color:var(--text-mid);line-height:1.6;"><strong>Federal Grants</strong> — Live results from Grants.gov filtered to opportunities eligible for city and township governments. Updated each time you visit the tab.</li>
+            <li style="font-size:13px;color:var(--text-mid);line-height:1.6;"><strong>Other Resources</strong> — A curated directory of grant portals, federal and state agency programs, regional funding sources, and technical assistance resources for NYS municipalities.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="resources-section-title">Using the Filters</div>
+      <div class="resources-grid">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;">
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">State Grants filters</div>
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.6;">Use the <strong>Agency</strong> dropdown to narrow results to a specific funding agency — for example, NYS Department of Environmental Conservation or NYS Homes &amp; Community Renewal. Use the <strong>Status</strong> checkboxes to show open opportunities, closed ones, or both. Use <strong>Sort</strong> to order by deadline or posting date. Press <strong>Apply filters</strong> to update the results.</p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;">
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">Federal Grants filters</div>
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.6;">Use the <strong>Category</strong> dropdown to filter by funding topic (e.g. Environment, Transportation, Housing). Use the <strong>Status</strong> checkboxes to include posted, forecasted, or closed opportunities. Use the <strong>search bar</strong> at the top of the page to search by keyword. Press <strong>Apply filters</strong> to fetch updated results from Grants.gov.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="resources-section-title">NYS SFS Grants — Using the ID Copy Button</div>
+      <div class="resources-grid" style="grid-template-columns:1fr;">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;">
+          <p style="font-size:13px;color:var(--text-mid);line-height:1.7;">Some state grant cards show an <strong>ID · copy</strong> button at the bottom. These are grants pulled from the NYS Statewide Financial System (SFS), which uses session-based navigation that prevents direct deep links to individual listings.</p>
+          <p style="margin-top:10px;font-size:13px;color:var(--text-mid);line-height:1.7;">To view the full listing for one of these grants:</p>
+          <ol style="margin-top:8px;padding-left:18px;display:flex;flex-direction:column;gap:6px;">
+            <li style="font-size:13px;color:var(--text-mid);line-height:1.6;">Click the <strong>copy</strong> button on the grant card to copy the grant ID to your clipboard.</li>
+            <li style="font-size:13px;color:var(--text-mid);line-height:1.6;">Click <strong>View ↗</strong> to open the NYS SFS grant search portal.</li>
+            <li style="font-size:13px;color:var(--text-mid);line-height:1.6;">Paste the ID into the search field on the SFS portal to find the full listing.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="resources-section-title">Data Sources &amp; Update Frequency</div>
+      <div class="resources-grid">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;">
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">State Grants</div>
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.6;">State grant data is collected nightly from the <strong>NYS SFS portal</strong> and directly from agency websites including EFC, NYS Parks, HCR, DEC, and DASNY. Results are typically refreshed by early morning each day. If a source website is temporarily unavailable, the dashboard will display data from the most recent successful update.</p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px 20px;">
+          <div style="font-size:12px;font-weight:600;color:var(--text);margin-bottom:6px;">Federal Grants</div>
+          <p style="font-size:12px;color:var(--text-mid);line-height:1.6;">Federal grant data is pulled <strong>live from Grants.gov</strong> each time you visit the Federal Grants tab. Results reflect what is currently listed on Grants.gov filtered to city and township eligibility. An internet connection is required to load federal grants.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="resources-section">
+      <div class="resources-section-title">A Note on Accuracy</div>
+      <div class="resources-grid" style="grid-template-columns:1fr;">
+        <div style="background:var(--blue-pale);border:1px solid var(--blue-light);border-radius:var(--radius-lg);padding:16px 20px;">
+          <p style="font-size:13px;color:var(--blue-dark);line-height:1.7;">This dashboard is intended as a discovery tool to help municipalities identify potential grant opportunities — it is <strong>not a comprehensive listing</strong> of every available grant. Deadlines, eligibility requirements, and program details may change after data is collected. Always verify information directly on the relevant agency or program website before applying. When in doubt, contact the funding agency directly.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- GRANT DETAIL MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
   <div class="modal"><button class="modal-close" onclick="closeModalDirect()">×</button><div id="modal-content"></div></div>
@@ -551,7 +627,7 @@ const NYS_AGENCY_NAMES = {
 function switchTab(tab, el) {
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  ['browse','federal','resources'].forEach(t =>
+  ['browse','federal','resources','howto'].forEach(t =>
     document.getElementById('tab-'+t).style.display = t===tab ? '' : 'none'
   );
   const searchEl = document.getElementById('keyword-input');
