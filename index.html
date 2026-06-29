@@ -588,6 +588,11 @@ const SOURCE_TO_AGENCY = {
   'HCR':      'HCR',
   'DASNY':    'DASNY',
 };
+const SOURCE_DISPLAY_NAMES = {
+  'EFC':  'NYS Environmental Facilities Corporation',
+  'HCR':  'NYS Homes & Community Renewal',
+  'DASNY':'Dormitory Authority of the State of New York',
+};
 function buildAgencyFilter() {
   const agencies = new Map();
   (state.agencyGrants||[]).forEach(g => {
@@ -596,7 +601,7 @@ function buildAgencyFilter() {
     if (mapped && NYS_AGENCY_NAMES[mapped]) {
       agencies.set(mapped, NYS_AGENCY_NAMES[mapped]);
     } else {
-      agencies.set(g.source, g.source);
+      agencies.set(g.source, SOURCE_DISPLAY_NAMES[g.source] || g.source);
     }
   });
   (state.nysGrants||[]).forEach(g => { if (g.agency) agencies.set(g.agency, NYS_AGENCY_NAMES[g.agency]||g.agency); });
