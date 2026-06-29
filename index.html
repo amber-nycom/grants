@@ -1141,26 +1141,14 @@ async function openModal(id) {
       </div>`;
 } catch(e) {
     const g=state.grants.find(x=>String(x.id)===String(id))||{};
-    const status=g.oppStatus||'';
-    const sc=status==='posted'?'tag-posted':status==='forecasted'?'tag-forecasted':'tag-closed';
+    const desc=g.description||g.synopsis||'';
     mc.innerHTML=`
-      <div class="modal-tag-row"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span>${status?`<span class="tag ${sc}">${esc(status)}</span>`:''}</div>
+      <div class="modal-tag-row"><span class="tag tag-federal">FEDERAL</span></div>
       <div class="modal-title">${esc(g.title||'Grant Details')}</div>
       <div class="modal-agency">${esc(g.agencyName||'')} · ID ${esc(String(g.number||id))}</div>
-      <div class="modal-grid">
-        <div class="modal-section"><div class="modal-section-title">At a glance</div>
-          <div class="modal-row"><span class="modal-key">Status</span><span class="modal-val">${esc(status)||'—'}</span></div>
-          <div class="modal-row"><span class="modal-key">Posted</span><span class="modal-val">${esc(g.openDate)||'—'}</span></div>
-          <div class="modal-row"><span class="modal-key">Closes</span><span class="modal-val">${esc(g.closeDate)||'Rolling'}</span></div>
-          <div class="modal-row"><span class="modal-key">ALN / CFDA</span><span class="modal-val">${(g.alnist||[]).join(', ')||'—'}</span></div>
-        </div>
-        <div class="modal-section"><div class="modal-section-title">Eligibility</div>
-          <div class="modal-row"><span class="modal-key">Applicant types</span><span class="modal-val" style="font-size:11px;">${esc(fmtElig(g.eligibleApplicants))}</span></div>
-        </div>
-      </div>
+      ${desc?`<div style="margin-top:14px;font-size:12px;color:var(--text-mid);line-height:1.6;">${esc(desc).replace(/\n/g,'<br>')}</div>`:''}
       <div class="modal-actions">
         <a class="btn-primary" href="https://grants.gov/search-results-detail/${esc(String(id))}" target="_blank">View on Grants.gov →</a>
-        <button class="btn-outline" onclick="toggleSaveModal('${esc(String(id))}')">${state.saved.has(String(id))?'♥ Saved':'♡ Save to shortlist'}</button>
       </div>`;
   }
 }
