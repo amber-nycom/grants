@@ -90,7 +90,6 @@
   .card-agency { font-size: 11px; color: var(--text-faint); }
   .card-mid { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
   .card-category { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10.5px; border: 1px solid var(--border); background: var(--surface-alt); color: var(--text-muted); }
-  /* deadline-row pushes to bottom of card above the divider */
   .deadline-row { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); margin-top: auto; }
   .deadline-row.urgent { color: var(--red); font-weight: 500; }
   .deadline-row.rolling { color: var(--green); }
@@ -196,6 +195,7 @@
   .resource-card-name span { color: var(--text-faint); font-size: 11px; font-weight: 400; }
   .resource-card-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
 
+  /* ── CFA BANNER ── */
   .cfa-banner { grid-column: 1 / -1; background: var(--surface); border: 1.5px solid #bfdbfe; border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 6px; }
   .cfa-banner-header { background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 100%); padding: 13px 18px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; flex-wrap: wrap; }
   .cfa-banner-badge { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 600; color: #fff; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
@@ -224,6 +224,50 @@
   .cfa-program-deadline.urgent { color: var(--red); font-weight: 500; }
   .cfa-program-deadline.normal { color: var(--text-faint); }
   .cfa-program-link { font-size: 10.5px; color: var(--blue); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+
+    /* Topbar: stack logo + tabs vertically */
+    .topbar { height: auto; flex-wrap: wrap; padding: 10px 14px 0 14px; gap: 0; }
+    .brand img { height: 38px; margin-right: 0; }
+    .brand { margin-right: auto; padding-bottom: 8px; }
+    .topbar-right { order: 3; width: 100%; padding-bottom: 0; }
+    .topbar-search { display: none !important; }
+    .info-btn { display: none; }
+    .nav-tabs { order: 2; width: 100%; border-top: 1px solid rgba(255,255,255,0.12); margin-right: 0; overflow-x: auto; }
+    .nav-tab { font-size: 12px; padding: 0 12px; height: 38px; white-space: nowrap; }
+
+    /* Hide sidebar, go full width */
+    .sidebar { display: none; }
+    .layout { display: block; }
+    .main { padding: 12px; }
+
+    /* Mobile filter bar */
+    .mobile-filter-bar { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+    .mobile-filter-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-family: 'Inter', sans-serif; background: var(--surface); color: var(--text-mid); cursor: pointer; }
+    .mobile-filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+
+    /* Single column cards */
+    .grants-grid { grid-template-columns: 1fr; gap: 10px; }
+
+    /* CFA banner */
+    .cfa-banner { margin-bottom: 12px; }
+    .cfa-banner-header { padding: 10px 12px; gap: 8px; }
+    .cfa-programs-grid { grid-template-columns: 1fr !important; }
+
+    /* Modal slides up from bottom */
+    .modal-box { width: 100% !important; max-width: 100% !important; margin: 0 !important; border-radius: 12px 12px 0 0 !important; position: fixed !important; bottom: 0 !important; top: auto !important; left: 0 !important; max-height: 85vh; overflow-y: auto; }
+    .modal-overlay { align-items: flex-end !important; }
+    .modal-grid { grid-template-columns: 1fr !important; }
+
+    /* Resources */
+    .resources-page { padding: 16px 12px 40px; }
+    .resources-grid { grid-template-columns: 1fr; }
+
+    /* Forms */
+    .form-row-2 { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -279,6 +323,11 @@
       </div>
     </aside>
     <main class="main">
+      <div class="mobile-filter-bar" style="display:none;" id="mobile-filter-bar">
+        <button class="mobile-filter-btn active" onclick="mobileStatus('posted',this)">Open</button>
+        <button class="mobile-filter-btn" onclick="mobileStatus('forecasted',this)">Forecasted</button>
+        <button class="mobile-filter-btn" onclick="mobileStatus('closed',this)">Closed</button>
+      </div>
       <div class="toolbar"><span id="active-tags"></span></div>
       <div class="grants-grid" id="grants-grid">
         <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Loading grants…</div></div>
@@ -333,6 +382,11 @@
       </div>
     </aside>
     <main class="main">
+      <div class="mobile-filter-bar" style="display:none;" id="mobile-fed-filter-bar">
+        <button class="mobile-filter-btn active" onclick="mobileFedStatus('posted',this)">Open</button>
+        <button class="mobile-filter-btn" onclick="mobileFedStatus('forecasted',this)">Forecasted</button>
+        <button class="mobile-filter-btn" onclick="mobileFedStatus('closed',this)">Closed</button>
+      </div>
       <div class="toolbar"><span id="fed-active-tags"></span></div>
       <div class="grants-grid" id="fed-grants-grid">
         <div class="loading-state"><div class="loading-spinner"></div><div class="loading-label">Fetching from Grants.gov…</div></div>
@@ -408,11 +462,11 @@
           <div class="resource-card-desc">Discretionary transportation grants for local governments for road, bridge, transit, port, and multimodal infrastructure projects.</div>
         </a>
         <a class="resource-card" href="https://www.transportation.gov/SS4A" target="_blank" rel="noopener">
-          <div class="resource-card-name">DOT Safe Streets & Roads for All <span>↗</span></div>
+          <div class="resource-card-name">DOT Safe Streets &amp; Roads for All <span>↗</span></div>
           <div class="resource-card-desc">Planning and capital grants for municipalities to prevent roadway deaths and serious injuries through infrastructure and safety improvements.</div>
         </a>
         <a class="resource-card" href="https://www.energy.gov/scep/slsc/state-and-local-solution-center" target="_blank" rel="noopener">
-          <div class="resource-card-name">DOE State & Local Solution Center <span>↗</span></div>
+          <div class="resource-card-name">DOE State &amp; Local Solution Center <span>↗</span></div>
           <div class="resource-card-desc">Energy efficiency and clean energy grants and technical assistance for local governments, including the Energy Efficiency and Conservation Block Grant.</div>
         </a>
       </div>
@@ -434,7 +488,7 @@
           <div class="resource-card-desc">Local Waterfront Revitalization, Smart Growth, Brownfield Opportunity Areas, and other DOS programs for municipal planning and revitalization.</div>
         </a>
         <a class="resource-card" href="https://hcr.ny.gov/grants" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Homes & Community Renewal <span>↗</span></div>
+          <div class="resource-card-name">NYS Homes &amp; Community Renewal <span>↗</span></div>
           <div class="resource-card-desc">HOME, CDBG, Housing Trust Fund, NY Main Street, and other HCR programs for affordable housing and community development.</div>
         </a>
         <a class="resource-card" href="https://www.dos.ny.gov/lg/lge.html" target="_blank" rel="noopener">
@@ -449,7 +503,7 @@
     </div>
 
     <div class="resources-section">
-      <div class="resources-section-title">Regional & Special Programs</div>
+      <div class="resources-section-title">Regional &amp; Special Programs</div>
       <div class="resources-grid">
         <a class="resource-card" href="https://www.arc.gov/funding-opportunities" target="_blank" rel="noopener">
           <div class="resource-card-name">Appalachian Regional Commission (ARC) <span>↗</span></div>
@@ -460,7 +514,7 @@
           <div class="resource-card-desc">Federal-state economic development grants for distressed communities in northern New York and three other border states.</div>
         </a>
         <a class="resource-card" href="https://services.nypa.gov/Services/Incentives/Grant-Services-and-Programs" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYPA Grant Services & Programs <span>↗</span></div>
+          <div class="resource-card-name">NYPA Grant Services &amp; Programs <span>↗</span></div>
           <div class="resource-card-desc">New York Power Authority programs providing energy efficiency grants and incentives to municipal and public sector customers.</div>
         </a>
         <a class="resource-card" href="https://tughill.org/what-we-do/grants" target="_blank" rel="noopener">
@@ -476,7 +530,7 @@
           <div class="resource-card-desc">EPA grants for water quality and coastal resilience projects for downstate municipalities along Long Island Sound.</div>
         </a>
         <a class="resource-card" href="https://www.nfwf.org/apply-grant" target="_blank" rel="noopener">
-          <div class="resource-card-name">National Fish & Wildlife Foundation <span>↗</span></div>
+          <div class="resource-card-name">National Fish &amp; Wildlife Foundation <span>↗</span></div>
           <div class="resource-card-desc">Competitive grants for conservation, habitat restoration, and watershed projects. Several programs are eligible for municipalities and local governments.</div>
         </a>
         <a class="resource-card" href="https://www.lcbp.org/about-us/grants-rfps/request-for-proposals-rfps/#nywetlands" target="_blank" rel="noopener">
@@ -493,6 +547,10 @@
     <div class="resources-section">
       <div class="resources-section-title">Technical Assistance</div>
       <div class="resources-grid">
+        <a class="resource-card" href="https://www.osc.ny.gov/local-government" target="_blank" rel="noopener">
+          <div class="resource-card-name">NYS Comptroller — Local Government <span>↗</span></div>
+          <div class="resource-card-desc">Guidance, fiscal stress monitoring, and resources for local governments including grants management best practices.</div>
+        </a>
         <a class="resource-card" href="https://www.rcap.org" target="_blank" rel="noopener">
           <div class="resource-card-name">RCAP — Rural Community Assistance Partnership <span>↗</span></div>
           <div class="resource-card-desc">Free and low-cost technical assistance for small and rural communities on water, wastewater, and grant applications.</div>
@@ -504,10 +562,6 @@
         <a class="resource-card" href="https://www.clrp.cornell.edu" target="_blank" rel="noopener">
           <div class="resource-card-name">Cornell Local Roads Program <span>↗</span></div>
           <div class="resource-card-desc">Training and technical assistance for local highway officials and municipal engineers across New York State.</div>
-           <a class="resource-card" href="https://www.osc.ny.gov/local-government" target="_blank" rel="noopener">
-          <div class="resource-card-name">NYS Comptroller — Local Government <span>↗</span></div>
-          <div class="resource-card-desc">Guidance, fiscal stress monitoring, and resources for local governments including grants management best practices.</div>
-        </a>
         </a>
       </div>
     </div>
@@ -573,18 +627,17 @@ const CAT = {
 };
 
 // ── NYS AGENCY LOOKUPS ────────────────────────────────────────
-// Badge colors — matched to agency-grants sourceColors where the agency appears in both
 const NYS_AGENCY_COLORS = {
-  'DEC01':  'background:#0f5132;color:#fff;',   // matches EFC/DEC green
-  'PRK01':  'background:#14532d;color:#fff;',   // matches NYS Parks green
-  'DOH01':  'background:#1e3a5f;color:#fff;',   // matches HCR navy
-  'AGM01':  'background:#3b5e2b;color:#fff;',   // agriculture green
-  'DCJ01':  'background:#1e3a5f;color:#fff;',   // navy
-  'DED01':  'background:#164e63;color:#fff;',   // teal-navy (ESD)
-  'DOL01':  'background:#1e3a5f;color:#fff;',   // navy
-  'OAS01':  'background:#3b0764;color:#fff;',   // matches DASNY purple
-  'OMH01':  'background:#3b0764;color:#fff;',   // purple
-  'TDA01':  'background:#1e3a5f;color:#fff;',   // navy
+  'DEC01':  'background:#0f5132;color:#fff;',
+  'PRK01':  'background:#14532d;color:#fff;',
+  'DOH01':  'background:#1e3a5f;color:#fff;',
+  'AGM01':  'background:#3b5e2b;color:#fff;',
+  'DCJ01':  'background:#1e3a5f;color:#fff;',
+  'DED01':  'background:#164e63;color:#fff;',
+  'DOL01':  'background:#1e3a5f;color:#fff;',
+  'OAS01':  'background:#3b0764;color:#fff;',
+  'OMH01':  'background:#3b0764;color:#fff;',
+  'TDA01':  'background:#1e3a5f;color:#fff;',
 };
 
 const NYS_AGENCY_LABELS = {
@@ -713,7 +766,8 @@ function renderFedCard(g) {
   let dl = '';
   if (!g.closeDate) dl = `<span class="deadline-row rolling">⟳ Rolling / no fixed deadline</span>`;
   else { const d=daysUntil(g.closeDate); const cls=d<=14&&d>=0?'urgent':''; dl=`<span class="deadline-row ${cls}">⏱ ${d<0?'Closed '+g.closeDate:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+g.closeDate}</span>`; }
-  return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')" data-title="${esc(cleanTitle(g.title||''))}" data-agency="${esc((g.agencyName||g.agencyCode||'').slice(0,60))}" data-status="${esc(g.oppStatus||'')}" data-closedate="${esc(g.closeDate||'')}" data-award="${esc(fmtAward(g))}" data-category="${esc(CAT[g.fundingCategories]||g.fundingCategories||'')}">    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div></div>
+  return `<div class="grant-card" onclick="openModal('${esc(String(g.id))}')" data-title="${esc(cleanTitle(g.title||''))}" data-agency="${esc((g.agencyName||g.agencyCode||'').slice(0,60))}" data-status="${esc(g.oppStatus||'')}" data-closedate="${esc(g.closeDate||'')}" data-award="${esc(fmtAward(g))}" data-category="${esc(CAT[g.fundingCategories]||g.fundingCategories||'')}">
+    <div class="card-top"><div style="display:flex;gap:5px;flex-wrap:wrap;"><span class="tag tag-federal">${esc((g.agencyCode||'FEDERAL').split('-')[0])}</span><span class="tag ${sc}">${esc(g.oppStatus||'')}</span></div></div>
     <div class="card-title">${esc(cleanTitle(g.title||'Untitled'))}</div>
     <div class="card-agency">${esc((g.agencyName||g.agencyCode||'').slice(0,60))}</div>
     <div class="card-mid">${g.fundingCategories?`<span class="card-category">${esc(CAT[g.fundingCategories]||g.fundingCategories)}</span>`:'<span></span>'}</div>
@@ -754,8 +808,8 @@ function applyFilters() {
   if (document.getElementById('s-closed').checked) state.statuses.push('closed');
   if (!state.statuses.length) state.statuses = ['posted'];
   state.page = 0;
-  renderGrants(); // re-render NYS/agency immediately from cached data
-  fetchGrants();  // also refresh federal (used if federal grants are shown on this tab)
+  renderGrants();
+  fetchGrants();
 }
 
 // ── MANUAL GRANTS ─────────────────────────────────────────────
@@ -915,11 +969,6 @@ function renderGrants() {
     html += allManual.map(g => renderManualCard(g)).join('');
   }
 
-  // ── COMBINED NYS SECTION ──────────────────────────────────────
-  // Merge agency grants + SFS grants into one list, deduplicating by topic.
-  // Rule: when both sources have the same grant, prefer the one with a
-  // functioning external link (not the SFS fallback) AND a dueDate.
-  // Agency grants that are closed or past-deadline are excluded first.
   const now = new Date();
   const norm25 = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,25);
 
@@ -934,7 +983,6 @@ function renderGrants() {
 
   const nysVisible = filteredNYS.filter(g => {
     const s = (g.status||'').toLowerCase();
-    // Apply status checkbox filters
     const isOpen = s.includes('available') || s.includes('open');
     const isAdvertised = s.includes('advertised');
     const isClosed = s.includes('closed');
@@ -944,8 +992,6 @@ function renderGrants() {
     return true;
   }).map(g => ({ ...g, _type: 'nys' }));
 
-  // Score a grant: higher = better candidate to keep when deduplicating.
-  // A real external link scores +2, a dueDate scores +1.
   const SFS_FALLBACK = 'esupplier.sfs.ny.gov';
   function grantScore(g) {
     let score = 0;
@@ -955,8 +1001,6 @@ function renderGrants() {
     return score;
   }
 
-  // Build a map keyed by normalized 25-char title prefix.
-  // If a key already exists, keep whichever scores higher.
   const seen = new Map();
   [...agencyVisible, ...nysVisible].forEach(g => {
     const key = norm25(g.title);
@@ -970,7 +1014,6 @@ function renderGrants() {
 
   const combined = [...seen.values()];
 
-  // Sort combined list according to state.sort
   function parseCombinedDate(g) {
     const raw = g.dueDate || g.closeDate || '';
     if (!raw) return null;
@@ -989,7 +1032,6 @@ function renderGrants() {
       return sortDir === 'asc' ? da - db : db - da;
     });
   }
-  // openDate|desc / openDate|asc — keep insertion order (agency first, then SFS) as proxy
   const hasNYSorAgency = combined.length > 0;
 
   if (hasNYSorAgency) {
@@ -1136,29 +1178,23 @@ async function openModal(id) {
       </div>
       ${desc?`<div class="modal-section" style="margin-bottom:14px;"><div class="modal-section-title">Description</div><div style="font-size:12px;color:var(--text-mid);line-height:1.6;margin-top:6px;max-height:160px;overflow-y:auto;">${esc(desc).replace(/\n/g,'<br>')}</div></div>`:''}
       <div class="modal-actions">
-              <a class="btn-primary" href="https://grants.gov/search-results-detail/${esc(String(id))}" target="_blank">View on Grants.gov →</a>
-            </div>`;
-        } catch(e) {
+        <a class="btn-primary" href="https://grants.gov/search-results-detail/${esc(String(id))}" target="_blank">View on Grants.gov →</a>
+      </div>`;
+  } catch(e) {
     const el=document.querySelector(`[onclick*="openModal('${id}')"]`);
     const title=el?.dataset.title||'Grant Details';
     const agency=el?.dataset.agency||'';
     const status=el?.dataset.status||'';
     const closeDate=el?.dataset.closedate||'';
-    const award=el?.dataset.award||'';
-    const category=el?.dataset.category||'';
     const sc=status==='posted'?'tag-posted':status==='forecasted'?'tag-forecasted':'tag-closed';
     let dl='';
     if(closeDate){const d=daysUntil(closeDate);const cls=d<=14&&d>=0?'urgent':'';dl=d<0?'Closed · '+closeDate:d===0?'Closes today':d===1?'Closes tomorrow':'Closes in '+d+' days · '+closeDate;}
     else{dl='Rolling / no fixed deadline';}
     mc.innerHTML=`
       <div class="modal-tag-row"><span class="tag tag-federal">FEDERAL</span>${status?`<span class="tag ${sc}">${esc(status)}</span>`:''}</div>
-      <div class="modal-title">${esc(title)}</div>
+      <div class="modal-title">${esc(cleanTitle(title))}</div>
       <div class="modal-agency">${esc(agency)} · ID ${esc(String(id))}</div>
-      <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;font-size:12px;color:var(--text-mid);">
-        <span>⏱ ${esc(dl)}</span>
-        ${award?`<span style="color:var(--text-faint);">·</span><span>💰 ${esc(award)}</span>`:''}
-        ${category?`<span style="color:var(--text-faint);">·</span><span>📁 ${esc(category)}</span>`:''}
-      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--text-mid);">⏱ ${esc(dl)}</div>
       <div class="modal-actions">
         <a class="btn-primary" href="https://grants.gov/search-results-detail/${esc(String(id))}" target="_blank">View on Grants.gov →</a>
       </div>`;
@@ -1243,6 +1279,26 @@ document.getElementById('keyword-input').addEventListener('keydown',e=>{
   if(e.key==='Enter') applyFedFilters();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalDirect();closeAddModalDirect();}});
+
+// ── MOBILE FILTER BARS ────────────────────────────────────────
+function mobileStatus(status, btn) {
+  document.querySelectorAll('#mobile-filter-bar .mobile-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  state.statuses = [status];
+  renderGrants();
+}
+function mobileFedStatus(status, btn) {
+  document.querySelectorAll('#mobile-fed-filter-bar .mobile-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  fed.statuses = [status];
+  fed.page = 0; fed.grants = []; fetchFedGrants();
+}
+if (window.innerWidth <= 768) {
+  const bar = document.getElementById('mobile-filter-bar');
+  if (bar) bar.style.display = 'flex';
+  const fedBar = document.getElementById('mobile-fed-filter-bar');
+  if (fedBar) fedBar.style.display = 'flex';
+}
 
 fetchNYSGrants();
 fetchAgencyGrants();
