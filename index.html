@@ -324,29 +324,10 @@
       </div>
     </aside>
     <main class="main">
-      <div class="mobile-filter-bar" style="display:none;" id="mobile-fed-filter-bar">
-        <button class="mobile-filter-btn active" onclick="mobileFedStatus('posted',this)">Open</button>
-        <button class="mobile-filter-btn" onclick="mobileFedStatus('forecasted',this)">Forecasted</button>
-        <button class="mobile-filter-btn" onclick="mobileFedStatus('closed',this)">Closed</button>
-        <select class="mobile-cat-select" onchange="mobileFedCategory(this.value)">
-          <option value="">All categories</option>
-          <option value="AG">Agriculture</option>
-          <option value="AR">Arts</option>
-          <option value="BC">Business &amp; Commerce</option>
-          <option value="CD">Community Development</option>
-          <option value="DPR">Disaster Prevention</option>
-          <option value="ED">Education</option>
-          <option value="EN">Energy</option>
-          <option value="ENV">Environment</option>
-          <option value="HL">Health</option>
-          <option value="HO">Housing</option>
-          <option value="LJL">Law &amp; Justice</option>
-          <option value="NR">Natural Resources</option>
-          <option value="RD">Regional Development</option>
-          <option value="ST">Science &amp; Technology</option>
-          <option value="T">Transportation</option>
-          <option value="O">Other</option>
-        </select>
+      <div class="mobile-filter-bar" style="display:none;" id="mobile-filter-bar">
+        <button class="mobile-filter-btn active" onclick="mobileStatus('posted',this)">Open</button>
+        <button class="mobile-filter-btn" onclick="mobileStatus('forecasted',this)">Forecasted</button>
+        <button class="mobile-filter-btn" onclick="mobileStatus('closed',this)">Closed</button>
       </div>
       <div class="toolbar"><span id="active-tags"></span></div>
       <div class="grants-grid" id="grants-grid">
@@ -406,6 +387,25 @@
         <button class="mobile-filter-btn active" onclick="mobileFedStatus('posted',this)">Open</button>
         <button class="mobile-filter-btn" onclick="mobileFedStatus('forecasted',this)">Forecasted</button>
         <button class="mobile-filter-btn" onclick="mobileFedStatus('closed',this)">Closed</button>
+        <select class="mobile-cat-select" onchange="mobileFedCategory(this.value)">
+          <option value="">All categories</option>
+          <option value="AG">Agriculture</option>
+          <option value="AR">Arts</option>
+          <option value="BC">Business &amp; Commerce</option>
+          <option value="CD">Community Development</option>
+          <option value="DPR">Disaster Prevention</option>
+          <option value="ED">Education</option>
+          <option value="EN">Energy</option>
+          <option value="ENV">Environment</option>
+          <option value="HL">Health</option>
+          <option value="HO">Housing</option>
+          <option value="LJL">Law &amp; Justice</option>
+          <option value="NR">Natural Resources</option>
+          <option value="RD">Regional Development</option>
+          <option value="ST">Science &amp; Technology</option>
+          <option value="T">Transportation</option>
+          <option value="O">Other</option>
+        </select>
       </div>
       <div class="toolbar"><span id="fed-active-tags"></span></div>
       <div class="grants-grid" id="fed-grants-grid">
