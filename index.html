@@ -305,7 +305,6 @@
       <div class="filter-group">
         <h4>Status</h4>
         <div class="filter-item"><input type="checkbox" id="s-posted" checked><label for="s-posted">Posted / Open</label></div>
-        <div class="filter-item"><input type="checkbox" id="s-forecasted"><label for="s-forecasted">Forecasted</label></div>
         <div class="filter-item"><input type="checkbox" id="s-closed"><label for="s-closed">Closed</label></div>
       </div>
       <input type="hidden" id="filter-eligibility" value="02">
@@ -326,7 +325,6 @@
     <main class="main">
       <div class="mobile-filter-bar" style="display:none;" id="mobile-filter-bar">
         <button class="mobile-filter-btn active" onclick="mobileStatus('posted',this)">Open</button>
-        <button class="mobile-filter-btn" onclick="mobileStatus('forecasted',this)">Forecasted</button>
         <button class="mobile-filter-btn" onclick="mobileStatus('closed',this)">Closed</button>
       </div>
       <div class="toolbar"><span id="active-tags"></span></div>
@@ -824,7 +822,6 @@ function applyFilters() {
   state.sort = document.getElementById('filter-sort').value;
   state.statuses = [];
   if (document.getElementById('s-posted').checked) state.statuses.push('posted');
-  if (document.getElementById('s-forecasted').checked) state.statuses.push('forecasted');
   if (document.getElementById('s-closed').checked) state.statuses.push('closed');
   if (!state.statuses.length) state.statuses = ['posted'];
   state.page = 0;
@@ -1304,7 +1301,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModalDirect();
 function mobileStatus(status, btn) {
   document.querySelectorAll('#mobile-filter-bar .mobile-filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  state.statuses = [status];
+  state.statuses = status === 'closed' ? ['closed'] : ['posted'];
   renderGrants();
 }
 function mobileFedCategory(category) {
