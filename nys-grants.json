@@ -12,17 +12,6 @@
       "source": "NYS"
     },
     {
-      "id": "FPSC01",
-      "agency": "AGM01",
-      "title": "Farmland Protection Staff Capacity, Round 1",
-      "status": "Available",
-      "eligibility": "Governmental Entity, Not-For-Profit",
-      "dueDate": "06/26/2026 4:00PM EDT",
-      "link": "https://agriculture.ny.gov/rfp-0397-farmland-protection-staff-capacity-grants-pilot-program",
-      "serviceArea": "Agricultural Supports",
-      "source": "NYS"
-    },
-    {
       "id": "SV26",
       "agency": "DCJ01",
       "title": "2026 STOP VAWA Formula Grant Program",
@@ -160,7 +149,7 @@
       "title": "Rural Community Health Integration2026",
       "status": "Advertised Only - Not in SFS",
       "eligibility": "Governmental Entity, Not-For-Profit",
-      "dueDate": "07/09/2026 4:00PM EDT",
+      "dueDate": "07/14/2026 4:00PM EDT",
       "link": "https://www.health.ny.gov/facilities/transforming_rural_healthcare/",
       "serviceArea": "Health Services",
       "source": "NYS"
@@ -254,6 +243,6 @@
       "source": "NYS"
     }
   ],
-  "fetched": "2026-06-22T20:06:05.521Z",
-  "count": 23
+  "fetched": "2026-06-29T12:47:13.044Z",
+  "count": 22
 }
