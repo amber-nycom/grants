@@ -581,9 +581,24 @@ function filterLocal(grants) {
 }
 
 // ── AGENCY FILTER ─────────────────────────────────────────────
+const SOURCE_TO_AGENCY = {
+  'EFC':      'EFC',
+  'DEC':      'DEC01',
+  'NYS Parks':'PRK01',
+  'HCR':      'HCR',
+  'DASNY':    'DASNY',
+};
 function buildAgencyFilter() {
   const agencies = new Map();
-  (state.agencyGrants||[]).forEach(g => { if (g.source) agencies.set(g.source, g.source); });
+  (state.agencyGrants||[]).forEach(g => {
+    if (!g.source) return;
+    const mapped = SOURCE_TO_AGENCY[g.source];
+    if (mapped && NYS_AGENCY_NAMES[mapped]) {
+      agencies.set(mapped, NYS_AGENCY_NAMES[mapped]);
+    } else {
+      agencies.set(g.source, g.source);
+    }
+  });
   (state.nysGrants||[]).forEach(g => { if (g.agency) agencies.set(g.agency, NYS_AGENCY_NAMES[g.agency]||g.agency); });
   const opts = '<option value="">All agencies</option>' +
     [...agencies.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([val,label])=>`<option value="${esc(val)}">${esc(label)}</option>`).join('');
@@ -597,7 +612,9 @@ function buildAgencyFilter() {
 }
 function filterNYSByAgency(grants, agency) {
   if (!agency) return grants;
-  return grants.filter(g => (g.source === agency) || (g.agency === agency));
+  const reverseMap = Object.fromEntries(Object.entries(SOURCE_TO_AGENCY).map(([src,code])=>[code,src]));
+  const sourceEquiv = reverseMap[agency] || agency;
+  return grants.filter(g => (g.source === agency) || (g.source === sourceEquiv) || (g.agency === agency));
 }
 
 // ── FEDERAL TAB ───────────────────────────────────────────────
@@ -875,7 +892,11 @@ function renderGrants() {
   const norm25 = s => (s||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,25);
 
   const agencyVisible = (state.agencyGrants||[]).filter(g => {
-    if (state.agency && g.source !== state.agency) return false;
+    if (state.agency) {
+      const reverseMap = Object.fromEntries(Object.entries(SOURCE_TO_AGENCY).map(([src,code])=>[code,src]));
+      const sourceEquiv = reverseMap[state.agency] || state.agency;
+      if (g.source !== state.agency && g.source !== sourceEquiv) return false;
+    }
     const s = (g.status||'').toLowerCase();
     const isClosed = s.includes('closed') || s.includes('unavailable');
     if (isClosed && !state.statuses.includes('closed')) return false;
