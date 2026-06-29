@@ -953,7 +953,10 @@ function renderGrants() {
 
   if (combined.length > 0) {
     const label = `${combined.length} opportunities`;
-    html += `<div style="grid-column:1/-1;padding:6px 0 4px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span> <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="font-weight:400;color:var(--nys);text-decoration:underline;margin-left:8px;">Browse all on NYS SFS ↗</a></div>`;
+    html += `<div style="grid-column:1/-1;padding:6px 0 8px;border-bottom:1.5px solid var(--border);${hasManual?'margin-top:8px;':''}margin-bottom:2px;font-family:'Inter',sans-serif;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">
+  <span style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);">📍 New York State Grants <span style="font-weight:400;color:var(--text-faint);">(${label})</span></span>
+  <a href="https://grantsmanagement.ny.gov/search-funding-sfs" target="_blank" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--nys);border-radius:var(--radius);font-size:11px;font-weight:500;color:var(--nys);text-decoration:none;font-family:'Inter',sans-serif;transition:all 0.12s;" onmouseover="this.style.background='var(--nys)';this.style.color='#fff'" onmouseout="this.style.background='';this.style.color='var(--nys)'">Browse NYS SFS ↗</a>
+</div>`;
     html += combined.map(g => g._type === 'agency' ? renderAgencyCard(g) : renderNYSCard(g)).join('');
   }
 
