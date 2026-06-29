@@ -244,9 +244,10 @@
     .main { padding: 12px; }
 
     /* Mobile filter bar */
-    .mobile-filter-bar { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
+    .mobile-filter-bar { display: flex !important; gap: 8px; margin-bottom: 12px; align-items: center; flex-wrap: wrap; }
     .mobile-filter-btn { padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 12px; font-family: 'Inter', sans-serif; background: var(--surface); color: var(--text-mid); cursor: pointer; }
     .mobile-filter-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .mobile-cat-select { height: 32px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); padding: 0 8px; font-size: 12px; font-family: 'Inter', sans-serif; color: var(--text-mid); cursor: pointer; }
 
     /* Single column cards */
     .grants-grid { grid-template-columns: 1fr; gap: 10px; }
@@ -323,10 +324,29 @@
       </div>
     </aside>
     <main class="main">
-      <div class="mobile-filter-bar" style="display:none;" id="mobile-filter-bar">
-        <button class="mobile-filter-btn active" onclick="mobileStatus('posted',this)">Open</button>
-        <button class="mobile-filter-btn" onclick="mobileStatus('forecasted',this)">Forecasted</button>
-        <button class="mobile-filter-btn" onclick="mobileStatus('closed',this)">Closed</button>
+      <div class="mobile-filter-bar" style="display:none;" id="mobile-fed-filter-bar">
+        <button class="mobile-filter-btn active" onclick="mobileFedStatus('posted',this)">Open</button>
+        <button class="mobile-filter-btn" onclick="mobileFedStatus('forecasted',this)">Forecasted</button>
+        <button class="mobile-filter-btn" onclick="mobileFedStatus('closed',this)">Closed</button>
+        <select class="mobile-cat-select" onchange="mobileFedCategory(this.value)">
+          <option value="">All categories</option>
+          <option value="AG">Agriculture</option>
+          <option value="AR">Arts</option>
+          <option value="BC">Business &amp; Commerce</option>
+          <option value="CD">Community Development</option>
+          <option value="DPR">Disaster Prevention</option>
+          <option value="ED">Education</option>
+          <option value="EN">Energy</option>
+          <option value="ENV">Environment</option>
+          <option value="HL">Health</option>
+          <option value="HO">Housing</option>
+          <option value="LJL">Law &amp; Justice</option>
+          <option value="NR">Natural Resources</option>
+          <option value="RD">Regional Development</option>
+          <option value="ST">Science &amp; Technology</option>
+          <option value="T">Transportation</option>
+          <option value="O">Other</option>
+        </select>
       </div>
       <div class="toolbar"><span id="active-tags"></span></div>
       <div class="grants-grid" id="grants-grid">
@@ -1287,19 +1307,17 @@ function mobileStatus(status, btn) {
   state.statuses = [status];
   renderGrants();
 }
+function mobileFedCategory(category) {
+  fed.category = category;
+  fed.page = 0; fed.grants = []; fetchFedGrants();
+}
 function mobileFedStatus(status, btn) {
   document.querySelectorAll('#mobile-fed-filter-bar .mobile-filter-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   fed.statuses = [status];
   fed.page = 0; fed.grants = []; fetchFedGrants();
 }
-if (window.innerWidth <= 768) {
-  const bar = document.getElementById('mobile-filter-bar');
-  if (bar) bar.style.display = 'flex';
-  const fedBar = document.getElementById('mobile-fed-filter-bar');
-  if (fedBar) fedBar.style.display = 'flex';
-}
-
+// mobile filter bars shown via CSS media query only
 fetchNYSGrants();
 fetchAgencyGrants();
 </script>
