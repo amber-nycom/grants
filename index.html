@@ -1191,8 +1191,8 @@ function renderNYSCard(g) {
   else { dl = `<span class="deadline-row" style="color:var(--text-faint);">— See program page</span>`; }
   const hasId = g.id && !String(g.id).startsWith('nys-');
   const rawLink = g.link || g.url || '';
-  const isSfsOnly = !rawLink || rawLink.includes('esupplier.sfs.ny.gov');
-  const viewHref = g.link || g.url || 'https://grantsmanagement.ny.gov/search-funding-sfs';
+  const isSfsOnly = !rawLink || rawLink.includes('esupplier.sfs.ny.gov') || rawLink.includes('nyscr.ny.gov');
+  const viewHref = (rawLink && !rawLink.includes('nyscr.ny.gov')) ? rawLink : 'https://grantsmanagement.ny.gov/search-funding-sfs';
   const agencyBadge = NYS_AGENCY_LABELS[g.agency] || g.agency || 'NYS';
   const agencyFull  = NYS_AGENCY_NAMES[g.agency]  || g.agency || 'New York State';
   const agencyStyle = NYS_AGENCY_COLORS[g.agency]  || 'background:var(--nys);color:#fff;';
