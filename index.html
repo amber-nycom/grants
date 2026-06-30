@@ -1192,7 +1192,7 @@ function renderNYSCard(g) {
   const hasId = g.id && !String(g.id).startsWith('nys-');
   const rawLink = g.link || g.url || '';
   const isSfsOnly = !rawLink || rawLink.includes('esupplier.sfs.ny.gov') || rawLink.includes('nyscr.ny.gov');
-  const viewHref = (rawLink && !rawLink.includes('nyscr.ny.gov')) ? rawLink : 'https://grantsmanagement.ny.gov/search-funding-sfs';
+  const viewHref = rawLink.includes('nyscr.ny.gov') ? 'https://esupplier.sfs.ny.gov/psp/fscm/SUPPLIER/ERP/c/NY_SUPPUB_FL.AUC_RESP_INQ_AUC.GBL' : (rawLink || 'https://grantsmanagement.ny.gov/search-funding-sfs');
   const agencyBadge = NYS_AGENCY_LABELS[g.agency] || g.agency || 'NYS';
   const agencyFull  = NYS_AGENCY_NAMES[g.agency]  || g.agency || 'New York State';
   const agencyStyle = NYS_AGENCY_COLORS[g.agency]  || 'background:var(--nys);color:#fff;';
