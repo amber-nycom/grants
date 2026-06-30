@@ -1190,7 +1190,8 @@ function renderNYSCard(g) {
   } else if (g.award) { dl = `<span class="deadline-row rolling">◈ ${esc(g.award)}</span>`; }
   else { dl = `<span class="deadline-row" style="color:var(--text-faint);">— See program page</span>`; }
   const hasId = g.id && !String(g.id).startsWith('nys-');
-  const isSfsOnly = !g.link && !g.url;
+  const rawLink = g.link || g.url || '';
+  const isSfsOnly = !rawLink || rawLink.includes('esupplier.sfs.ny.gov');
   const viewHref = g.link || g.url || 'https://grantsmanagement.ny.gov/search-funding-sfs';
   const agencyBadge = NYS_AGENCY_LABELS[g.agency] || g.agency || 'NYS';
   const agencyFull  = NYS_AGENCY_NAMES[g.agency]  || g.agency || 'New York State';
